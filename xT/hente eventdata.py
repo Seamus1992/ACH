@@ -48,7 +48,7 @@ kampdetaljer = kampdetaljer.rename(columns={'wyId':'matchId'})
 df = kampdetaljer.merge(df)
 df = df[['label','date','shot.isGoal','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
 
-df.to_csv('C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\xT\U15 Ligaen 23 24.csv',index=False)
+df.to_csv('xT/U15 Ligaen 23 24.csv',index=False)
 
 connection_string = 'SharedAccessSignature=sv=2020-08-04&ss=f&srt=sco&sp=rl&se=2025-01-11T22:47:25Z&st=2022-01-11T14:47:25Z&spr=https&sig=CXdXPlHz%2FhW0IRugFTfCrB7osNQVZJ%2BHjNR1EM2s6RU%3D;FileEndpoint=https://divforeningendataout1.file.core.windows.net/;'
 share_name = 'divisionsforeningen-outgoingdata'
@@ -94,7 +94,7 @@ kampdetaljer = kampdetaljer.rename(columns={'wyId':'matchId'})
 df = kampdetaljer.merge(df)
 df = df[['label','date','shot.isGoal','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
 
-df.to_csv('C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\xT\U17 Ligaen 23 24.csv',index=False)
+df.to_csv('xT/U17 Ligaen 23 24.csv',index=False)
 
 connection_string = 'SharedAccessSignature=sv=2020-08-04&ss=f&srt=sco&sp=rl&se=2025-01-11T22:47:25Z&st=2022-01-11T14:47:25Z&spr=https&sig=CXdXPlHz%2FhW0IRugFTfCrB7osNQVZJ%2BHjNR1EM2s6RU%3D;FileEndpoint=https://divforeningendataout1.file.core.windows.net/;'
 share_name = 'divisionsforeningen-outgoingdata'
@@ -140,7 +140,7 @@ kampdetaljer = kampdetaljer.rename(columns={'wyId':'matchId'})
 df = kampdetaljer.merge(df)
 df = df[['label','date','shot.isGoal','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
 
-df.to_csv('C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\xT\U19 Ligaen 23 24.csv',index=False)
+df.to_csv('xT/U19 Ligaen 23 24.csv',index=False)
 
 connection_string = 'SharedAccessSignature=sv=2020-08-04&ss=f&srt=sco&sp=rl&se=2025-01-11T22:47:25Z&st=2022-01-11T14:47:25Z&spr=https&sig=CXdXPlHz%2FhW0IRugFTfCrB7osNQVZJ%2BHjNR1EM2s6RU%3D;FileEndpoint=https://divforeningendataout1.file.core.windows.net/;'
 share_name = 'divisionsforeningen-outgoingdata'
@@ -186,7 +186,7 @@ kampdetaljer = kampdetaljer.rename(columns={'wyId':'matchId'})
 df = kampdetaljer.merge(df)
 df = df[['label','date','shot.isGoal','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
 
-df.to_csv('C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\xT\Superliga 23 24.csv',index=False)
+df.to_csv('xT/Superliga 23 24.csv',index=False)
 
 connection_string = 'SharedAccessSignature=sv=2020-08-04&ss=f&srt=sco&sp=rl&se=2025-01-11T22:47:25Z&st=2022-01-11T14:47:25Z&spr=https&sig=CXdXPlHz%2FhW0IRugFTfCrB7osNQVZJ%2BHjNR1EM2s6RU%3D;FileEndpoint=https://divforeningendataout1.file.core.windows.net/;'
 share_name = 'divisionsforeningen-outgoingdata'
@@ -232,7 +232,7 @@ kampdetaljer = kampdetaljer.rename(columns={'wyId':'matchId'})
 df = kampdetaljer.merge(df)
 df = df[['label','date','shot.isGoal','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
 
-df.to_csv('C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\xT\1st Division 23 24.csv',index=False)
+df.to_csv('xT/1st Division 23 24.csv',index=False)
 
 connection_string = 'SharedAccessSignature=sv=2020-08-04&ss=f&srt=sco&sp=rl&se=2025-01-11T22:47:25Z&st=2022-01-11T14:47:25Z&spr=https&sig=CXdXPlHz%2FhW0IRugFTfCrB7osNQVZJ%2BHjNR1EM2s6RU%3D;FileEndpoint=https://divforeningendataout1.file.core.windows.net/;'
 share_name = 'divisionsforeningen-outgoingdata'
@@ -278,7 +278,7 @@ kampdetaljer = kampdetaljer.rename(columns={'wyId':'matchId'})
 df = kampdetaljer.merge(df)
 df = df[['label','date','shot.isGoal','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
 
-df.to_csv('C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\xT\2nd Division 23 24.csv',index=False)
+df.to_csv('xT/2nd Division 23 24.csv',index=False)
 
 connection_string = 'SharedAccessSignature=sv=2020-08-04&ss=f&srt=sco&sp=rl&se=2025-01-11T22:47:25Z&st=2022-01-11T14:47:25Z&spr=https&sig=CXdXPlHz%2FhW0IRugFTfCrB7osNQVZJ%2BHjNR1EM2s6RU%3D;FileEndpoint=https://divforeningendataout1.file.core.windows.net/;'
 share_name = 'divisionsforeningen-outgoingdata'
@@ -324,7 +324,7 @@ kampdetaljer = kampdetaljer.rename(columns={'wyId':'matchId'})
 df = kampdetaljer.merge(df)
 df = df[['label','date','shot.isGoal','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
 
-df.to_csv('C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\xT\3. Division 23 24.csv',index=False)
+df.to_csv('xT/3. Division 23 24.csv',index=False)
 
 connection_string = 'SharedAccessSignature=sv=2020-08-04&ss=f&srt=sco&sp=rl&se=2025-01-11T22:47:25Z&st=2022-01-11T14:47:25Z&spr=https&sig=CXdXPlHz%2FhW0IRugFTfCrB7osNQVZJ%2BHjNR1EM2s6RU%3D;FileEndpoint=https://divforeningendataout1.file.core.windows.net/;'
 share_name = 'divisionsforeningen-outgoingdata'
@@ -370,7 +370,7 @@ kampdetaljer = kampdetaljer.rename(columns={'wyId':'matchId'})
 df = kampdetaljer.merge(df)
 df = df[['label','date','shot.isGoal','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
 
-df.to_csv('C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\xT\U17 Division 23 24.csv',index=False)
+df.to_csv('xT/U17 Division 23 24.csv',index=False)
 
 connection_string = 'SharedAccessSignature=sv=2020-08-04&ss=f&srt=sco&sp=rl&se=2025-01-11T22:47:25Z&st=2022-01-11T14:47:25Z&spr=https&sig=CXdXPlHz%2FhW0IRugFTfCrB7osNQVZJ%2BHjNR1EM2s6RU%3D;FileEndpoint=https://divforeningendataout1.file.core.windows.net/;'
 share_name = 'divisionsforeningen-outgoingdata'
@@ -416,4 +416,4 @@ kampdetaljer = kampdetaljer.rename(columns={'wyId':'matchId'})
 df = kampdetaljer.merge(df)
 df = df[['label','date','shot.isGoal','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
 
-df.to_csv('C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\xT\U19 Division 23 24.csv',index=False)
+df.to_csv('xT/U19 Division 23 24.csv',index=False)

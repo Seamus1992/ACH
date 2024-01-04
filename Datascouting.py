@@ -363,7 +363,6 @@ def U15_liga ():
 
     df = pd.read_csv(r'xT/U15 Ligaen 23 24.csv')
 
-    df = df[['id','matchId','label','date','matchPeriod','minute','shot.isGoal','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.duration','possession.id','possession.eventsNumber','possession.eventIndex','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
     df1 = df.copy()
     df = df[(df['pass.accurate'] ==True) | (df['carry.progression'] > 0)]
     df = df[~df['type.primary'].str.contains('infraction')]
@@ -464,7 +463,7 @@ def U15_liga ():
     xT['xT'] = xT['xT'].fillna(0)
     xT['xT Rank'] = xT['xT'].rank(ascending=False).astype(int)
 
-    xgc = df1[['id','label','team.name','player.id','player.name','possession.attack.xg','possession.id','type.primary','type.secondary']]
+    xgc = df1
     xgchold = xgc.drop_duplicates(subset='possession.id',keep='first')
     xgchold = xgchold.rename(columns={'possession.attack.xg': 'Hold xG'})
     xgchold = xgchold.groupby('team.name')['Hold xG'].agg('sum').reset_index()
@@ -868,7 +867,6 @@ def U17_liga ():
         st.write(df_Angriberesæsonen)
     df = pd.read_csv(r'xT/U17 Ligaen 23 24.csv')
 
-    df = df[['id','matchId','label','date','matchPeriod','minute','shot.isGoal','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.duration','possession.id','possession.eventsNumber','possession.eventIndex','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
     df1 = df.copy()
     df = df[(df['pass.accurate'] ==True) | (df['carry.progression'] > 0)]
     df = df[~df['type.primary'].str.contains('infraction')]
@@ -969,7 +967,7 @@ def U17_liga ():
     xT['xT'] = xT['xT'].fillna(0)
     xT['xT Rank'] = xT['xT'].rank(ascending=False).astype(int)
 
-    xgc = df1[['id','label','team.name','player.id','player.name','possession.attack.xg','possession.id','type.primary','type.secondary']]
+    xgc = df1
     xgchold = xgc.drop_duplicates(subset='possession.id',keep='first')
     xgchold = xgchold.rename(columns={'possession.attack.xg': 'Hold xG'})
     xgchold = xgchold.groupby('team.name')['Hold xG'].agg('sum').reset_index()
@@ -1373,7 +1371,6 @@ def U19_liga ():
         st.write(df_Angriberesæsonen)
     df = pd.read_csv(r'xT/U19 Ligaen 23 24.csv')
 
-    df = df[['id','matchId','label','date','matchPeriod','minute','shot.isGoal','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.duration','possession.id','possession.eventsNumber','possession.eventIndex','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
     df1 = df.copy()
     df = df[(df['pass.accurate'] ==True) | (df['carry.progression'] > 0)]
     df = df[~df['type.primary'].str.contains('infraction')]
@@ -1474,7 +1471,7 @@ def U19_liga ():
     xT['xT'] = xT['xT'].fillna(0)
     xT['xT Rank'] = xT['xT'].rank(ascending=False).astype(int)
 
-    xgc = df1[['id','label','team.name','player.id','player.name','possession.attack.xg','possession.id','type.primary','type.secondary']]
+    xgc = df1
     xgchold = xgc.drop_duplicates(subset='possession.id',keep='first')
     xgchold = xgchold.rename(columns={'possession.attack.xg': 'Hold xG'})
     xgchold = xgchold.groupby('team.name')['Hold xG'].agg('sum').reset_index()

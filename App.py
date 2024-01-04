@@ -3124,6 +3124,7 @@ if username == valid_username and password == valid_password:
             hold = 'Horsens U19'
             df = df[df['label'].str.contains(hold)]
             df['date'] = df['date'].apply(lambda x: parser.parse(x).strftime('%d-%m-%Y'))
+            df['date'] = pd.to_datetime(df['date'])
             df = df.sort_values(by='date')
             st.dataframe(df)            
             valgtekamp = st.multiselect('Vælg kamp', df['label'].unique(),default=df['label'].unique()[0])

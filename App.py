@@ -2216,10 +2216,9 @@ if username == valid_username and password == valid_password:
 
             hold = 'Horsens U15'
             df = df[df['label'].str.contains(hold)]
-            df = df.sort_values(by='label')
-            valgtekamp = st.multiselect('Vælg kamp', df['label'].unique())
-            df.loc[df['player.id'] == 624663, 'player.name'] = 'Je. Beluli'
-            df.loc[df['pass.recipient.id'] == 624663, 'pass.recipient.name'] = 'Je. Beluli'
+            df['date'] = pd.to_datetime(df['date'])
+            df = df.sort_values(by='date',ascending=False)
+            valgtekamp = st.multiselect('Vælg kamp', df['label'].unique(),default=df['label'].unique()[0])
 
             df1 = df.copy()
 
@@ -2670,10 +2669,9 @@ if username == valid_username and password == valid_password:
 
             hold = 'Horsens U17'
             df = df[df['label'].str.contains(hold)]
-            df = df.sort_values(by='label')
-            valgtekamp = st.multiselect('Vælg kamp', df['label'].unique())
-#            df.loc[df['player.id'] == 624663, 'player.name'] = 'Je. Beluli'
-#            df.loc[df['pass.recipient.id'] == 624663, 'pass.recipient.name'] = 'Je. Beluli'
+            df['date'] = pd.to_datetime(df['date'])
+            df = df.sort_values(by='date',ascending=False)
+            valgtekamp = st.multiselect('Vælg kamp', df['label'].unique(),default=df['label'].unique()[0])
 
             df1 = df.copy()
 
@@ -3125,7 +3123,6 @@ if username == valid_username and password == valid_password:
             df = df[df['label'].str.contains(hold)]
             df['date'] = pd.to_datetime(df['date'])
             df = df.sort_values(by='date',ascending=False)
-            st.dataframe(df)            
             valgtekamp = st.multiselect('Vælg kamp', df['label'].unique(),default=df['label'].unique()[0])
             df.loc[df['player.id'] == 624663, 'player.name'] = 'Je. Beluli'
             df.loc[df['pass.recipient.id'] == 624663, 'pass.recipient.name'] = 'Je. Beluli'

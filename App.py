@@ -2313,10 +2313,10 @@ if username == valid_username and password == valid_password:
                 col1,col2 = st.columns(2)
                 with col1:
                     from PIL import Image
-                    image = Image.open('C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\xT\xT zoner.png')
+                    image = Image.open('xT/xT zoner.png')
                     st.image(image,'xT zoner')
                 with col2:
-                    zoner = pd.read_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\xT\Zone scores.csv')
+                    zoner = pd.read_csv(r'xT/Zone scores.csv')
                     zoner = zoner[['Start Zone','Start zone score']]
                     zoner = zoner.rename(columns={'Start Zone': 'Zone'})
                     zoner = zoner.rename(columns={'Start zone score': 'Zone score'})
@@ -2675,8 +2675,8 @@ if username == valid_username and password == valid_password:
             df = df[df['label'].str.contains(hold)]
             df = df.sort_values(by='label')
             valgtekamp = st.multiselect('Vælg kamp', df['label'].unique())
-            df.loc[df['player.id'] == 624663, 'player.name'] = 'Je. Beluli'
-            df.loc[df['pass.recipient.id'] == 624663, 'pass.recipient.name'] = 'Je. Beluli'
+#            df.loc[df['player.id'] == 624663, 'player.name'] = 'Je. Beluli'
+#            df.loc[df['pass.recipient.id'] == 624663, 'pass.recipient.name'] = 'Je. Beluli'
 
             df1 = df.copy()
             df = df[['id','matchId','label','date','matchPeriod','minute','shot.isGoal','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.duration','possession.id','possession.eventsNumber','possession.eventIndex','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
@@ -2769,10 +2769,10 @@ if username == valid_username and password == valid_password:
                 col1,col2 = st.columns(2)
                 with col1:
                     from PIL import Image
-                    image = Image.open('C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\xT\xT zoner.png')
+                    image = Image.open('xT/xT zoner.png')
                     st.image(image,'xT zoner')
                 with col2:
-                    zoner = pd.read_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\xT\Zone scores.csv')
+                    zoner = pd.read_csv(r'xT/Zone scores.csv')
                     zoner = zoner[['Start Zone','Start zone score']]
                     zoner = zoner.rename(columns={'Start Zone': 'Zone'})
                     zoner = zoner.rename(columns={'Start zone score': 'Zone score'})
@@ -3225,10 +3225,10 @@ if username == valid_username and password == valid_password:
                 col1,col2 = st.columns(2)
                 with col1:
                     from PIL import Image
-                    image = Image.open('C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\xT\xT zoner.png')
+                    image = Image.open('xT/xT zoner.png')
                     st.image(image,'xT zoner')
                 with col2:
-                    zoner = pd.read_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\xT\Zone scores.csv')
+                    zoner = pd.read_csv('xT/Zone scores.csv')
                     zoner = zoner[['Start Zone','Start zone score']]
                     zoner = zoner.rename(columns={'Start Zone': 'Zone'})
                     zoner = zoner.rename(columns={'Start zone score': 'Zone score'})

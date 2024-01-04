@@ -2835,7 +2835,7 @@ if username == valid_username and password == valid_password:
             xgcspiller = xgcspiller[xgcspiller['team.name'] == hold]
 
 
-            col1,col2 = st.columns(2)
+            col1,col2, col34 = st.columns([1,1,2])
             with col1:  
                 xTspiller = df.groupby(['player.name','team.name'])['xT'].agg('sum').reset_index()
                 xTspiller = xTspiller[xTspiller['team.name'] == hold]
@@ -2844,7 +2844,38 @@ if username == valid_username and password == valid_password:
             samlet = xgcspiller.merge(xTspiller)
             with col2:
                 st.dataframe(xgcspiller,hide_index=True)
+            
+            with col34:
+                xgplacering = df1
+                xgplacering = xgplacering[xgplacering['type.primary'] == 'shot']
+                xgplacering = xgplacering[xgplacering['team.name'] == hold]
                 
+                x = xgplacering['location.x']
+                y = xgplacering['location.y']
+                player_names = xgplacering['player.name']  # Extract player names
+                label_text = xgplacering.sort_values(by='possession.attack.xg',ascending=False)
+                label_text = label_text[['player.name', 'possession.attack.xg']].to_string(index=False)
+                label_text = label_text.replace('possession.attack.xg','xG')
+                shot_xg = xgplacering['possession.attack.xg'].astype(float)
+                min_size = 5  # Minimum dot size
+                max_size = 100  # Maximum dot size
+                sizes = np.interp(shot_xg, (shot_xg.min(), shot_xg.max()), (min_size, max_size))
+
+                pitch = Pitch(pitch_type='wyscout', pitch_color='grass', line_color='white', stripe=True)
+                fig, ax = pitch.draw()
+                sc = pitch.scatter(x, y, ax=ax, s=sizes)
+
+                # Add player names as labels using annotate
+                for i, txt in enumerate(player_names):
+                    ax.annotate(txt, (x.iloc[i], y.iloc[i]), color='white', fontsize=8, ha='center', va='bottom')
+
+                ax.text(0.3, 0.5, label_text, color='black', ha='center', va='center',
+                        transform=ax.transAxes, fontsize=10, bbox=dict(facecolor='white', alpha=0.7))
+
+
+                st.write('Xg plot (Jo større markering, jo større xG)')
+                st.pyplot(plt.gcf(), use_container_width=True)
+
                 
             team_passes = (df1['type.primary'] == 'pass') & (df1['team.name'] == hold) & (df1['type.secondary'] != "Throw-in")
             team_passes = df1.loc[team_passes, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y', 'player.name','player.id','pass.recipient.name','pass.recipient.id','pass.accurate']]

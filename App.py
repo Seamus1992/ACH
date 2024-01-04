@@ -3124,7 +3124,7 @@ if username == valid_username and password == valid_password:
             hold = 'Horsens U19'
             df = df[df['label'].str.contains(hold)]
             df['date'] = pd.to_datetime(df['date'])
-            df = df.sort_values(by='date')
+            df = df.sort_values(by='date',ascending=False)
             st.dataframe(df)            
             valgtekamp = st.multiselect('Vælg kamp', df['label'].unique(),default=df['label'].unique()[0])
             df.loc[df['player.id'] == 624663, 'player.name'] = 'Je. Beluli'

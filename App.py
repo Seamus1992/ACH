@@ -2380,7 +2380,7 @@ if username == valid_username and password == valid_password:
                 max_size = 100  # Maximum dot size
                 sizes = np.interp(shot_xg, (shot_xg.min(), shot_xg.max()), (min_size, max_size))
 
-                pitch = Pitch(pitch_type='wyscout', pitch_color='grass', line_color='white', stripe=True)
+                pitch = Pitch(pitch_type='wyscout',half=True, pitch_color='grass', line_color='white', stripe=True)
                 fig, ax = pitch.draw()
                 sc = pitch.scatter(x, y, ax=ax, s=sizes)
 

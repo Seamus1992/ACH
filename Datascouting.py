@@ -438,7 +438,7 @@ def U15_liga ():
     )
 
 
-    dfscore = pd.read_csv(r'C:/Users/SéamusPeareBartholdy/Documents/GitHub/AC-Horsens/xT/Zone scores.csv')
+    dfscore = pd.read_csv(r'xT/Zone scores.csv')
 
     df = df.merge(dfscore[['Start Zone', 'Start zone score']], on='Start Zone', how='left')
 

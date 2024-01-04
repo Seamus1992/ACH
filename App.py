@@ -3123,7 +3123,7 @@ if username == valid_username and password == valid_password:
             hold = 'Horsens U19'
             df = df[df['label'].str.contains(hold)]
             df = df.sort_values(by='label')
-            valgtekamp = st.multiselect('Vælg kamp', df['label'].unique(),default=df['label'][0])
+            valgtekamp = st.multiselect('Vælg kamp', df['label'].unique(),default=df['label'].unique()[0])
             df.loc[df['player.id'] == 624663, 'player.name'] = 'Je. Beluli'
             df.loc[df['pass.recipient.id'] == 624663, 'pass.recipient.name'] = 'Je. Beluli'
 

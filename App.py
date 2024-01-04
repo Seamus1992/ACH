@@ -2359,9 +2359,11 @@ if username == valid_username and password == valid_password:
                 xTspiller = df.groupby(['player.name','team.name'])['xT'].agg('sum').reset_index()
                 xTspiller = xTspiller[xTspiller['team.name'] == hold]
                 xTspiller = xTspiller.sort_values(by='xT', ascending=False)
+                xTspiller = xTspiller[['player.name','xT']]
                 st.dataframe(xTspiller,hide_index=True)
-            samlet = xgcspiller.merge(xTspiller)
+                samlet = xgcspiller.merge(xTspiller)
             with col2:
+                xgcspiller = xgcspiller[['player.name','xGC','xGCC']]
                 st.dataframe(xgcspiller,hide_index=True)
             
             with col34:
@@ -2839,9 +2841,11 @@ if username == valid_username and password == valid_password:
                 xTspiller = df.groupby(['player.name','team.name'])['xT'].agg('sum').reset_index()
                 xTspiller = xTspiller[xTspiller['team.name'] == hold]
                 xTspiller = xTspiller.sort_values(by='xT', ascending=False)
+                xTspiller = xTspiller[['player.name','xT']]
                 st.dataframe(xTspiller,hide_index=True)
-            samlet = xgcspiller.merge(xTspiller)
+                samlet = xgcspiller.merge(xTspiller)
             with col2:
+                xgcspiller = xgcspiller[['player.name','xGC','xGCC']]
                 st.dataframe(xgcspiller,hide_index=True)
             
             with col34:

@@ -3118,13 +3118,13 @@ if username == valid_username and password == valid_password:
             from mplsoccer.pitch import Pitch
             import numpy as np
             import streamlit as st
+            from dateutil import parser
+            
             df = pd.read_csv(r'xT/U19 Ligaen 23 24.csv')
             hold = 'Horsens U19'
             df = df[df['label'].str.contains(hold)]
-            df['date'] = df['date'].str.replace(' at ', ' ', regex=False).str.replace(' GMT\+2', '', regex=True)
-            df['date'] = pd.to_datetime(df['date'], format='%B %d, %Y %I:%M:%S %p')
-            df['date'] = df['date'].dt.strftime('%d-%m-%Y')
-            df = df.sort_values(by='date')
+            df['date'] = df['date'].apply(lambda x: parser.parse(x).strftime('%d-%m-%Y'))
+            df = df.sort_values(by='date')            
             valgtekamp = st.multiselect('Vælg kamp', df['label'].unique(),default=df['label'].unique()[0])
             df.loc[df['player.id'] == 624663, 'player.name'] = 'Je. Beluli'
             df.loc[df['pass.recipient.id'] == 624663, 'pass.recipient.name'] = 'Je. Beluli'

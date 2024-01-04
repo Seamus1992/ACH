@@ -2369,6 +2369,7 @@ if username == valid_username and password == valid_password:
                 xgplacering = xgplacering[xgplacering['type.primary'] =='shot']
                 x = xgplacering['location.x']
                 y = xgplacering['location.y']
+                player_names = xgplacering['player.name']  # Extract player names
                 
                 shot_xg = xgplacering['possession.attack.xg'].astype(float)
                 min_size = 1  # Minimum dot size
@@ -2377,7 +2378,7 @@ if username == valid_username and password == valid_password:
 
                 pitch = Pitch(pitch_type='wyscout', pitch_color='grass', line_color='white', stripe=True)
                 fig, ax = pitch.draw()
-                sc = pitch.scatter(x, y, ax=ax, s=sizes,text=xgplacering['player.name'])
+                sc = pitch.scatter(x, y, ax=ax, s=sizes,text=player_names)
                 st.write('Xg plot (Jo større markering, jo større xG)')
                 st.pyplot(plt.gcf(), use_container_width=True)   
                 

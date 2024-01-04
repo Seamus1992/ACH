@@ -3119,7 +3119,7 @@ if username == valid_username and password == valid_password:
             import numpy as np
             import streamlit as st
             df = pd.read_csv(r'xT/U19 Ligaen 23 24.csv')
-
+            st.dataframe(df)
             hold = 'Horsens U19'
             df = df[df['label'].str.contains(hold)]
             df = df.sort_values(by='date')

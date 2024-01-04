@@ -2380,7 +2380,7 @@ if username == valid_username and password == valid_password:
                 max_size = 100  # Maximum dot size
                 sizes = np.interp(shot_xg, (shot_xg.min(), shot_xg.max()), (min_size, max_size))
 
-                pitch = Pitch(pitch_type='wyscout',half=True, pitch_color='grass', line_color='white', stripe=True)
+                pitch = Pitch(pitch_type='wyscout', pitch_color='grass', line_color='white', stripe=True)
                 fig, ax = pitch.draw()
                 sc = pitch.scatter(x, y, ax=ax, s=sizes)
 
@@ -2389,7 +2389,7 @@ if username == valid_username and password == valid_password:
                     ax.annotate(txt, (x.iloc[i], y.iloc[i]), color='white', fontsize=8, ha='center', va='bottom')
 
                 ax.text(0.3, 0.5, label_text, color='black', ha='center', va='center',
-                        transform=ax.transAxes, fontsize=12, bbox=dict(facecolor='white', alpha=0.7))
+                        transform=ax.transAxes, fontsize=10, bbox=dict(facecolor='white', alpha=0.7))
 
 
                 st.write('Xg plot (Jo større markering, jo større xG)')

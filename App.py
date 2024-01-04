@@ -2376,7 +2376,7 @@ if username == valid_username and password == valid_password:
                 label_text = label_text.replace('possession.attack.xg','xG')
                 shot_xg = xgplacering['possession.attack.xg'].astype(float)
                 min_size = 5  # Minimum dot size
-                max_size = 50  # Maximum dot size
+                max_size = 100  # Maximum dot size
                 sizes = np.interp(shot_xg, (shot_xg.min(), shot_xg.max()), (min_size, max_size))
 
                 pitch = Pitch(pitch_type='wyscout', pitch_color='grass', line_color='white', stripe=True)

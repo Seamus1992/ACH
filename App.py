@@ -2222,7 +2222,6 @@ if username == valid_username and password == valid_password:
             df.loc[df['pass.recipient.id'] == 624663, 'pass.recipient.name'] = 'Je. Beluli'
 
             df1 = df.copy()
-            df = df[['id','matchId','label','date','matchPeriod','minute','shot.isGoal','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.duration','possession.id','possession.eventsNumber','possession.eventIndex','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
 
             df = df[df['label'].isin(valgtekamp)]
             df = df[(df['pass.accurate'] ==True) | (df['carry.progression'] > 0)]
@@ -2677,7 +2676,6 @@ if username == valid_username and password == valid_password:
 #            df.loc[df['pass.recipient.id'] == 624663, 'pass.recipient.name'] = 'Je. Beluli'
 
             df1 = df.copy()
-            df = df[['id','matchId','label','date','matchPeriod','minute','shot.isGoal','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.duration','possession.id','possession.eventsNumber','possession.eventIndex','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
 
             df = df[df['label'].isin(valgtekamp)]
             df = df[(df['pass.accurate'] ==True) | (df['carry.progression'] > 0)]
@@ -3132,7 +3130,6 @@ if username == valid_username and password == valid_password:
             df.loc[df['pass.recipient.id'] == 624663, 'pass.recipient.name'] = 'Je. Beluli'
 
             df1 = df.copy()
-            df = df[['id','matchId','label','date','matchPeriod','minute','shot.isGoal','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.duration','possession.id','possession.eventsNumber','possession.eventIndex','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
 
             df = df[df['label'].isin(valgtekamp)]
             df = df[(df['pass.accurate'] ==True) | (df['carry.progression'] > 0)]

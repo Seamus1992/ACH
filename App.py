@@ -3121,6 +3121,8 @@ if username == valid_username and password == valid_password:
             df = pd.read_csv(r'xT/U19 Ligaen 23 24.csv')
             hold = 'Horsens U19'
             df = df[df['label'].str.contains(hold)]
+            df['date'] = pd.to_datetime(df['date'], format='%B %d, %Y at %I:%M:%S %p %Z')
+            df['date'] = df['date'].dt.strftime('%d-%m-%Y')
             df = df.sort_values(by='date')
             st.dataframe(df)
 

@@ -2372,6 +2372,7 @@ if username == valid_username and password == valid_password:
                 x = xgplacering['location.x']
                 y = xgplacering['location.y']
                 player_names = xgplacering['player.name']  # Extract player names
+                label_text = xgplacering[['player.name', 'possession.attack.xg']].to_string(index=False)
 
                 shot_xg = xgplacering['possession.attack.xg'].astype(float)
                 min_size = 5  # Minimum dot size
@@ -2386,7 +2387,7 @@ if username == valid_username and password == valid_password:
                 for i, txt in enumerate(player_names):
                     ax.annotate(txt, (x.iloc[i], y.iloc[i]), color='white', fontsize=8, ha='center', va='bottom')
 
-                ax.text(0.5, 0.95,xgplacering[['player.name','possession.attack.xg']], color='black', ha='center', va='center',
+                ax.text(0.5, 0.95, label_text, color='black', ha='center', va='center',
                         transform=ax.transAxes, fontsize=12, bbox=dict(facecolor='white', alpha=0.7))
 
 

@@ -2378,7 +2378,7 @@ if username == valid_username and password == valid_password:
 
                 pitch = Pitch(pitch_type='wyscout', pitch_color='grass', line_color='white', stripe=True)
                 fig, ax = pitch.draw()
-                sc = pitch.scatter(x, y, ax=ax, s=sizes,text=player_names)
+                sc = pitch.scatter(x, y, ax=ax, s=sizes,marker=player_names)
                 st.write('Xg plot (Jo større markering, jo større xG)')
                 st.pyplot(plt.gcf(), use_container_width=True)   
                 

@@ -2367,6 +2367,8 @@ if username == valid_username and password == valid_password:
             with col34:
                 xgplacering = df1
                 xgplacering = xgplacering[xgplacering['type.primary'] == 'shot']
+                xgplacering = xgplacering[xgplacering['team.name'] == hold]
+                
                 x = xgplacering['location.x']
                 y = xgplacering['location.y']
                 player_names = xgplacering['player.name']  # Extract player names
@@ -2382,7 +2384,7 @@ if username == valid_username and password == valid_password:
 
                 # Add player names as labels using annotate
                 for i, txt in enumerate(player_names):
-                    ax.annotate(txt, (x.iloc[i], y.iloc[i]), color='white', fontsize=8, ha='center', va='center')
+                    ax.annotate(txt, (x.iloc[i], y.iloc[i]), color='white', fontsize=8, ha='center', va='bottom')
 
                 st.write('Xg plot (Jo større markering, jo større xG)')
                 st.pyplot(plt.gcf(), use_container_width=True)

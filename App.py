@@ -2342,8 +2342,6 @@ if username == valid_username and password == valid_password:
 
             st.dataframe(xThold,hide_index=True)
                 
-
-
             xgc = xgc[xgc['team.name'] == hold]
 
             xgcspiller = xgc.groupby(['player.id','player.name','team.name','Hold xG i åbent spil'])['possession.attack.xg'].agg('sum').reset_index()
@@ -3321,7 +3319,6 @@ if username == valid_username and password == valid_password:
             xgcspiller = xgcspiller.rename(columns={'possession.attack.xg': 'xGC'})
             xgcspiller = xgcspiller.sort_values(by='xGCC',ascending=False)
             xgcspiller = xgcspiller[xgcspiller['team.name'] == hold]
-
 
             col1,col2, col34 = st.columns([1,1,2])
             with col1:  

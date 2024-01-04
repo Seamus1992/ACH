@@ -2366,11 +2366,11 @@ if username == valid_username and password == valid_password:
             
             with col34:
                 xgplacering = df1
-                xgplacering = xgplacering[xgplacering['type.primary'] =='shot']
+                xgplacering = xgplacering[xgplacering['type.primary'] == 'shot']
                 x = xgplacering['location.x']
                 y = xgplacering['location.y']
                 player_names = xgplacering['player.name']  # Extract player names
-                
+
                 shot_xg = xgplacering['possession.attack.xg'].astype(float)
                 min_size = 1  # Minimum dot size
                 max_size = 50  # Maximum dot size
@@ -2378,10 +2378,15 @@ if username == valid_username and password == valid_password:
 
                 pitch = Pitch(pitch_type='wyscout', pitch_color='grass', line_color='white', stripe=True)
                 fig, ax = pitch.draw()
-                sc = pitch.scatter(x, y, ax=ax, s=sizes,marker=player_names)
+                sc = pitch.scatter(x, y, ax=ax, s=sizes)
+
+                # Add player names as labels using annotate
+                for i, txt in enumerate(player_names):
+                    ax.annotate(txt, (x.iloc[i], y.iloc[i]), color='white', fontsize=8, ha='center', va='center')
+
                 st.write('Xg plot (Jo større markering, jo større xG)')
-                st.pyplot(plt.gcf(), use_container_width=True)   
-                
+                st.pyplot(plt.gcf(), use_container_width=True)
+                                
             team_passes = (df1['type.primary'] == 'pass') & (df1['team.name'] == hold) & (df1['type.secondary'] != "Throw-in")
             team_passes = df1.loc[team_passes, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y', 'player.name','player.id','pass.recipient.name','pass.recipient.id','pass.accurate']]
             players = team_passes[['player.id','player.name']]

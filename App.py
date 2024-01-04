@@ -2323,7 +2323,7 @@ if username == valid_username and password == valid_password:
                     st.write('xT udregnes som: zonen hvor pasning/dribling slutter - zone hvor pasning/dribling starter')
                     st.write('Zonernes værdi er udregnet på baggrund af de seneste 8 sæsoner i 1. div og Superligaen med udgangspunkt i den gennemsnitlige værdi for en boldbesiddelse i zonen. Den er så vægtet efter hvor mange aktioner der går fra boldbesiddelsen i zonen til en afslutning. Jo flere jo lavere vægtning')
 
-            xgc = df1[['id','label','team.name','player.id','player.name','possession.attack.xg','possession.id','type.primary','type.secondary']]
+            xgc = df1
             xgchold = xgc.drop_duplicates(subset='possession.id',keep='last')
             xgchold = xgchold.rename(columns={'possession.attack.xg': 'Hold xG i åbent spil'})
             xgchold = xgchold.groupby('team.name')['Hold xG i åbent spil'].agg('sum').reset_index()
@@ -2777,7 +2777,7 @@ if username == valid_username and password == valid_password:
                     st.write('xT udregnes som: zonen hvor pasning/dribling slutter - zone hvor pasning/dribling starter')
                     st.write('Zonernes værdi er udregnet på baggrund af de seneste 8 sæsoner i 1. div og Superligaen med udgangspunkt i den gennemsnitlige værdi for en boldbesiddelse i zonen. Den er så vægtet efter hvor mange aktioner der går fra boldbesiddelsen i zonen til en afslutning. Jo flere jo lavere vægtning')
 
-            xgc = df1[['id','label','team.name','player.id','player.name','possession.attack.xg','possession.id','type.primary','type.secondary']]
+            xgc = df1
             xgchold = xgc.drop_duplicates(subset='possession.id',keep='last')
             xgchold = xgchold.rename(columns={'possession.attack.xg': 'Hold xG i åbent spil'})
             xgchold = xgchold.groupby('team.name')['Hold xG i åbent spil'].agg('sum').reset_index()
@@ -2797,8 +2797,6 @@ if username == valid_username and password == valid_password:
 
             st.dataframe(xThold,hide_index=True)
                 
-
-
             xgc = xgc[xgc['team.name'] == hold]
 
             xgcspiller = xgc.groupby(['player.id','player.name','team.name','Hold xG i åbent spil'])['possession.attack.xg'].agg('sum').reset_index()
@@ -3231,7 +3229,7 @@ if username == valid_username and password == valid_password:
                     st.write('xT udregnes som: zonen hvor pasning/dribling slutter - zone hvor pasning/dribling starter')
                     st.write('Zonernes værdi er udregnet på baggrund af de seneste 8 sæsoner i 1. div og Superligaen med udgangspunkt i den gennemsnitlige værdi for en boldbesiddelse i zonen. Den er så vægtet efter hvor mange aktioner der går fra boldbesiddelsen i zonen til en afslutning. Jo flere jo lavere vægtning')
 
-            xgc = df1[['id','label','team.name','player.id','player.name','possession.attack.xg','possession.id','type.primary','type.secondary']]
+            xgc = df1
             xgchold = xgc.drop_duplicates(subset='possession.id',keep='last')
             xgchold = xgchold.rename(columns={'possession.attack.xg': 'Hold xG i åbent spil'})
             xgchold = xgchold.groupby('team.name')['Hold xG i åbent spil'].agg('sum').reset_index()

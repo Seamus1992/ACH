@@ -2212,7 +2212,6 @@ if username == valid_username and password == valid_password:
             from mplsoccer.pitch import Pitch
             import numpy as np
             import streamlit as st
-            st.set_page_config(layout='wide')
             df = pd.read_csv(r'xT/U15 Ligaen 23 24.csv')
 
             hold = 'Horsens U15'
@@ -2668,7 +2667,6 @@ if username == valid_username and password == valid_password:
             from mplsoccer.pitch import Pitch
             import numpy as np
             import streamlit as st
-            st.set_page_config(layout='wide')
             df = pd.read_csv(r'xT/U17 Ligaen 23 24.csv')
 
             hold = 'Horsens U17'
@@ -3124,7 +3122,6 @@ if username == valid_username and password == valid_password:
             from mplsoccer.pitch import Pitch
             import numpy as np
             import streamlit as st
-            st.set_page_config(layout='wide')
             df = pd.read_csv(r'xT/U19 Ligaen 23 24.csv')
 
             hold = 'Horsens U19'

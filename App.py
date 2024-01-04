@@ -2387,7 +2387,7 @@ if username == valid_username and password == valid_password:
                 for i, txt in enumerate(player_names):
                     ax.annotate(txt, (x.iloc[i], y.iloc[i]), color='white', fontsize=8, ha='center', va='bottom')
 
-                ax.text(0.1, 0.1, label_text, color='black', ha='center', va='center',
+                ax.text(0.5, 0.5, label_text, color='black', ha='center', va='center',
                         transform=ax.transAxes, fontsize=12, bbox=dict(facecolor='white', alpha=0.7))
 
 

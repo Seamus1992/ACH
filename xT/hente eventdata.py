@@ -46,7 +46,7 @@ kampdetaljer = json_normalize(json_files)
 kampdetaljer = kampdetaljer[['wyId','label','date']]
 kampdetaljer = kampdetaljer.rename(columns={'wyId':'matchId'})
 df = kampdetaljer.merge(df)
-df = df[['label','date','shot.isGoal','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.types','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
+df = df[['label','date','shot.isGoal','shot.xg','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.types','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
 
 df.to_csv('xT/U15 Ligaen 23 24.csv',index=False)
 
@@ -92,7 +92,7 @@ kampdetaljer = json_normalize(json_files)
 kampdetaljer = kampdetaljer[['wyId','label','date']]
 kampdetaljer = kampdetaljer.rename(columns={'wyId':'matchId'})
 df = kampdetaljer.merge(df)
-df = df[['label','date','shot.isGoal','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.types','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
+df = df[['label','date','shot.isGoal','shot.xg','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.types','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
 
 df.to_csv('xT/U17 Ligaen 23 24.csv',index=False)
 
@@ -138,7 +138,7 @@ kampdetaljer = json_normalize(json_files)
 kampdetaljer = kampdetaljer[['wyId','label','date']]
 kampdetaljer = kampdetaljer.rename(columns={'wyId':'matchId'})
 df = kampdetaljer.merge(df)
-df = df[['label','date','shot.isGoal','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.types','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
+df = df[['label','date','shot.isGoal','shot.xg','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.types','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
 
 df.to_csv('xT/U19 Ligaen 23 24.csv',index=False)
 
@@ -184,7 +184,7 @@ kampdetaljer = json_normalize(json_files)
 kampdetaljer = kampdetaljer[['wyId','label','date']]
 kampdetaljer = kampdetaljer.rename(columns={'wyId':'matchId'})
 df = kampdetaljer.merge(df)
-df = df[['label','date','shot.isGoal','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.types','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
+df = df[['label','date','shot.isGoal','shot.xg','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.types','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
 
 df.to_csv('xT/Superliga 23 24.csv',index=False)
 
@@ -230,7 +230,7 @@ kampdetaljer = json_normalize(json_files)
 kampdetaljer = kampdetaljer[['wyId','label','date']]
 kampdetaljer = kampdetaljer.rename(columns={'wyId':'matchId'})
 df = kampdetaljer.merge(df)
-df = df[['label','date','shot.isGoal','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.types','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
+df = df[['label','date','shot.isGoal','shot.xg','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.types','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
 
 df.to_csv('xT/1st Division 23 24.csv',index=False)
 
@@ -276,7 +276,7 @@ kampdetaljer = json_normalize(json_files)
 kampdetaljer = kampdetaljer[['wyId','label','date']]
 kampdetaljer = kampdetaljer.rename(columns={'wyId':'matchId'})
 df = kampdetaljer.merge(df)
-df = df[['label','date','shot.isGoal','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.types','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
+df = df[['label','date','shot.isGoal','shot.xg','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.types','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
 
 df.to_csv('xT/2nd Division 23 24.csv',index=False)
 
@@ -322,7 +322,7 @@ kampdetaljer = json_normalize(json_files)
 kampdetaljer = kampdetaljer[['wyId','label','date']]
 kampdetaljer = kampdetaljer.rename(columns={'wyId':'matchId'})
 df = kampdetaljer.merge(df)
-df = df[['label','date','shot.isGoal','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.types','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
+df = df[['label','date','shot.isGoal','shot.xg','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.types','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
 
 df.to_csv('xT/3. Division 23 24.csv',index=False)
 
@@ -368,7 +368,7 @@ kampdetaljer = json_normalize(json_files)
 kampdetaljer = kampdetaljer[['wyId','label','date']]
 kampdetaljer = kampdetaljer.rename(columns={'wyId':'matchId'})
 df = kampdetaljer.merge(df)
-df = df[['label','date','shot.isGoal','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.types','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
+df = df[['label','date','shot.isGoal','shot.xg','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.types','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
 
 df.to_csv('xT/U17 Division 23 24.csv',index=False)
 
@@ -414,6 +414,6 @@ kampdetaljer = json_normalize(json_files)
 kampdetaljer = kampdetaljer[['wyId','label','date']]
 kampdetaljer = kampdetaljer.rename(columns={'wyId':'matchId'})
 df = kampdetaljer.merge(df)
-df = df[['label','date','shot.isGoal','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.types','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
+df = df[['label','date','shot.isGoal','shot.xg','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.types','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
 
 df.to_csv('xT/U19 Division 23 24.csv',index=False)

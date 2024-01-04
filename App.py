@@ -2368,15 +2368,15 @@ if username == valid_username and password == valid_password:
             
             with col34:
                 xgplacering = df1
-                xgplacering = xgplacering[xgplacering['type.primary'] == 'shot']
+                xgplacering = xgplacering[xgplacering['shot.xg'] > 0]
                 xgplacering = xgplacering[xgplacering['team.name'] == hold]
                 
                 x = xgplacering['location.x']
                 y = xgplacering['location.y']
                 player_names = xgplacering['player.name']  # Extract player names
-                label_text = xgplacering.sort_values(by='possession.attack.xg',ascending=False)
-                label_text = label_text[['player.name', 'possession.attack.xg']].to_string(index=False,header=False)
-                shot_xg = xgplacering['possession.attack.xg'].astype(float)
+                label_text = xgplacering.sort_values(by='shot.xg',ascending=False)
+                label_text = label_text[['player.name', 'shot.xg']].to_string(index=False,header=False)
+                shot_xg = xgplacering['shot.xg'].astype(float)
                 min_size = 5  # Minimum dot size
                 max_size = 100  # Maximum dot size
                 sizes = np.interp(shot_xg, (shot_xg.min(), shot_xg.max()), (min_size, max_size))
@@ -2850,15 +2850,15 @@ if username == valid_username and password == valid_password:
             
             with col34:
                 xgplacering = df1
-                xgplacering = xgplacering[xgplacering['type.primary'] == 'shot']
+                xgplacering = xgplacering[xgplacering['shot.xg'] > 0]
                 xgplacering = xgplacering[xgplacering['team.name'] == hold]
                 
                 x = xgplacering['location.x']
                 y = xgplacering['location.y']
                 player_names = xgplacering['player.name']  # Extract player names
-                label_text = xgplacering.sort_values(by='possession.attack.xg',ascending=False)
-                label_text = label_text[['player.name', 'possession.attack.xg']].to_string(index=False,header=False)
-                shot_xg = xgplacering['possession.attack.xg'].astype(float)
+                label_text = xgplacering.sort_values(by='shot.xg',ascending=False)
+                label_text = label_text[['player.name', 'shot.xg']].to_string(index=False,header=False)
+                shot_xg = xgplacering['shot.xg'].astype(float)
                 min_size = 5  # Minimum dot size
                 max_size = 100  # Maximum dot size
                 sizes = np.interp(shot_xg, (shot_xg.min(), shot_xg.max()), (min_size, max_size))
@@ -3337,15 +3337,15 @@ if username == valid_username and password == valid_password:
             
             with col34:
                 xgplacering = df1
-                xgplacering = xgplacering[xgplacering['type.primary'] == 'shot']
+                xgplacering = xgplacering[xgplacering['shot.xg'] > 0]
                 xgplacering = xgplacering[xgplacering['team.name'] == hold]
                 
                 x = xgplacering['location.x']
                 y = xgplacering['location.y']
                 player_names = xgplacering['player.name']  # Extract player names
-                label_text = xgplacering.sort_values(by='possession.attack.xg',ascending=False)
-                label_text = label_text[['player.name', 'possession.attack.xg']].to_string(index=False,header=False)
-                shot_xg = xgplacering['possession.attack.xg'].astype(float)
+                label_text = xgplacering.sort_values(by='shot.xg',ascending=False)
+                label_text = label_text[['player.name', 'shot.xg']].to_string(index=False,header=False)
+                shot_xg = xgplacering['shot.xg'].astype(float)
                 min_size = 5  # Minimum dot size
                 max_size = 100  # Maximum dot size
                 sizes = np.interp(shot_xg, (shot_xg.min(), shot_xg.max()), (min_size, max_size))

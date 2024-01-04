@@ -2372,8 +2372,9 @@ if username == valid_username and password == valid_password:
                 x = xgplacering['location.x']
                 y = xgplacering['location.y']
                 player_names = xgplacering['player.name']  # Extract player names
-                label_text = xgplacering[['player.name', 'possession.attack.xg']].to_string(index=False)
+                label_text = xgplacering[['player.name', 'possession.attack.xg']]
                 label_text = label_text.rename(columns={'possession.attack.xg': 'xG'})
+                label_text = label_text.astype(str)
                 shot_xg = xgplacering['possession.attack.xg'].astype(float)
                 min_size = 5  # Minimum dot size
                 max_size = 50  # Maximum dot size

@@ -2374,7 +2374,7 @@ if username == valid_username and password == valid_password:
                 player_names = xgplacering['player.name']  # Extract player names
                 label_text = xgplacering.sort_values(by='possession.attack.xg',ascending=False)
                 label_text = label_text[['player.name', 'possession.attack.xg']].to_string(index=False)
-                label_text = label_text.replace('possession.attack.xg','xG')
+                label_text = label_text.replace('possession.attack.xg', '').replace('player.name', '')
                 shot_xg = xgplacering['possession.attack.xg'].astype(float)
                 min_size = 5  # Minimum dot size
                 max_size = 100  # Maximum dot size
@@ -2855,7 +2855,7 @@ if username == valid_username and password == valid_password:
                 player_names = xgplacering['player.name']  # Extract player names
                 label_text = xgplacering.sort_values(by='possession.attack.xg',ascending=False)
                 label_text = label_text[['player.name', 'possession.attack.xg']].to_string(index=False)
-                label_text = label_text.replace('possession.attack.xg','xG')
+                label_text = label_text.replace('possession.attack.xg', '').replace('player.name', '')
                 shot_xg = xgplacering['possession.attack.xg'].astype(float)
                 min_size = 5  # Minimum dot size
                 max_size = 100  # Maximum dot size
@@ -2875,7 +2875,6 @@ if username == valid_username and password == valid_password:
 
                 st.write('Xg plot (Jo større markering, jo større xG)')
                 st.pyplot(plt.gcf(), use_container_width=True)
-
                 
             team_passes = (df1['type.primary'] == 'pass') & (df1['team.name'] == hold) & (df1['type.secondary'] != "Throw-in")
             team_passes = df1.loc[team_passes, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y', 'player.name','player.id','pass.recipient.name','pass.recipient.id','pass.accurate']]
@@ -3364,8 +3363,6 @@ if username == valid_username and password == valid_password:
 
                 st.write('Xg plot (Jo større markering, jo større xG)')
                 st.pyplot(plt.gcf(), use_container_width=True)
-
-                
                 
             team_passes = (df1['type.primary'] == 'pass') & (df1['team.name'] == hold) & (df1['type.secondary'] != "Throw-in")
             team_passes = df1.loc[team_passes, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y', 'player.name','player.id','pass.recipient.name','pass.recipient.id','pass.accurate']]

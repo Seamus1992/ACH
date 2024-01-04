@@ -15,12 +15,12 @@ combined_csv = pd.concat([pd.read_csv(f) for f in all_filenames])
 df = pd.DataFrame(combined_csv)
 df = df.dropna()
 print ('GPS csv filer kombineret')
-df2 = pd.read_excel(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\Fysisk data\GPS spillere.xlsx')
+df2 = pd.read_excel(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\ACH\Fysisk data\GPS spillere.xlsx')
 dforiginal = df.merge(df2)
-os.chdir(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens')
-dforiginal.to_excel(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\Fysisk data\samlet gps data.xlsx', index=False)
-dforiginal = pd.read_excel(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\Fysisk data\samlet gps data.xlsx')
-writer = pd.ExcelWriter(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\Fysisk data\samlet gps data.xlsx', engine='xlsxwriter')
+os.chdir(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\ACH')
+dforiginal.to_excel(r'Fysisk data\samlet gps data.xlsx', index=False)
+dforiginal = pd.read_excel(r'Fysisk data/samlet gps data.xlsx')
+writer = pd.ExcelWriter(r'Fysisk data/samlet gps data.xlsx', engine='xlsxwriter')
 dforiginal.to_excel(writer,sheet_name='Sheet1', index=None, header=True)
 
 
@@ -36,11 +36,11 @@ fmt = workbook.add_format(formatdict)
 worksheet.set_column('F:G', None, fmt)
 
 writer.close()
-dforiginal = pd.read_excel(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\Fysisk data\samlet gps data.xlsx',decimal=',')
+dforiginal = pd.read_excel(r'Fysisk data/samlet gps data.xlsx',decimal=',')
 Ugenummer = dforiginal['Date'].apply(lambda x: x.isocalendar()[1])
 dforiginal.insert(loc = 48, column = 'Ugenummer', value= Ugenummer)
-dforiginal.to_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\Fysisk data\samlet gps data.csv', index=False)
-os.remove(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\Fysisk data\samlet gps data.xlsx')
+dforiginal.to_csv(r'Fysisk data/samlet gps data.csv', index=False)
+os.remove(r'Fysisk data/samlet gps data.xlsx')
 print('GPS færdig')
 
 #Hent eventdata
@@ -149,7 +149,7 @@ type_cols = pd.json_normalize(df['carry'])
 type_cols.columns = ['progression','x','y']
 df = pd.concat([df.drop('carry', axis=1), type_cols], axis=1)
 df = df.rename(columns={'progression':'Carry progression','x':'Carry end location x','y':'Carry end location y'})
-df.to_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\U15 til modstanderanalyse.csv')
+df.to_csv(r'U15 til modstanderanalyse.csv')
 
 
 from azure.storage.fileshare import ShareServiceClient
@@ -257,7 +257,7 @@ type_cols = pd.json_normalize(df['carry'])
 type_cols.columns = ['progression','x','y']
 df = pd.concat([df.drop('carry', axis=1), type_cols], axis=1)
 df = df.rename(columns={'progression':'Carry progression','x':'Carry end location x','y':'Carry end location y'})
-df.to_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\U17 til modstanderanalyse.csv')
+df.to_csv(r'U17 til modstanderanalyse.csv')
 
 from azure.storage.fileshare import ShareServiceClient
 import json
@@ -364,7 +364,7 @@ type_cols = pd.json_normalize(df['carry'])
 type_cols.columns = ['progression','x','y']
 df = pd.concat([df.drop('carry', axis=1), type_cols], axis=1)
 df = df.rename(columns={'progression':'Carry progression','x':'Carry end location x','y':'Carry end location y'})
-df.to_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\U19 til modstanderanalyse.csv')
+df.to_csv(r'U19 til modstanderanalyse.csv')
 
 from azure.storage.fileshare import ShareServiceClient
 import json
@@ -449,7 +449,7 @@ kampdetaljer = kampdetaljer.rename(columns={'wyId':'matchId'})
 dfegnekampe = kampdetaljer.merge(df)
 dfegnekampe['label'] = dfegnekampe['label'].astype(str)
 dfegnekampe = dfegnekampe[dfegnekampe['label'].str.contains('Horsens')]
-dfegnekampe.to_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\Teamsheet alle kampe U15 sidste sæson.csv',index=False)
+dfegnekampe.to_csv(r'Teamsheet alle kampe U15 sidste sæson.csv',index=False)
 print('U15 data til teamsheet hentet')
 from azure.storage.fileshare import ShareServiceClient
 import json
@@ -534,7 +534,7 @@ kampdetaljer = kampdetaljer.rename(columns={'wyId':'matchId'})
 dfegnekampe = kampdetaljer.merge(df)
 dfegnekampe['label'] = dfegnekampe['label'].astype(str)
 #dfegnekampe = dfegnekampe[dfegnekampe['label'].str.contains('Horsens')]
-dfegnekampe.to_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\Teamsheet alle kampe U15.csv',index=False)
+dfegnekampe.to_csv(r'Teamsheet alle kampe U15.csv',index=False)
 print('U15 data til benchmark hentet')
 from azure.storage.fileshare import ShareServiceClient
 import json
@@ -626,7 +626,7 @@ dfegnekampe = dfegnekampe.sort_values(by='date',ascending=False)
 
 # Format the 'date' column to day-month-year format
 dfegnekampe['date'] = dfegnekampe['date'].apply(lambda x: x.strftime('%d-%m-%Y'))
-dfegnekampe.to_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\Teamsheet egne kampe U15.csv',index=False)
+dfegnekampe.to_csv(r'Teamsheet egne kampe U15.csv',index=False)
 print('Alt data hentet til teamsheet')
 
 #Start på U17
@@ -706,7 +706,7 @@ kampdetaljer = kampdetaljer.rename(columns={'wyId':'matchId'})
 dfegnekampe = kampdetaljer.merge(df)
 dfegnekampe['label'] = dfegnekampe['label'].astype(str)
 dfegnekampe = dfegnekampe[dfegnekampe['label'].str.contains('Horsens')]
-dfegnekampe.to_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\Teamsheet alle kampe U17 sidste sæson.csv',index=False)
+dfegnekampe.to_csv(r'Teamsheet alle kampe U17 sidste sæson.csv',index=False)
 print('U17 kampe seneste sæson hentet til teamsheet')
 
 from azure.storage.fileshare import ShareServiceClient
@@ -792,7 +792,7 @@ kampdetaljer = kampdetaljer.rename(columns={'wyId':'matchId'})
 dfegnekampe = kampdetaljer.merge(df)
 dfegnekampe['label'] = dfegnekampe['label'].astype(str)
 #dfegnekampe = dfegnekampe[dfegnekampe['label'].str.contains('Horsens')]
-dfegnekampe.to_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\Teamsheet alle kampe U17.csv',index=False)
+dfegnekampe.to_csv(r'Teamsheet alle kampe U17.csv',index=False)
 print('Alle U17 kampe hentet til teamsheet')
 from azure.storage.fileshare import ShareServiceClient
 import json
@@ -885,7 +885,7 @@ dfegnekampe = dfegnekampe.sort_values(by='date',ascending=False)
 # Format the 'date' column to day-month-year format
 dfegnekampe['date'] = dfegnekampe['date'].apply(lambda x: x.strftime('%d-%m-%Y'))
 
-dfegnekampe.to_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\Teamsheet egne kampe U17.csv',index=False)
+dfegnekampe.to_csv(r'Teamsheet egne kampe U17.csv',index=False)
 
 
 #Start på U19
@@ -965,7 +965,7 @@ kampdetaljer = kampdetaljer.rename(columns={'wyId':'matchId'})
 dfegnekampe = kampdetaljer.merge(df)
 dfegnekampe['label'] = dfegnekampe['label'].astype(str)
 dfegnekampe = dfegnekampe[dfegnekampe['label'].str.contains('Horsens')]
-dfegnekampe.to_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\Teamsheet alle kampe U19 sidste sæson.csv',index=False)
+dfegnekampe.to_csv(r'Teamsheet alle kampe U19 sidste sæson.csv',index=False)
 print('U19 data hentet til teamsheet')
 from azure.storage.fileshare import ShareServiceClient
 import json
@@ -1050,7 +1050,7 @@ kampdetaljer = kampdetaljer.rename(columns={'wyId':'matchId'})
 dfegnekampe = kampdetaljer.merge(df)
 dfegnekampe['label'] = dfegnekampe['label'].astype(str)
 #dfegnekampe = dfegnekampe[dfegnekampe['label'].str.contains('Horsens')]
-dfegnekampe.to_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\Teamsheet alle kampe U19.csv',index=False)
+dfegnekampe.to_csv(r'Teamsheet alle kampe U19.csv',index=False)
 
 from azure.storage.fileshare import ShareServiceClient
 import json
@@ -1143,7 +1143,7 @@ dfegnekampe = dfegnekampe.sort_values(by='date',ascending=False)
 
 # Format the 'date' column to day-month-year format
 dfegnekampe['date'] = dfegnekampe['date'].apply(lambda x: x.strftime('%d-%m-%Y'))
-dfegnekampe.to_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\Teamsheet egne kampe U19.csv',index=False)
+dfegnekampe.to_csv(r'Teamsheet egne kampe U19.csv',index=False)
 print('U19 data hentet til teamsheet')
 from azure.storage.fileshare import ShareServiceClient
 import json
@@ -1243,7 +1243,7 @@ df1 = kampdetaljer.merge(df)
 
 df1.to_csv('U15 eventdata alle.csv',index=False)
 
-df = pd.read_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\U15 eventdata alle.csv')
+df = pd.read_csv(r'U15 eventdata alle.csv')
 df['team'] = df['team'].apply(lambda x: ast.literal_eval(x))
 
 # Create a new dataframe with the columns as the dictionary keys and the values as a list
@@ -1278,7 +1278,7 @@ df = pd.concat([df, new_df], axis=1)
 df = df.drop('player', axis=1)
 df['matchId'] = df['matchId'].astype(str)
 df['Player id'] = df['Player id'].astype(str)
-df.to_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\U15 eventdata alle.csv')
+df.to_csv(r'U15 eventdata alle.csv')
 
 print('U15 Matchdetails hentet')
 
@@ -1374,7 +1374,7 @@ df1 = kampdetaljer.merge(df)
 
 df1.to_csv('U17 eventdata alle.csv',index=False)
 
-df = pd.read_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\U17 eventdata alle.csv')
+df = pd.read_csv(r'U17 eventdata alle.csv')
 df['team'] = df['team'].apply(lambda x: ast.literal_eval(x))
 
 # Create a new dataframe with the columns as the dictionary keys and the values as a list
@@ -1409,7 +1409,7 @@ df = pd.concat([df, new_df], axis=1)
 df = df.drop('player', axis=1)
 df['matchId'] = df['matchId'].astype(str)
 df['Player id'] = df['Player id'].astype(str)
-df.to_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\U17 eventdata alle.csv')
+df.to_csv(r'U17 eventdata alle.csv')
 
 print('Matchdetails hentet U17')
 
@@ -1504,7 +1504,7 @@ df1 = kampdetaljer.merge(df)
 
 df1.to_csv('U19 eventdata alle.csv',index=False)
 
-df = pd.read_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\U19 eventdata alle.csv')
+df = pd.read_csv(r'U19 eventdata alle.csv')
 df['team'] = df['team'].apply(lambda x: ast.literal_eval(x))
 
 # Create a new dataframe with the columns as the dictionary keys and the values as a list
@@ -1539,7 +1539,7 @@ df = pd.concat([df, new_df], axis=1)
 df = df.drop('player', axis=1)
 df['matchId'] = df['matchId'].astype(str)
 df['Player id'] = df['Player id'].astype(str)
-df.to_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\U19 eventdata alle.csv')
+df.to_csv(r'U19 eventdata alle.csv')
 
 print('Matchdetails hentet U19')
 

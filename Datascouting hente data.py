@@ -95,7 +95,7 @@ df1 = kampdetaljer.merge(df)
 
 df1.to_csv('U15 eventdata alle.csv',index=False)
 
-df = pd.read_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\U15 eventdata alle.csv')
+df = pd.read_csv('U15 eventdata alle.csv')
 df['team'] = df['team'].apply(lambda x: ast.literal_eval(x))
 
 # Create a new dataframe with the columns as the dictionary keys and the values as a list
@@ -130,7 +130,7 @@ df = pd.concat([df, new_df], axis=1)
 df = df.drop('player', axis=1)
 df['matchId'] = df['matchId'].astype(str)
 df['Player id'] = df['Player id'].astype(str)
-df.to_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\U15 eventdata alle.csv')
+df.to_csv('U15 eventdata alle.csv')
 
 print('U15 ligaen hentet')
 
@@ -231,7 +231,7 @@ df1 = kampdetaljer.merge(df)
 
 df1.to_csv('U17 eventdata alle.csv',index=False)
 
-df = pd.read_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\U17 eventdata alle.csv')
+df = pd.read_csv('U17 eventdata alle.csv')
 df['team'] = df['team'].apply(lambda x: ast.literal_eval(x))
 
 # Create a new dataframe with the columns as the dictionary keys and the values as a list
@@ -266,7 +266,7 @@ df = pd.concat([df, new_df], axis=1)
 df = df.drop('player', axis=1)
 df['matchId'] = df['matchId'].astype(str)
 df['Player id'] = df['Player id'].astype(str)
-df.to_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\U17 eventdata alle.csv')
+df.to_csv('U17 eventdata alle.csv')
 
 print('U17 ligaen hentet')
 
@@ -367,7 +367,7 @@ df1 = kampdetaljer.merge(df)
 
 df1.to_csv('U19 eventdata alle.csv',index=False)
 
-df = pd.read_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\U19 eventdata alle.csv')
+df = pd.read_csv('U19 eventdata alle.csv')
 df['team'] = df['team'].apply(lambda x: ast.literal_eval(x))
 
 # Create a new dataframe with the columns as the dictionary keys and the values as a list
@@ -402,7 +402,7 @@ df = pd.concat([df, new_df], axis=1)
 df = df.drop('player', axis=1)
 df['matchId'] = df['matchId'].astype(str)
 df['Player id'] = df['Player id'].astype(str)
-df.to_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\U19 eventdata alle.csv')
+df.to_csv('U19 eventdata alle.csv')
 
 print('U19 ligaen hentet')
 
@@ -497,7 +497,7 @@ df1 = kampdetaljer.merge(df)
 
 df1.to_csv('U17 div eventdata alle.csv',index=False)
 
-df = pd.read_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\U17 div eventdata alle.csv')
+df = pd.read_csv('U17 div eventdata alle.csv')
 df['team'] = df['team'].apply(lambda x: ast.literal_eval(x))
 
 # Create a new dataframe with the columns as the dictionary keys and the values as a list
@@ -532,7 +532,7 @@ df = pd.concat([df, new_df], axis=1)
 df = df.drop('player', axis=1)
 df['matchId'] = df['matchId'].astype(str)
 df['Player id'] = df['Player id'].astype(str)
-df.to_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\U17 div eventdata alle.csv')
+df.to_csv('U17 div eventdata alle.csv')
 
 print('U17 divisionen hentet')
 
@@ -627,7 +627,7 @@ df1 = kampdetaljer.merge(df)
 
 df1.to_csv('U19 div eventdata alle.csv',index=False)
 
-df = pd.read_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\U19 div eventdata alle.csv')
+df = pd.read_csv('U19 div eventdata alle.csv')
 df['team'] = df['team'].apply(lambda x: ast.literal_eval(x))
 
 # Create a new dataframe with the columns as the dictionary keys and the values as a list
@@ -662,7 +662,7 @@ df = pd.concat([df, new_df], axis=1)
 df = df.drop('player', axis=1)
 df['matchId'] = df['matchId'].astype(str)
 df['Player id'] = df['Player id'].astype(str)
-df.to_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\U19 div eventdata alle.csv')
+df.to_csv('U19 div eventdata alle.csv')
 
 print('U19 divisionen hentet')
 
@@ -757,7 +757,7 @@ df1 = kampdetaljer.merge(df)
 
 df1.to_csv('Superliga eventdata alle.csv',index=False)
 
-df = pd.read_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\Superliga eventdata alle.csv')
+df = pd.read_csv('Superliga eventdata alle.csv')
 df['team'] = df['team'].apply(lambda x: ast.literal_eval(x))
 
 # Create a new dataframe with the columns as the dictionary keys and the values as a list
@@ -792,7 +792,7 @@ df = pd.concat([df, new_df], axis=1)
 df = df.drop('player', axis=1)
 df['matchId'] = df['matchId'].astype(str)
 df['Player id'] = df['Player id'].astype(str)
-df.to_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\Superliga eventdata alle.csv')
+df.to_csv('Superliga eventdata alle.csv')
 
 print('Superligaen hentet')
 
@@ -887,7 +887,7 @@ df1 = kampdetaljer.merge(df)
 
 df1.to_csv('1.div eventdata alle.csv',index=False)
 
-df = pd.read_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\1.div eventdata alle.csv')
+df = pd.read_csv('1.div eventdata alle.csv')
 df['team'] = df['team'].apply(lambda x: ast.literal_eval(x))
 
 # Create a new dataframe with the columns as the dictionary keys and the values as a list
@@ -922,7 +922,7 @@ df = pd.concat([df, new_df], axis=1)
 df = df.drop('player', axis=1)
 df['matchId'] = df['matchId'].astype(str)
 df['Player id'] = df['Player id'].astype(str)
-df.to_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\1.div eventdata alle.csv')
+df.to_csv('1.div eventdata alle.csv')
 
 print('1. division hentet')
 
@@ -1017,7 +1017,7 @@ df1 = kampdetaljer.merge(df)
 
 df1.to_csv('2.div eventdata alle.csv',index=False)
 
-df = pd.read_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\2.div eventdata alle.csv')
+df = pd.read_csv('2.div eventdata alle.csv')
 df['team'] = df['team'].apply(lambda x: ast.literal_eval(x))
 
 # Create a new dataframe with the columns as the dictionary keys and the values as a list
@@ -1052,7 +1052,7 @@ df = pd.concat([df, new_df], axis=1)
 df = df.drop('player', axis=1)
 df['matchId'] = df['matchId'].astype(str)
 df['Player id'] = df['Player id'].astype(str)
-df.to_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\2.div eventdata alle.csv')
+df.to_csv('2.div eventdata alle.csv')
 
 print('2. div hentet')
 
@@ -1147,7 +1147,7 @@ df1 = kampdetaljer.merge(df)
 
 df1.to_csv('3.div eventdata alle.csv',index=False)
 
-df = pd.read_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\3.div eventdata alle.csv')
+df = pd.read_csv('3.div eventdata alle.csv')
 df['team'] = df['team'].apply(lambda x: ast.literal_eval(x))
 
 # Create a new dataframe with the columns as the dictionary keys and the values as a list
@@ -1182,6 +1182,6 @@ df = pd.concat([df, new_df], axis=1)
 df = df.drop('player', axis=1)
 df['matchId'] = df['matchId'].astype(str)
 df['Player id'] = df['Player id'].astype(str)
-df.to_csv(r'C:\Users\SéamusPeareBartholdy\Documents\GitHub\AC-Horsens\3.div eventdata alle.csv')
+df.to_csv('3.div eventdata alle.csv')
 
 print('3. division hentet')

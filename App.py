@@ -3344,7 +3344,7 @@ if username == valid_username and password == valid_password:
                 player_names = xgplacering['player.name']  # Extract player names
                 label_text = xgplacering.sort_values(by='possession.attack.xg',ascending=False)
                 label_text = label_text[['player.name', 'possession.attack.xg']].to_string(index=False)
-                label_text = label_text.replace('possession.attack.xg','')
+                label_text = label_text.replace('possession.attack.xg', '').replace('player.name', '')
                 shot_xg = xgplacering['possession.attack.xg'].astype(float)
                 min_size = 5  # Minimum dot size
                 max_size = 100  # Maximum dot size

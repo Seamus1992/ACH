@@ -49,12 +49,11 @@ import json
 import pandas as pd
 from pandas import json_normalize
 import numpy as np
-import os
+
 connection_string = 'SharedAccessSignature=sv=2020-08-04&ss=f&srt=sco&sp=rl&se=2025-01-11T22:47:25Z&st=2022-01-11T14:47:25Z&spr=https&sig=CXdXPlHz%2FhW0IRugFTfCrB7osNQVZJ%2BHjNR1EM2s6RU%3D;FileEndpoint=https://divforeningendataout1.file.core.windows.net/;'
 share_name = 'divisionsforeningen-outgoingdata'
 dir_path = 'KampData/Sæson 23-24/U15 Ligaen/'
 
-
 service_client = ShareServiceClient.from_connection_string(connection_string)
 share_client = service_client.get_share_client(share_name)
 directory_client = share_client.get_directory_client(dir_path)
@@ -64,105 +63,43 @@ json_files = []
 def find_json_files(directory_client):
     for item in directory_client.list_directories_and_files():
         if item.is_directory:
-            if 'AC Horsens' in item.name:
-                # Recursively search for JSON files in the subdirectory if it contains 'AC Horsens' in its name
-                sub_directory_client = directory_client.get_subdirectory_client(item.name)
-                find_json_files(sub_directory_client)
-            else:
-                # Otherwise, continue searching in the current directory
-                find_json_files(directory_client.get_subdirectory_client(item.name))
+            sub_directory_client = directory_client.get_subdirectory_client(item.name)
+            find_json_files(sub_directory_client)
         elif item.name.endswith('.json') and 'MatchEvents' in item.name:
-            # If the item is a JSON file with 'MatchEvents' in the name, download it and append its data to the list
             json_files.append(json.loads(directory_client.get_file_client(item.name).download_file().readall().decode()))
 
 find_json_files(directory_client)
 
-# Create an empty list to store the events data
 events_list = []
 
-# Iterate over each item in the json_files list and append its 'events' data to the events_list
 for item in json_files:
     events_list.extend(item['events'])
 
-# Convert the events_list to a DataFrame
-df = pd.DataFrame(events_list)
-print('U15 data hentet fra database')
-type_cols = pd.json_normalize(df['type'])
-type_cols.columns = ['type_primary','type_secondary']
-df = pd.concat([df.drop('type', axis=1), type_cols], axis=1)
-df = df.rename(columns= {'id':'Action id'})
-type_cols = pd.json_normalize(df['location'])
-type_cols.columns = ['x','y']
-df = pd.concat([df.drop('location', axis=1), type_cols], axis=1)
-df = df.rename(columns={'x' : 'Action location start x', 'y' : 'Action location start y'})
-type_cols = pd.json_normalize(df['team'])
-type_cols.columns = ['id','name','formation']
-df = pd.concat([df.drop('team', axis=1), type_cols], axis=1)
-df = df.rename(columns={'id' : 'Team id', 'name' : 'Team name','formation':'Team formation'})
-type_cols = pd.json_normalize(df['opponentTeam'])
-type_cols.columns = ['id','name','formation']
-df = pd.concat([df.drop('opponentTeam', axis=1), type_cols], axis=1)
-df = df.rename(columns={'id' : 'Opponent team id', 'name' : 'Opponent team name','formation':'Opponent team formation'})
-type_cols = pd.json_normalize(df['player'])
-type_cols.columns = ['id','name','position']
-df = pd.concat([df.drop('player', axis=1), type_cols], axis=1)
-df = df.rename(columns={'id' : 'Player id', 'name' : 'Player name','position':'Player position'})
-type_cols = pd.json_normalize(df['pass'])
-type_cols.columns = ['accurate','angle','height','length','recipient','id','name','position','endLocation']
-df = pd.concat([df.drop('pass', axis=1), type_cols], axis=1)
-df = df.rename(columns={'accurate' : 'Pass accurate', 'angle' : 'Pass angle','height':'Pass height','length':'Pass length','recipient':'Pass recipient id','id':'Pass recipient name','name':'Pass recipient position','position':'Pass end x','endLocation':'Pass end y'})
-type_cols = pd.json_normalize(df['shot'])
-type_cols.columns = ['bodypart','isGoal','onTarget','goalZone','xg','postShotXg','goalkeeperActionId','goalkeeper','id','name']
-df = pd.concat([df.drop('shot', axis=1), type_cols], axis=1)
-df = df.rename(columns={'bodypart' : 'Shot bodypart', 'isGoal' : 'Shot is goal','onTarget':'Shot on target','goalZone':'Shot goalzone','xg':'Shot xg','postShotxg':'Shot post shot xg','goalkeeperActionId':'Shot goalkeeper action id','goalkeeper':'Shot goalkeeper','id':'Shot goalkeeper id','name':'Shot goalkeeper name'})
-type_cols = pd.json_normalize(df['possession'])
-type_cols.columns = ['id','duration','types','eventsNumber','eventIndex','location','x','y','x','y','id','name','formation','withShot','withShotOnGoal','withGoal','flank','xg',]
-df = pd.concat([df.drop('possession', axis=1), type_cols], axis=1)
-df = df.rename(columns={'id' : 'Possession id', 'duration' : 'Possession duration','types':'Possession type','eventsnumber':'Possession eventsnumber','eventIndex':'Possession event index','location':'Possession location'})
-# create unique names for duplicate columns
-dup_cols = [col for col in df.columns if df.columns.tolist().count(col) > 1]
-unique_cols = [f'{col}_{i}' if col in dup_cols else col for i, col in enumerate(df.columns)]
+df = pd.json_normalize(events_list)
 
-# rename the dataframe columns with the unique names
-df.columns = unique_cols
+json_files = []
 
-df = df.rename(columns={'Possession id_44':'Possession id','x_50':'Possession start location x','y_51':'Possession start location y','x_52':'Possession end location x','y_53':'Possession end location y','Possession id_54':'Possession team id','name':'Possession team name','formation':'Possession team formation','withShot':'Possession with shot','withShotOnGoal':'Possession with shot on goal','withGoal':'Possession with goal','flank':'Possession flank','xg':'Possession xg'})
-#type_cols = pd.json_normalize(df['groundDuel'])
-#type_cols.columns = ['opponent','id','name','position','duelType','keptPossession','progressedWithBall','stoppedProgress','recoveredPossession','takeOn','side','relatedDuelId']
-#df = pd.concat([df.drop('groundDuel', axis=1), type_cols], axis=1)
-#df = df.rename(columns={'opponent':'Ground duel type','id':'Ground duel kept possession','name':'Ground duel progressed with ball','position':'Ground duel stopped progress','duelType':'Ground duel recovered possession','keptPosession':'Ground duel takeon','progressedWithBall':'Ground duel side','stoppedProgress':'Ground duel related duel id','recoveredPossession':'Ground duel opponent id','takeOn':'Ground duel opponent name','side':'Ground duel opponent position','relatedDuelId':'slettes'})
-#df = df.rename(columns={'bodypart' : 'Shot bodypart', 'isGoal' : 'Shot is goal','onTarget':'Shot on target','goalZone':'Shot goalzone','xg':'Shot xg','postShotxg':'Shot post shot xg','goalkeeperActionId':'Shot goalkeeper action id','goalkeeper':'Shot goalkeeper','id':'Shot goalkeeper id','name':'Shot goalkeeper name'})
-#type_cols = pd.json_normalize(df['aerialDuel'])
-#type_cols.columns = ['opponent','id','name','position','height','firstTouch','height','relatedDuelId']
-df = pd.concat([df.drop('aerialDuel', axis=1), type_cols], axis=1)
-df = df.rename(columns={'opponent':'Aerial duelfirstTouch','id':'Aerial duel height','name':'Aerial duel related duel id','position':'Aerial duel opponent id','height':'Aerial duel opponent name','firstTouch':'Aerial duel opponent position','relatedDuelId':'slettes'})
-dup_cols = [col for col in df.columns if df.columns.tolist().count(col) > 1]
-unique_cols = [f'{col}_{i}' if col in dup_cols else col for i, col in enumerate(df.columns)]
-# rename the dataframe columns with the unique names
-df.columns = unique_cols
-df = df.rename(columns={'Aerial duel opponent name_78':'Aerial duel opponent height','Aerial duel opponent name_76':'Aerial duel opponent name'})
-#type_cols = pd.json_normalize(df['infraction'])
-#type_cols.columns = ['yellowCard','redCard','type','opponent','id','name','position']
-#df = pd.concat([df.drop('infraction', axis=1), type_cols], axis=1)
-#df = df.rename(columns={'yellowCard':'Infraction yellow card','redCard':'Infraction red card','type':'Infraction type','opponent':'Infraction opponent id','id':'Infraction opponent name','name':'Infraction opponent position','position':'slettes'})
-type_cols = pd.json_normalize(df['carry'])
-type_cols.columns = ['progression','x','y']
-df = pd.concat([df.drop('carry', axis=1), type_cols], axis=1)
-df = df.rename(columns={'progression':'Carry progression','x':'Carry end location x','y':'Carry end location y'})
-df.to_csv(r'U15 til modstanderanalyse.csv')
+def find_json_files(directory_client):
+    for item in directory_client.list_directories_and_files():
+        if item.is_directory:
+            sub_directory_client = directory_client.get_subdirectory_client(item.name)
+            find_json_files(sub_directory_client)
+        elif item.name.endswith('.json') and 'MatchDetail' in item.name:
+            json_files.append(json.loads(directory_client.get_file_client(item.name).download_file().readall().decode()))
+            
+find_json_files(directory_client)
+kampdetaljer = json_normalize(json_files)
+kampdetaljer = kampdetaljer[['wyId','label','date']]
+kampdetaljer = kampdetaljer.rename(columns={'wyId':'matchId'})
+df = kampdetaljer.merge(df)
+df = df[['label','date','shot.isGoal','shot.xg','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.types','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
 
+df.to_csv('xT/U15 Ligaen 23 24.csv',index=False)
 
-from azure.storage.fileshare import ShareServiceClient
-import json
-import pandas as pd
-from pandas import json_normalize
-import numpy as np
-import os
 connection_string = 'SharedAccessSignature=sv=2020-08-04&ss=f&srt=sco&sp=rl&se=2025-01-11T22:47:25Z&st=2022-01-11T14:47:25Z&spr=https&sig=CXdXPlHz%2FhW0IRugFTfCrB7osNQVZJ%2BHjNR1EM2s6RU%3D;FileEndpoint=https://divforeningendataout1.file.core.windows.net/;'
 share_name = 'divisionsforeningen-outgoingdata'
 dir_path = 'KampData/Sæson 23-24/U17 Ligaen/'
 
-
 service_client = ShareServiceClient.from_connection_string(connection_string)
 share_client = service_client.get_share_client(share_name)
 directory_client = share_client.get_directory_client(dir_path)
@@ -172,103 +109,88 @@ json_files = []
 def find_json_files(directory_client):
     for item in directory_client.list_directories_and_files():
         if item.is_directory:
-            if 'AC Horsens' in item.name:
-                # Recursively search for JSON files in the subdirectory if it contains 'AC Horsens' in its name
-                sub_directory_client = directory_client.get_subdirectory_client(item.name)
-                find_json_files(sub_directory_client)
-            else:
-                # Otherwise, continue searching in the current directory
-                find_json_files(directory_client.get_subdirectory_client(item.name))
+            sub_directory_client = directory_client.get_subdirectory_client(item.name)
+            find_json_files(sub_directory_client)
         elif item.name.endswith('.json') and 'MatchEvents' in item.name:
-            # If the item is a JSON file with 'MatchEvents' in the name, download it and append its data to the list
             json_files.append(json.loads(directory_client.get_file_client(item.name).download_file().readall().decode()))
 
 find_json_files(directory_client)
 
-# Create an empty list to store the events data
 events_list = []
 
-# Iterate over each item in the json_files list and append its 'events' data to the events_list
 for item in json_files:
     events_list.extend(item['events'])
 
-# Convert the events_list to a DataFrame
-df = pd.DataFrame(events_list)
-print('U17 data hentet fra database')
-type_cols = pd.json_normalize(df['type'])
-type_cols.columns = ['type_primary','type_secondary']
-df = pd.concat([df.drop('type', axis=1), type_cols], axis=1)
-df = df.rename(columns= {'id':'Action id'})
-type_cols = pd.json_normalize(df['location'])
-type_cols.columns = ['x','y']
-df = pd.concat([df.drop('location', axis=1), type_cols], axis=1)
-df = df.rename(columns={'x' : 'Action location start x', 'y' : 'Action location start y'})
-type_cols = pd.json_normalize(df['team'])
-type_cols.columns = ['id','name','formation']
-df = pd.concat([df.drop('team', axis=1), type_cols], axis=1)
-df = df.rename(columns={'id' : 'Team id', 'name' : 'Team name','formation':'Team formation'})
-type_cols = pd.json_normalize(df['opponentTeam'])
-type_cols.columns = ['id','name','formation']
-df = pd.concat([df.drop('opponentTeam', axis=1), type_cols], axis=1)
-df = df.rename(columns={'id' : 'Opponent team id', 'name' : 'Opponent team name','formation':'Opponent team formation'})
-type_cols = pd.json_normalize(df['player'])
-type_cols.columns = ['id','name','position']
-df = pd.concat([df.drop('player', axis=1), type_cols], axis=1)
-df = df.rename(columns={'id' : 'Player id', 'name' : 'Player name','position':'Player position'})
-type_cols = pd.json_normalize(df['pass'])
-type_cols.columns = ['accurate','angle','height','length','recipient','id','name','position','endLocation']
-df = pd.concat([df.drop('pass', axis=1), type_cols], axis=1)
-df = df.rename(columns={'accurate' : 'Pass accurate', 'angle' : 'Pass angle','height':'Pass height','length':'Pass length','recipient':'Pass recipient id','id':'Pass recipient name','name':'Pass recipient position','position':'Pass end x','endLocation':'Pass end y'})
-type_cols = pd.json_normalize(df['shot'])
-type_cols.columns = ['bodypart','isGoal','onTarget','goalZone','xg','postShotXg','goalkeeperActionId','goalkeeper','id','name']
-df = pd.concat([df.drop('shot', axis=1), type_cols], axis=1)
-df = df.rename(columns={'bodypart' : 'Shot bodypart', 'isGoal' : 'Shot is goal','onTarget':'Shot on target','goalZone':'Shot goalzone','xg':'Shot xg','postShotxg':'Shot post shot xg','goalkeeperActionId':'Shot goalkeeper action id','goalkeeper':'Shot goalkeeper','id':'Shot goalkeeper id','name':'Shot goalkeeper name'})
-type_cols = pd.json_normalize(df['possession'])
-type_cols.columns = ['id','duration','types','eventsNumber','eventIndex','location','x','y','x','y','id','name','formation','withShot','withShotOnGoal','withGoal','flank','xg',]
-df = pd.concat([df.drop('possession', axis=1), type_cols], axis=1)
-df = df.rename(columns={'id' : 'Possession id', 'duration' : 'Possession duration','types':'Possession type','eventsnumber':'Possession eventsnumber','eventIndex':'Possession event index','location':'Possession location'})
-# create unique names for duplicate columns
-dup_cols = [col for col in df.columns if df.columns.tolist().count(col) > 1]
-unique_cols = [f'{col}_{i}' if col in dup_cols else col for i, col in enumerate(df.columns)]
+df = pd.json_normalize(events_list)
 
-# rename the dataframe columns with the unique names
-df.columns = unique_cols
+json_files = []
 
-df = df.rename(columns={'Possession id_44':'Possession id','x_50':'Possession start location x','y_51':'Possession start location y','x_52':'Possession end location x','y_53':'Possession end location y','Possession id_54':'Possession team id','name':'Possession team name','formation':'Possession team formation','withShot':'Possession with shot','withShotOnGoal':'Possession with shot on goal','withGoal':'Possession with goal','flank':'Possession flank','xg':'Possession xg'})
-#type_cols = pd.json_normalize(df['groundDuel'])
-#type_cols.columns = ['opponent','id','name','position','duelType','keptPossession','progressedWithBall','stoppedProgress','recoveredPossession','takeOn','side','relatedDuelId']
-#df = pd.concat([df.drop('groundDuel', axis=1), type_cols], axis=1)
-#df = df.rename(columns={'opponent':'Ground duel type','id':'Ground duel kept possession','name':'Ground duel progressed with ball','position':'Ground duel stopped progress','duelType':'Ground duel recovered possession','keptPosession':'Ground duel takeon','progressedWithBall':'Ground duel side','stoppedProgress':'Ground duel related duel id','recoveredPossession':'Ground duel opponent id','takeOn':'Ground duel opponent name','side':'Ground duel opponent position','relatedDuelId':'slettes'})
-#df = df.rename(columns={'bodypart' : 'Shot bodypart', 'isGoal' : 'Shot is goal','onTarget':'Shot on target','goalZone':'Shot goalzone','xg':'Shot xg','postShotxg':'Shot post shot xg','goalkeeperActionId':'Shot goalkeeper action id','goalkeeper':'Shot goalkeeper','id':'Shot goalkeeper id','name':'Shot goalkeeper name'})
-#type_cols = pd.json_normalize(df['aerialDuel'])
-#type_cols.columns = ['opponent','id','name','position','height','firstTouch','height','relatedDuelId']
-df = pd.concat([df.drop('aerialDuel', axis=1), type_cols], axis=1)
-df = df.rename(columns={'opponent':'Aerial duelfirstTouch','id':'Aerial duel height','name':'Aerial duel related duel id','position':'Aerial duel opponent id','height':'Aerial duel opponent name','firstTouch':'Aerial duel opponent position','relatedDuelId':'slettes'})
-dup_cols = [col for col in df.columns if df.columns.tolist().count(col) > 1]
-unique_cols = [f'{col}_{i}' if col in dup_cols else col for i, col in enumerate(df.columns)]
-# rename the dataframe columns with the unique names
-df.columns = unique_cols
-df = df.rename(columns={'Aerial duel opponent name_78':'Aerial duel opponent height','Aerial duel opponent name_76':'Aerial duel opponent name'})
-#type_cols = pd.json_normalize(df['infraction'])
-#type_cols.columns = ['yellowCard','redCard','type','opponent','id','name','position']
-#df = pd.concat([df.drop('infraction', axis=1), type_cols], axis=1)
-#df = df.rename(columns={'yellowCard':'Infraction yellow card','redCard':'Infraction red card','type':'Infraction type','opponent':'Infraction opponent id','id':'Infraction opponent name','name':'Infraction opponent position','position':'slettes'})
-type_cols = pd.json_normalize(df['carry'])
-type_cols.columns = ['progression','x','y']
-df = pd.concat([df.drop('carry', axis=1), type_cols], axis=1)
-df = df.rename(columns={'progression':'Carry progression','x':'Carry end location x','y':'Carry end location y'})
-df.to_csv(r'U17 til modstanderanalyse.csv')
+def find_json_files(directory_client):
+    for item in directory_client.list_directories_and_files():
+        if item.is_directory:
+            sub_directory_client = directory_client.get_subdirectory_client(item.name)
+            find_json_files(sub_directory_client)
+        elif item.name.endswith('.json') and 'MatchDetail' in item.name:
+            json_files.append(json.loads(directory_client.get_file_client(item.name).download_file().readall().decode()))
+            
+find_json_files(directory_client)
+kampdetaljer = json_normalize(json_files)
+kampdetaljer = kampdetaljer[['wyId','label','date']]
+kampdetaljer = kampdetaljer.rename(columns={'wyId':'matchId'})
+df = kampdetaljer.merge(df)
+df = df[['label','date','shot.isGoal','shot.xg','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.types','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
 
-from azure.storage.fileshare import ShareServiceClient
-import json
-import pandas as pd
-from pandas import json_normalize
-import numpy as np
-import os
+df.to_csv('xT/U17 Ligaen 23 24.csv',index=False)
+
 connection_string = 'SharedAccessSignature=sv=2020-08-04&ss=f&srt=sco&sp=rl&se=2025-01-11T22:47:25Z&st=2022-01-11T14:47:25Z&spr=https&sig=CXdXPlHz%2FhW0IRugFTfCrB7osNQVZJ%2BHjNR1EM2s6RU%3D;FileEndpoint=https://divforeningendataout1.file.core.windows.net/;'
 share_name = 'divisionsforeningen-outgoingdata'
 dir_path = 'KampData/Sæson 23-24/U19 Ligaen/'
 
+service_client = ShareServiceClient.from_connection_string(connection_string)
+share_client = service_client.get_share_client(share_name)
+directory_client = share_client.get_directory_client(dir_path)
+
+json_files = []
+
+def find_json_files(directory_client):
+    for item in directory_client.list_directories_and_files():
+        if item.is_directory:
+            sub_directory_client = directory_client.get_subdirectory_client(item.name)
+            find_json_files(sub_directory_client)
+        elif item.name.endswith('.json') and 'MatchEvents' in item.name:
+            json_files.append(json.loads(directory_client.get_file_client(item.name).download_file().readall().decode()))
+
+find_json_files(directory_client)
+
+events_list = []
+
+for item in json_files:
+    events_list.extend(item['events'])
+
+df = pd.json_normalize(events_list)
+
+json_files = []
+
+def find_json_files(directory_client):
+    for item in directory_client.list_directories_and_files():
+        if item.is_directory:
+            sub_directory_client = directory_client.get_subdirectory_client(item.name)
+            find_json_files(sub_directory_client)
+        elif item.name.endswith('.json') and 'MatchDetail' in item.name:
+            json_files.append(json.loads(directory_client.get_file_client(item.name).download_file().readall().decode()))
+            
+find_json_files(directory_client)
+kampdetaljer = json_normalize(json_files)
+kampdetaljer = kampdetaljer[['wyId','label','date']]
+kampdetaljer = kampdetaljer.rename(columns={'wyId':'matchId'})
+df = kampdetaljer.merge(df)
+df = df[['label','date','shot.isGoal','shot.xg','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.types','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
+
+df.to_csv('xT/U19 Ligaen 23 24.csv',index=False)
+
+connection_string = 'SharedAccessSignature=sv=2020-08-04&ss=f&srt=sco&sp=rl&se=2025-01-11T22:47:25Z&st=2022-01-11T14:47:25Z&spr=https&sig=CXdXPlHz%2FhW0IRugFTfCrB7osNQVZJ%2BHjNR1EM2s6RU%3D;FileEndpoint=https://divforeningendataout1.file.core.windows.net/;'
+share_name = 'divisionsforeningen-outgoingdata'
+dir_path = 'KampData/Sæson 23-24/Superliga/'
 
 service_client = ShareServiceClient.from_connection_string(connection_string)
 share_client = service_client.get_share_client(share_name)
@@ -279,92 +201,269 @@ json_files = []
 def find_json_files(directory_client):
     for item in directory_client.list_directories_and_files():
         if item.is_directory:
-            if 'AC Horsens' in item.name:
-                # Recursively search for JSON files in the subdirectory if it contains 'AC Horsens' in its name
-                sub_directory_client = directory_client.get_subdirectory_client(item.name)
-                find_json_files(sub_directory_client)
-            else:
-                # Otherwise, continue searching in the current directory
-                find_json_files(directory_client.get_subdirectory_client(item.name))
+            sub_directory_client = directory_client.get_subdirectory_client(item.name)
+            find_json_files(sub_directory_client)
         elif item.name.endswith('.json') and 'MatchEvents' in item.name:
-            # If the item is a JSON file with 'MatchEvents' in the name, download it and append its data to the list
             json_files.append(json.loads(directory_client.get_file_client(item.name).download_file().readall().decode()))
 
 find_json_files(directory_client)
 
-# Create an empty list to store the events data
 events_list = []
 
-# Iterate over each item in the json_files list and append its 'events' data to the events_list
 for item in json_files:
     events_list.extend(item['events'])
 
-# Convert the events_list to a DataFrame
-df = pd.DataFrame(events_list)
-print('U19 data hentet fra database')
-type_cols = pd.json_normalize(df['type'])
-type_cols.columns = ['type_primary','type_secondary']
-df = pd.concat([df.drop('type', axis=1), type_cols], axis=1)
-df = df.rename(columns= {'id':'Action id'})
-type_cols = pd.json_normalize(df['location'])
-type_cols.columns = ['x','y']
-df = pd.concat([df.drop('location', axis=1), type_cols], axis=1)
-df = df.rename(columns={'x' : 'Action location start x', 'y' : 'Action location start y'})
-type_cols = pd.json_normalize(df['team'])
-type_cols.columns = ['id','name','formation']
-df = pd.concat([df.drop('team', axis=1), type_cols], axis=1)
-df = df.rename(columns={'id' : 'Team id', 'name' : 'Team name','formation':'Team formation'})
-type_cols = pd.json_normalize(df['opponentTeam'])
-type_cols.columns = ['id','name','formation']
-df = pd.concat([df.drop('opponentTeam', axis=1), type_cols], axis=1)
-df = df.rename(columns={'id' : 'Opponent team id', 'name' : 'Opponent team name','formation':'Opponent team formation'})
-type_cols = pd.json_normalize(df['player'])
-type_cols.columns = ['id','name','position']
-df = pd.concat([df.drop('player', axis=1), type_cols], axis=1)
-df = df.rename(columns={'id' : 'Player id', 'name' : 'Player name','position':'Player position'})
-type_cols = pd.json_normalize(df['pass'])
-type_cols.columns = ['accurate','angle','height','length','recipient','id','name','position','endLocation']
-df = pd.concat([df.drop('pass', axis=1), type_cols], axis=1)
-df = df.rename(columns={'accurate' : 'Pass accurate', 'angle' : 'Pass angle','height':'Pass height','length':'Pass length','recipient':'Pass recipient id','id':'Pass recipient name','name':'Pass recipient position','position':'Pass end x','endLocation':'Pass end y'})
-type_cols = pd.json_normalize(df['shot'])
-type_cols.columns = ['bodypart','isGoal','onTarget','goalZone','xg','postShotXg','goalkeeperActionId','goalkeeper','id','name']
-df = pd.concat([df.drop('shot', axis=1), type_cols], axis=1)
-df = df.rename(columns={'bodypart' : 'Shot bodypart', 'isGoal' : 'Shot is goal','onTarget':'Shot on target','goalZone':'Shot goalzone','xg':'Shot xg','postShotxg':'Shot post shot xg','goalkeeperActionId':'Shot goalkeeper action id','goalkeeper':'Shot goalkeeper','id':'Shot goalkeeper id','name':'Shot goalkeeper name'})
-type_cols = pd.json_normalize(df['possession'])
-type_cols.columns = ['id','duration','types','eventsNumber','eventIndex','location','x','y','x','y','id','name','formation','withShot','withShotOnGoal','withGoal','flank','xg',]
-df = pd.concat([df.drop('possession', axis=1), type_cols], axis=1)
-df = df.rename(columns={'id' : 'Possession id', 'duration' : 'Possession duration','types':'Possession type','eventsnumber':'Possession eventsnumber','eventIndex':'Possession event index','location':'Possession location'})
-# create unique names for duplicate columns
-dup_cols = [col for col in df.columns if df.columns.tolist().count(col) > 1]
-unique_cols = [f'{col}_{i}' if col in dup_cols else col for i, col in enumerate(df.columns)]
+df = pd.json_normalize(events_list)
 
-# rename the dataframe columns with the unique names
-df.columns = unique_cols
+json_files = []
 
-df = df.rename(columns={'Possession id_44':'Possession id','x_50':'Possession start location x','y_51':'Possession start location y','x_52':'Possession end location x','y_53':'Possession end location y','Possession id_54':'Possession team id','name':'Possession team name','formation':'Possession team formation','withShot':'Possession with shot','withShotOnGoal':'Possession with shot on goal','withGoal':'Possession with goal','flank':'Possession flank','xg':'Possession xg'})
-#type_cols = pd.json_normalize(df['groundDuel'])
-#type_cols.columns = ['opponent','id','name','position','duelType','keptPossession','progressedWithBall','stoppedProgress','recoveredPossession','takeOn','side','relatedDuelId']
-#df = pd.concat([df.drop('groundDuel', axis=1), type_cols], axis=1)
-#df = df.rename(columns={'opponent':'Ground duel type','id':'Ground duel kept possession','name':'Ground duel progressed with ball','position':'Ground duel stopped progress','duelType':'Ground duel recovered possession','keptPosession':'Ground duel takeon','progressedWithBall':'Ground duel side','stoppedProgress':'Ground duel related duel id','recoveredPossession':'Ground duel opponent id','takeOn':'Ground duel opponent name','side':'Ground duel opponent position','relatedDuelId':'slettes'})
-#df = df.rename(columns={'bodypart' : 'Shot bodypart', 'isGoal' : 'Shot is goal','onTarget':'Shot on target','goalZone':'Shot goalzone','xg':'Shot xg','postShotxg':'Shot post shot xg','goalkeeperActionId':'Shot goalkeeper action id','goalkeeper':'Shot goalkeeper','id':'Shot goalkeeper id','name':'Shot goalkeeper name'})
-#type_cols = pd.json_normalize(df['aerialDuel'])
-#type_cols.columns = ['opponent','id','name','position','height','firstTouch','height','relatedDuelId']
-df = pd.concat([df.drop('aerialDuel', axis=1), type_cols], axis=1)
-df = df.rename(columns={'opponent':'Aerial duelfirstTouch','id':'Aerial duel height','name':'Aerial duel related duel id','position':'Aerial duel opponent id','height':'Aerial duel opponent name','firstTouch':'Aerial duel opponent position','relatedDuelId':'slettes'})
-dup_cols = [col for col in df.columns if df.columns.tolist().count(col) > 1]
-unique_cols = [f'{col}_{i}' if col in dup_cols else col for i, col in enumerate(df.columns)]
-# rename the dataframe columns with the unique names
-df.columns = unique_cols
-df = df.rename(columns={'Aerial duel opponent name_78':'Aerial duel opponent height','Aerial duel opponent name_76':'Aerial duel opponent name'})
-#type_cols = pd.json_normalize(df['infraction'])
-#type_cols.columns = ['yellowCard','redCard','type','opponent','id','name','position']
-#df = pd.concat([df.drop('infraction', axis=1), type_cols], axis=1)
-#df = df.rename(columns={'yellowCard':'Infraction yellow card','redCard':'Infraction red card','type':'Infraction type','opponent':'Infraction opponent id','id':'Infraction opponent name','name':'Infraction opponent position','position':'slettes'})
-type_cols = pd.json_normalize(df['carry'])
-type_cols.columns = ['progression','x','y']
-df = pd.concat([df.drop('carry', axis=1), type_cols], axis=1)
-df = df.rename(columns={'progression':'Carry progression','x':'Carry end location x','y':'Carry end location y'})
-df.to_csv(r'U19 til modstanderanalyse.csv')
+def find_json_files(directory_client):
+    for item in directory_client.list_directories_and_files():
+        if item.is_directory:
+            sub_directory_client = directory_client.get_subdirectory_client(item.name)
+            find_json_files(sub_directory_client)
+        elif item.name.endswith('.json') and 'MatchDetail' in item.name:
+            json_files.append(json.loads(directory_client.get_file_client(item.name).download_file().readall().decode()))
+            
+find_json_files(directory_client)
+kampdetaljer = json_normalize(json_files)
+kampdetaljer = kampdetaljer[['wyId','label','date']]
+kampdetaljer = kampdetaljer.rename(columns={'wyId':'matchId'})
+df = kampdetaljer.merge(df)
+df = df[['label','date','shot.isGoal','shot.xg','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.types','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
+
+df.to_csv('xT/Superliga 23 24.csv',index=False)
+
+connection_string = 'SharedAccessSignature=sv=2020-08-04&ss=f&srt=sco&sp=rl&se=2025-01-11T22:47:25Z&st=2022-01-11T14:47:25Z&spr=https&sig=CXdXPlHz%2FhW0IRugFTfCrB7osNQVZJ%2BHjNR1EM2s6RU%3D;FileEndpoint=https://divforeningendataout1.file.core.windows.net/;'
+share_name = 'divisionsforeningen-outgoingdata'
+dir_path = 'KampData/Sæson 23-24/1st Division/'
+
+service_client = ShareServiceClient.from_connection_string(connection_string)
+share_client = service_client.get_share_client(share_name)
+directory_client = share_client.get_directory_client(dir_path)
+
+json_files = []
+
+def find_json_files(directory_client):
+    for item in directory_client.list_directories_and_files():
+        if item.is_directory:
+            sub_directory_client = directory_client.get_subdirectory_client(item.name)
+            find_json_files(sub_directory_client)
+        elif item.name.endswith('.json') and 'MatchEvents' in item.name:
+            json_files.append(json.loads(directory_client.get_file_client(item.name).download_file().readall().decode()))
+
+find_json_files(directory_client)
+
+events_list = []
+
+for item in json_files:
+    events_list.extend(item['events'])
+
+df = pd.json_normalize(events_list)
+
+json_files = []
+
+def find_json_files(directory_client):
+    for item in directory_client.list_directories_and_files():
+        if item.is_directory:
+            sub_directory_client = directory_client.get_subdirectory_client(item.name)
+            find_json_files(sub_directory_client)
+        elif item.name.endswith('.json') and 'MatchDetail' in item.name:
+            json_files.append(json.loads(directory_client.get_file_client(item.name).download_file().readall().decode()))
+            
+find_json_files(directory_client)
+kampdetaljer = json_normalize(json_files)
+kampdetaljer = kampdetaljer[['wyId','label','date']]
+kampdetaljer = kampdetaljer.rename(columns={'wyId':'matchId'})
+df = kampdetaljer.merge(df)
+df = df[['label','date','shot.isGoal','shot.xg','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.types','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
+
+df.to_csv('xT/1st Division 23 24.csv',index=False)
+
+connection_string = 'SharedAccessSignature=sv=2020-08-04&ss=f&srt=sco&sp=rl&se=2025-01-11T22:47:25Z&st=2022-01-11T14:47:25Z&spr=https&sig=CXdXPlHz%2FhW0IRugFTfCrB7osNQVZJ%2BHjNR1EM2s6RU%3D;FileEndpoint=https://divforeningendataout1.file.core.windows.net/;'
+share_name = 'divisionsforeningen-outgoingdata'
+dir_path = 'KampData/Sæson 23-24/2nd Division/'
+
+service_client = ShareServiceClient.from_connection_string(connection_string)
+share_client = service_client.get_share_client(share_name)
+directory_client = share_client.get_directory_client(dir_path)
+
+json_files = []
+
+def find_json_files(directory_client):
+    for item in directory_client.list_directories_and_files():
+        if item.is_directory:
+            sub_directory_client = directory_client.get_subdirectory_client(item.name)
+            find_json_files(sub_directory_client)
+        elif item.name.endswith('.json') and 'MatchEvents' in item.name:
+            json_files.append(json.loads(directory_client.get_file_client(item.name).download_file().readall().decode()))
+
+find_json_files(directory_client)
+
+events_list = []
+
+for item in json_files:
+    events_list.extend(item['events'])
+
+df = pd.json_normalize(events_list)
+
+json_files = []
+
+def find_json_files(directory_client):
+    for item in directory_client.list_directories_and_files():
+        if item.is_directory:
+            sub_directory_client = directory_client.get_subdirectory_client(item.name)
+            find_json_files(sub_directory_client)
+        elif item.name.endswith('.json') and 'MatchDetail' in item.name:
+            json_files.append(json.loads(directory_client.get_file_client(item.name).download_file().readall().decode()))
+            
+find_json_files(directory_client)
+kampdetaljer = json_normalize(json_files)
+kampdetaljer = kampdetaljer[['wyId','label','date']]
+kampdetaljer = kampdetaljer.rename(columns={'wyId':'matchId'})
+df = kampdetaljer.merge(df)
+df = df[['label','date','shot.isGoal','shot.xg','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.types','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
+
+df.to_csv('xT/2nd Division 23 24.csv',index=False)
+
+connection_string = 'SharedAccessSignature=sv=2020-08-04&ss=f&srt=sco&sp=rl&se=2025-01-11T22:47:25Z&st=2022-01-11T14:47:25Z&spr=https&sig=CXdXPlHz%2FhW0IRugFTfCrB7osNQVZJ%2BHjNR1EM2s6RU%3D;FileEndpoint=https://divforeningendataout1.file.core.windows.net/;'
+share_name = 'divisionsforeningen-outgoingdata'
+dir_path = 'KampData/Sæson 23-24/3. Division/'
+
+service_client = ShareServiceClient.from_connection_string(connection_string)
+share_client = service_client.get_share_client(share_name)
+directory_client = share_client.get_directory_client(dir_path)
+
+json_files = []
+
+def find_json_files(directory_client):
+    for item in directory_client.list_directories_and_files():
+        if item.is_directory:
+            sub_directory_client = directory_client.get_subdirectory_client(item.name)
+            find_json_files(sub_directory_client)
+        elif item.name.endswith('.json') and 'MatchEvents' in item.name:
+            json_files.append(json.loads(directory_client.get_file_client(item.name).download_file().readall().decode()))
+
+find_json_files(directory_client)
+
+events_list = []
+
+for item in json_files:
+    events_list.extend(item['events'])
+
+df = pd.json_normalize(events_list)
+
+json_files = []
+
+def find_json_files(directory_client):
+    for item in directory_client.list_directories_and_files():
+        if item.is_directory:
+            sub_directory_client = directory_client.get_subdirectory_client(item.name)
+            find_json_files(sub_directory_client)
+        elif item.name.endswith('.json') and 'MatchDetail' in item.name:
+            json_files.append(json.loads(directory_client.get_file_client(item.name).download_file().readall().decode()))
+            
+find_json_files(directory_client)
+kampdetaljer = json_normalize(json_files)
+kampdetaljer = kampdetaljer[['wyId','label','date']]
+kampdetaljer = kampdetaljer.rename(columns={'wyId':'matchId'})
+df = kampdetaljer.merge(df)
+df = df[['label','date','shot.isGoal','shot.xg','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.types','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
+
+df.to_csv('xT/3. Division 23 24.csv',index=False)
+
+connection_string = 'SharedAccessSignature=sv=2020-08-04&ss=f&srt=sco&sp=rl&se=2025-01-11T22:47:25Z&st=2022-01-11T14:47:25Z&spr=https&sig=CXdXPlHz%2FhW0IRugFTfCrB7osNQVZJ%2BHjNR1EM2s6RU%3D;FileEndpoint=https://divforeningendataout1.file.core.windows.net/;'
+share_name = 'divisionsforeningen-outgoingdata'
+dir_path = 'KampData/Sæson 23-24/U17 Division/'
+
+service_client = ShareServiceClient.from_connection_string(connection_string)
+share_client = service_client.get_share_client(share_name)
+directory_client = share_client.get_directory_client(dir_path)
+
+json_files = []
+
+def find_json_files(directory_client):
+    for item in directory_client.list_directories_and_files():
+        if item.is_directory:
+            sub_directory_client = directory_client.get_subdirectory_client(item.name)
+            find_json_files(sub_directory_client)
+        elif item.name.endswith('.json') and 'MatchEvents' in item.name:
+            json_files.append(json.loads(directory_client.get_file_client(item.name).download_file().readall().decode()))
+
+find_json_files(directory_client)
+
+events_list = []
+
+for item in json_files:
+    events_list.extend(item['events'])
+
+df = pd.json_normalize(events_list)
+
+json_files = []
+
+def find_json_files(directory_client):
+    for item in directory_client.list_directories_and_files():
+        if item.is_directory:
+            sub_directory_client = directory_client.get_subdirectory_client(item.name)
+            find_json_files(sub_directory_client)
+        elif item.name.endswith('.json') and 'MatchDetail' in item.name:
+            json_files.append(json.loads(directory_client.get_file_client(item.name).download_file().readall().decode()))
+            
+find_json_files(directory_client)
+kampdetaljer = json_normalize(json_files)
+kampdetaljer = kampdetaljer[['wyId','label','date']]
+kampdetaljer = kampdetaljer.rename(columns={'wyId':'matchId'})
+df = kampdetaljer.merge(df)
+df = df[['label','date','shot.isGoal','shot.xg','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.types','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
+
+df.to_csv('xT/U17 Division 23 24.csv',index=False)
+
+connection_string = 'SharedAccessSignature=sv=2020-08-04&ss=f&srt=sco&sp=rl&se=2025-01-11T22:47:25Z&st=2022-01-11T14:47:25Z&spr=https&sig=CXdXPlHz%2FhW0IRugFTfCrB7osNQVZJ%2BHjNR1EM2s6RU%3D;FileEndpoint=https://divforeningendataout1.file.core.windows.net/;'
+share_name = 'divisionsforeningen-outgoingdata'
+dir_path = 'KampData/Sæson 23-24/U19 Division/'
+
+service_client = ShareServiceClient.from_connection_string(connection_string)
+share_client = service_client.get_share_client(share_name)
+directory_client = share_client.get_directory_client(dir_path)
+
+json_files = []
+
+def find_json_files(directory_client):
+    for item in directory_client.list_directories_and_files():
+        if item.is_directory:
+            sub_directory_client = directory_client.get_subdirectory_client(item.name)
+            find_json_files(sub_directory_client)
+        elif item.name.endswith('.json') and 'MatchEvents' in item.name:
+            json_files.append(json.loads(directory_client.get_file_client(item.name).download_file().readall().decode()))
+
+find_json_files(directory_client)
+
+events_list = []
+
+for item in json_files:
+    events_list.extend(item['events'])
+
+df = pd.json_normalize(events_list)
+
+json_files = []
+
+def find_json_files(directory_client):
+    for item in directory_client.list_directories_and_files():
+        if item.is_directory:
+            sub_directory_client = directory_client.get_subdirectory_client(item.name)
+            find_json_files(sub_directory_client)
+        elif item.name.endswith('.json') and 'MatchDetail' in item.name:
+            json_files.append(json.loads(directory_client.get_file_client(item.name).download_file().readall().decode()))
+            
+find_json_files(directory_client)
+kampdetaljer = json_normalize(json_files)
+kampdetaljer = kampdetaljer[['wyId','label','date']]
+kampdetaljer = kampdetaljer.rename(columns={'wyId':'matchId'})
+df = kampdetaljer.merge(df)
+df = df[['label','date','shot.isGoal','shot.xg','type.primary','type.secondary','location.x','location.y','team.name','opponentTeam.name','player.id','player.name','pass.accurate','pass.endLocation.x','pass.endLocation.y','pass.recipient.id','pass.recipient.name','possession.id','possession.eventsNumber','possession.eventIndex','possession.types','possession.team.name','possession.attack.xg','carry.progression','carry.endLocation.x','carry.endLocation.y']]
+
+df.to_csv('xT/U19 Division 23 24.csv',index=False)
+
 
 from azure.storage.fileshare import ShareServiceClient
 import json

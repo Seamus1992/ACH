@@ -7196,15 +7196,15 @@ if username == valid_username and password == valid_password:
             import numpy as np
 
             dfteamstats = pd.read_csv(r'Teamsheet alle kampe U15.csv')
-            df = pd.read_csv(r'U15 til modstanderanalyse.csv')
-            holdnavne = df['Team name'].drop_duplicates(keep= 'first')
+            df = pd.read_csv(r'xT/U15 Ligaen 23 24.csv')
+            holdnavne = df['team.name'].drop_duplicates(keep= 'first')
             modstander = st.selectbox('Vælg modstander',holdnavne)
 
             columns_after_first_3 = dfteamstats.columns[3:]
             dfteamstatsmodstander = dfteamstats.iloc[:, :3].join(dfteamstats.loc[:, columns_after_first_3[dfteamstats.columns[3:].str.contains(modstander)]])
-            df = df[df['Team name'].str.contains(modstander)]
+            df = df[df['team.name'].str.contains(modstander)]
 
-            kampe = df['Opponent team name'].drop_duplicates(keep='first')
+            kampe = df['opponentTeam.name'].drop_duplicates(keep='first')
             kampe = kampe.dropna()
             kampe = sorted(kampe)
             option4 = st.multiselect('Vælg modstanderens modstander (Hvis ingen er valgt, vises alle)',kampe)
@@ -7213,7 +7213,7 @@ if username == valid_username and password == valid_password:
             else:
                 filtreretdfkamp = kampe
 
-            df = df[df['Opponent team name'].isin(filtreretdfkamp)]
+            df = df[df['opponentTeam.name'].isin(filtreretdfkamp)]
             dfteamstatsmodstander = dfteamstatsmodstander[dfteamstatsmodstander['label'].str.contains('|'.join(filtreretdfkamp))]
             #st.dataframe(dfteamstatsmodstander)
             ppda_columns = dfteamstatsmodstander.columns[dfteamstatsmodstander.columns.str.endswith('.ppda')]
@@ -7258,42 +7258,42 @@ if username == valid_username and password == valid_password:
 
             Deep_completion = df.copy()
 
-            Deep_completion = Deep_completion[Deep_completion['type_secondary'].str.contains('deep_completion|deep_completed_cross')]
+            Deep_completion = Deep_completion[Deep_completion['type.secondary'].str.contains('deep_completion|deep_completed_cross')]
 
             Assists = df.copy()
 
             # Create a boolean mask for rows to remove
             strings_to_remove = ['second_assist', 'third_assist']
-            rows_to_remove = Assists['type_secondary'].str.contains('|'.join(strings_to_remove))
+            rows_to_remove = Assists['type.secondary'].str.contains('|'.join(strings_to_remove))
 
             # Apply the mask to remove rows
             Assists = Assists[~rows_to_remove]
 
             # Replace 'shot_assist' string in the 'type_secondary' column
-            Assists['type_secondary'] = Assists['type_secondary'].str.replace('shot_assist', '')
+            Assists['type.secondary'] = Assists['type.secondary'].str.replace('shot_assist', '')
 
             # Filter rows that contain 'assist' in the modified 'type_secondary' column
-            Assists = Assists[Assists['type_secondary'].str.contains('assist')]
+            Assists = Assists[Assists['type.secondary'].str.contains('assist')]
 
             Målscorer = df.copy()
             strings_to_remove = ['goal_kick', 'goalkeeper_exit','conceded_goal']
-            rows_to_remove = Målscorer['type_secondary'].str.contains('|'.join(strings_to_remove))
+            rows_to_remove = Målscorer['type.secondary'].str.contains('|'.join(strings_to_remove))
             Målscorer = Målscorer[~rows_to_remove]
-            Målscorer = Målscorer[Målscorer['type_secondary'].str.contains('goal')]
+            Målscorer = Målscorer[Målscorer['type.secondary'].str.contains('goal')]
 
 
             col1, col2, col3, col4 = st.columns(4)
             with col1:
                 
-                Shotxg = df[['Player name','Shot xg']]
-                Shotxg = Shotxg.groupby('Player name')['Shot xg'].sum()
+                Shotxg = df[['player.name','shot.xg']]
+                Shotxg = Shotxg.groupby('player.name')['shot.xg'].sum()
                 Shotxg = Shotxg.nlargest(3)
                 st.write('Xg')
                 st.dataframe(Shotxg)
 
             with col2:
                 
-                Postshotxg = df[['Player name','postShotXg']]
+                Postshotxg = df[['player.name','postShotXg']]
                 Postshotxg = Postshotxg.groupby('Player name')['postShotXg'].sum()
                 Postshotxg = Postshotxg.nlargest(3)
                 st.write('Postshot xG')

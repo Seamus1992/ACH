@@ -8118,7 +8118,7 @@ if username == valid_username and password == valid_password:
                 st.dataframe(top_player_df)
 
             with col3:
-                top_player_names = Assists.groupby(['player.id','player.name']).value_counts().head(3)
+                top_player_names = Assists.groupby(['player.id', 'player.name']).size().sort_values(ascending=False).head(3)
                 st.write('Top 3 spillere på Assists')
                 top_player_df = top_player_names.to_frame(name='Antal')
                 st.dataframe(top_player_df)

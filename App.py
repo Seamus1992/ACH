@@ -7436,7 +7436,7 @@ if username == valid_username and password == valid_password:
 
             Forward_passes = df
             Forward_passes = Forward_passes[
-                (Forward_passes['type_primary'].str.contains('pass')) &
+                (Forward_passes['type.primary'].str.contains('pass')) &
                 (Forward_passes['location.x'].astype(float) <= 50) &
                 (Forward_passes['location.x'] + 10 <= Forward_passes['pass.endLocation.x']) &
                 (Forward_passes['pass.accurate'] ==True)

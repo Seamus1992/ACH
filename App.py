@@ -7543,15 +7543,15 @@ if username == valid_username and password == valid_password:
             import numpy as np
 
             dfteamstats = pd.read_csv(r'Teamsheet alle kampe U17.csv')
-            df = pd.read_csv(r'U17 til modstanderanalyse.csv')
-            holdnavne = df['Team name'].drop_duplicates(keep= 'first')
+            df = pd.read_csv(r'xT/U17 Ligaen 23 24.csv')
+            holdnavne = df['team.name'].drop_duplicates(keep= 'first')
             modstander = st.selectbox('Vælg modstander',holdnavne)
 
             columns_after_first_3 = dfteamstats.columns[3:]
             dfteamstatsmodstander = dfteamstats.iloc[:, :3].join(dfteamstats.loc[:, columns_after_first_3[dfteamstats.columns[3:].str.contains(modstander)]])
-            df = df[df['Team name'].str.contains(modstander)]
+            df = df[df['team.name'].str.contains(modstander)]
 
-            kampe = df['Opponent team name'].drop_duplicates(keep='first')
+            kampe = df['opponentTeam.name'].drop_duplicates(keep='first')
             kampe = kampe.dropna()
             kampe = sorted(kampe)
             option4 = st.multiselect('Vælg modstanderens modstander (Hvis ingen er valgt, vises alle)',kampe)
@@ -7560,7 +7560,7 @@ if username == valid_username and password == valid_password:
             else:
                 filtreretdfkamp = kampe
 
-            df = df[df['Opponent team name'].isin(filtreretdfkamp)]
+            df = df[df['opponentTeam.name'].isin(filtreretdfkamp)]
             dfteamstatsmodstander = dfteamstatsmodstander[dfteamstatsmodstander['label'].str.contains('|'.join(filtreretdfkamp))]
             #st.dataframe(dfteamstatsmodstander)
             ppda_columns = dfteamstatsmodstander.columns[dfteamstatsmodstander.columns.str.endswith('.ppda')]
@@ -7595,7 +7595,7 @@ if username == valid_username and password == valid_password:
             average_ppda = dfteamstatsmodstander.loc[:, ppda_columns].mean()
             average_ppda_df = average_ppda.to_frame(name='PPDA')
 
-            team_formation_counts = df['Team formation'].value_counts()
+            team_formation_counts = df['team.formation'].value_counts()
             total_rows = len(df)
             team_formation_percentages = (team_formation_counts / total_rows) * 100
             top_formations = team_formation_percentages.head(3)
@@ -7605,49 +7605,49 @@ if username == valid_username and password == valid_password:
 
             Deep_completion = df.copy()
 
-            Deep_completion = Deep_completion[Deep_completion['type_secondary'].str.contains('deep_completion|deep_completed_cross')]
+            Deep_completion = Deep_completion[Deep_completion['type.secondary'].str.contains('deep_completion|deep_completed_cross')]
 
             Assists = df.copy()
 
             # Create a boolean mask for rows to remove
             strings_to_remove = ['second_assist', 'third_assist']
-            rows_to_remove = Assists['type_secondary'].str.contains('|'.join(strings_to_remove))
+            rows_to_remove = Assists['type.secondary'].str.contains('|'.join(strings_to_remove))
 
             # Apply the mask to remove rows
             Assists = Assists[~rows_to_remove]
 
             # Replace 'shot_assist' string in the 'type_secondary' column
-            Assists['type_secondary'] = Assists['type_secondary'].str.replace('shot_assist', '')
+            Assists['type.secondary'] = Assists['type.secondary'].str.replace('shot_assist', '')
 
             # Filter rows that contain 'assist' in the modified 'type_secondary' column
-            Assists = Assists[Assists['type_secondary'].str.contains('assist')]
+            Assists = Assists[Assists['type.secondary'].str.contains('assist')]
 
             Målscorer = df.copy()
             strings_to_remove = ['goal_kick', 'goalkeeper_exit','conceded_goal']
-            rows_to_remove = Målscorer['type_secondary'].str.contains('|'.join(strings_to_remove))
+            rows_to_remove = Målscorer['type.secondary'].str.contains('|'.join(strings_to_remove))
             Målscorer = Målscorer[~rows_to_remove]
-            Målscorer = Målscorer[Målscorer['type_secondary'].str.contains('goal')]
+            Målscorer = Målscorer[Målscorer['type.secondary'].str.contains('goal')]
 
 
             col1, col2, col3, col4 = st.columns(4)
             with col1:
                 
-                Shotxg = df[['Player name','Shot xg']]
-                Shotxg = Shotxg.groupby('Player name')['Shot xg'].sum()
+                Shotxg = df[['player.name','shot.xg']]
+                Shotxg = Shotxg.groupby('player.name')['shot.xg'].sum()
                 Shotxg = Shotxg.nlargest(3)
                 st.write('Xg')
                 st.dataframe(Shotxg)
 
             with col2:
                 
-                Postshotxg = df[['Player name','postShotXg']]
-                Postshotxg = Postshotxg.groupby('Player name')['postShotXg'].sum()
+                Postshotxg = df[['player.name','shot.postShotXg']]
+                Postshotxg = Postshotxg.groupby('player.name')['shot.postShotXg'].sum()
                 Postshotxg = Postshotxg.nlargest(3)
                 st.write('Postshot xG')
                 st.dataframe(Postshotxg)
 
             with col3:
-                top_player_names = Assists['Player name'].value_counts().head(3)
+                top_player_names = Assists['player.name'].value_counts().head(3)
                 top_player_names = top_player_names.rename_axis("Spiller navn").reset_index()
                 top_player_names.columns = ["Player name", "Assists"]
                 top_player_names = top_player_names.set_index('Player name')
@@ -7655,10 +7655,10 @@ if username == valid_username and password == valid_password:
                 st.dataframe(top_player_names)
 
             with col4:
-                top_player_names = Målscorer['Player name'].value_counts().head(3)
+                top_player_names = Målscorer['player.name'].value_counts().head(3)
                 top_player_names = top_player_names.rename_axis("Spiller navn").reset_index()
-                top_player_names.columns = ["Player name", "Mål"]
-                top_player_names = top_player_names.set_index('Player name')
+                top_player_names.columns = ["player.name", "Mål"]
+                top_player_names = top_player_names.set_index('player.name')
                 st.write('Mål')
                 st.dataframe(top_player_names)
 
@@ -7680,21 +7680,21 @@ if username == valid_username and password == valid_password:
 
             with col34:
                 xgplacering = df.copy()
-                xgplacering = df[df['Shot xg'].astype(float) > 0]
-                spillere = xgplacering['Player name'].drop_duplicates(keep='first')
+                xgplacering = df[df['shot.xg'].astype(float) > 0]
+                spillere = xgplacering['player.name'].drop_duplicates(keep='first')
                 spillere = spillere.dropna()
                 spillere = sorted(spillere)
-                option4 = st.multiselect('Vælg spiller (hvis ingen vælges vises alle))',spillere)
+                option4 = st.multiselect('Vælg spiller (hvis ingen vælges vises alle)',spillere)
                 if len(option4) > 0:
                     filtreretdfkamp = option4
                 else:
                     filtreretdfkamp = spillere
 
-                xgplacering = xgplacering[xgplacering['Player name'].isin(filtreretdfkamp)]
+                xgplacering = xgplacering[xgplacering['player.name'].isin(filtreretdfkamp)]
 
-                x = xgplacering['Action location start x']
-                y = xgplacering['Action location start y']
-                shot_xg = xgplacering['Shot xg'].astype(float)
+                x = xgplacering['location.x']
+                y = xgplacering['location.y']
+                shot_xg = xgplacering['shot.xg'].astype(float)
                 min_size = 1  # Minimum dot size
                 max_size = 50  # Maximum dot size
                 sizes = np.interp(shot_xg, (shot_xg.min(), shot_xg.max()), (min_size, max_size))
@@ -7714,10 +7714,10 @@ if username == valid_username and password == valid_password:
                 fig, ax = pitch.draw()
 
                 for _, row in Deep_completion.iterrows():
-                    start_x = row['Action location start x']
-                    start_y = row['Action location start y']
-                    end_x = row['Pass end x']
-                    end_y = row['Pass end y']
+                    start_x = row['location.x']
+                    start_y = row['location.y']
+                    end_x = row['pass.endLocation.x']
+                    end_y = row['pass.endLocation.y']
                     
                     arrow_dx = end_x - start_x
                     arrow_dy = end_y - start_y
@@ -7737,10 +7737,10 @@ if username == valid_username and password == valid_password:
                 fig, ax = pitch.draw()
 
                 for _, row in Assists.iterrows():
-                    start_x = row['Action location start x']
-                    start_y = row['Action location start y']
-                    end_x = row['Pass end x']
-                    end_y = row['Pass end y']
+                    start_x = row['location.x']
+                    start_y = row['location.y']
+                    end_x = row['pass.endLocation.x']
+                    end_y = row['pass.endLocation.y']
                     
                     arrow_dx = end_x - start_x
                     arrow_dy = end_y - start_y
@@ -7757,24 +7757,24 @@ if username == valid_username and password == valid_password:
 
             col1, col2, col3, col4 = st.columns(4)
             with col1:
-                top_player_names = Deep_completion['Player name'].value_counts().head(3)
+                top_player_names = Deep_completion['player.name'].value_counts().head(3)
                 st.write('Top 3 spillere på Deep completions')
                 top_player_df = top_player_names.to_frame(name='Antal')
                 st.dataframe(top_player_df)
 
             with col2:    
-                top_player_positions = Deep_completion['Player position'].value_counts().head(3)
+                top_player_positions = Deep_completion['player.position'].value_counts().head(3)
                 st.write('Top 3 positioner for Deep completions')
                 top_player_df = top_player_positions.to_frame(name='Antal')
                 st.dataframe(top_player_df)
 
             with col3:
-                top_player_names = Assists['Player name'].value_counts().head(3)
+                top_player_names = Assists['player.name'].value_counts().head(3)
                 st.write('Top 3 spillere på Assists')
                 top_player_df = top_player_names.to_frame(name='Antal')
                 st.dataframe(top_player_df)
             with col4:    
-                top_player_positions = Assists['Player position'].value_counts().head(3)
+                top_player_positions = Assists['player.position'].value_counts().head(3)
                 st.write('Top 3 positioner for Assists')
                 top_player_df = top_player_positions.to_frame(name='Antal')
                 st.dataframe(top_player_df)
@@ -7783,33 +7783,33 @@ if username == valid_username and password == valid_password:
 
             Forward_passes = df
             Forward_passes = Forward_passes[
-                (Forward_passes['type_primary'].str.contains('pass')) &
-                (Forward_passes['Action location start x'].astype(float) <= 50) &
-                (Forward_passes['Action location start x'] + 10 <= Forward_passes['Pass end x']) &
-                (Forward_passes['Pass accurate'] ==True)
+                (Forward_passes['type.primary'].str.contains('pass')) &
+                (Forward_passes['location.x'].astype(float) <= 50) &
+                (Forward_passes['location.x'] + 10 <= Forward_passes['pass.endLocation.x']) &
+                (Forward_passes['pass.accurate'] ==True)
             ]
-            top_combinationsf = Forward_passes.groupby(['Player name', 'Pass recipient name']).agg({
-                'Player position': 'first',
-                'Pass recipient position': 'first',
-                'Player name': 'count'
-            }).nlargest(5, 'Player name')
+            top_combinationsf = Forward_passes.groupby(['player.name', 'pass.recipient.name']).agg({
+                'player.position': 'first',
+                'pass.recipient.position': 'first',
+                'player.name': 'count'
+            }).nlargest(5, 'player.name')
 
-            top_combinationsf = top_combinationsf.rename(columns={'Player name':'Antal'})
+            top_combinationsf = top_combinationsf.rename(columns={'player.name':'Antal'})
 
             st.write("Top 5 mest frekvente fremadrettede pasninger på mere end 10 meter")
             st.dataframe(top_combinationsf)
 
             Losses = df
             Losses = Losses[
-                (Losses['type_secondary'].str.contains('loss')) &
-                (Losses['Action location start x'].astype(float) <= 50)
+                (Losses['type.secondary'].str.contains('loss')) &
+                (Losses['location.x'].astype(float) <= 50)
             ]
-            top_combinations = Losses.groupby(['Player name']).agg({
-                'Player position': 'first',
-                'Player name': 'count'
-            }).nlargest(5, 'Player name')
+            top_combinations = Losses.groupby(['player.name']).agg({
+                'player.position': 'first',
+                'player.name': 'count'
+            }).nlargest(5, 'player.name')
 
-            top_combinations = top_combinations.rename(columns={'Player name':'Antal'})
+            top_combinations = top_combinations.rename(columns={'player.name':'Antal'})
 
 
             # Create two columns using st.beta_columns()
@@ -7821,10 +7821,10 @@ if username == valid_username and password == valid_password:
                 fig, ax = pitch.draw()
 
                 for _, row in Forward_passes.iterrows():
-                    start_x = row['Action location start x']
-                    start_y = row['Action location start y']
-                    end_x = row['Pass end x']
-                    end_y = row['Pass end y']
+                    start_x = row['location.x']
+                    start_y = row['location.y']
+                    end_x = row['pass.endLocation.x']
+                    end_y = row['pass.endLocation.y']
 
                     arrow_dx = end_x - start_x
                     arrow_dy = end_y - start_y
@@ -7845,10 +7845,10 @@ if username == valid_username and password == valid_password:
                 fig, ax = pitch.draw()
 
                 for _, row in Losses.iterrows():
-                    start_x = row['Action location start x']
-                    start_y = row['Action location start y']
-                    end_x = row['Pass end x']
-                    end_y = row['Pass end y']
+                    start_x = row['location.x']
+                    start_y = row['location.y']
+                    end_x = row['pass.endLocation.x']
+                    end_y = row['pass.endLocation.y']
 
                     arrow_dx = end_x - start_x
                     arrow_dy = end_y - start_y
@@ -7872,12 +7872,12 @@ if username == valid_username and password == valid_password:
             col1, col2 = st.columns(2)
             with col1:
                 st.write('Boldtab højde på banen')
-                plot = px.histogram(data_frame=Losses,x=Losses['Action location start x'],nbins=10)
+                plot = px.histogram(data_frame=Losses,x=Losses['location.x'],nbins=10)
                 st.plotly_chart(plot,use_container_width=True)
 
             with col2:
                 st.write('Boldtab bredde på banen')
-                plot = px.histogram(data_frame=Losses,x=Losses['Action location start y'],nbins=10)
+                plot = px.histogram(data_frame=Losses,x=Losses['location.y'],nbins=10)
                 plot.update_xaxes(range=[0, 100])
                 st.plotly_chart(plot,use_container_width=True) 
 
@@ -7890,15 +7890,15 @@ if username == valid_username and password == valid_password:
             import numpy as np
 
             dfteamstats = pd.read_csv(r'Teamsheet alle kampe U19.csv')
-            df = pd.read_csv(r'U19 til modstanderanalyse.csv')
-            holdnavne = df['Team name'].drop_duplicates(keep= 'first')
+            df = pd.read_csv(r'xT/U19 Ligaen 23 24.csv')
+            holdnavne = df['team.name'].drop_duplicates(keep= 'first')
             modstander = st.selectbox('Vælg modstander',holdnavne)
 
             columns_after_first_3 = dfteamstats.columns[3:]
             dfteamstatsmodstander = dfteamstats.iloc[:, :3].join(dfteamstats.loc[:, columns_after_first_3[dfteamstats.columns[3:].str.contains(modstander)]])
-            df = df[df['Team name'].str.contains(modstander)]
+            df = df[df['team.name'].str.contains(modstander)]
 
-            kampe = df['Opponent team name'].drop_duplicates(keep='first')
+            kampe = df['opponentTeam.name'].drop_duplicates(keep='first')
             kampe = kampe.dropna()
             kampe = sorted(kampe)
             option4 = st.multiselect('Vælg modstanderens modstander (Hvis ingen er valgt, vises alle)',kampe)
@@ -7907,7 +7907,7 @@ if username == valid_username and password == valid_password:
             else:
                 filtreretdfkamp = kampe
 
-            df = df[df['Opponent team name'].isin(filtreretdfkamp)]
+            df = df[df['opponentTeam.name'].isin(filtreretdfkamp)]
             dfteamstatsmodstander = dfteamstatsmodstander[dfteamstatsmodstander['label'].str.contains('|'.join(filtreretdfkamp))]
             #st.dataframe(dfteamstatsmodstander)
             ppda_columns = dfteamstatsmodstander.columns[dfteamstatsmodstander.columns.str.endswith('.ppda')]
@@ -7942,7 +7942,7 @@ if username == valid_username and password == valid_password:
             average_ppda = dfteamstatsmodstander.loc[:, ppda_columns].mean()
             average_ppda_df = average_ppda.to_frame(name='PPDA')
 
-            team_formation_counts = df['Team formation'].value_counts()
+            team_formation_counts = df['team.formation'].value_counts()
             total_rows = len(df)
             team_formation_percentages = (team_formation_counts / total_rows) * 100
             top_formations = team_formation_percentages.head(3)
@@ -7952,49 +7952,49 @@ if username == valid_username and password == valid_password:
 
             Deep_completion = df.copy()
 
-            Deep_completion = Deep_completion[Deep_completion['type_secondary'].str.contains('deep_completion|deep_completed_cross')]
+            Deep_completion = Deep_completion[Deep_completion['type.secondary'].str.contains('deep_completion|deep_completed_cross')]
 
             Assists = df.copy()
 
             # Create a boolean mask for rows to remove
             strings_to_remove = ['second_assist', 'third_assist']
-            rows_to_remove = Assists['type_secondary'].str.contains('|'.join(strings_to_remove))
+            rows_to_remove = Assists['type.secondary'].str.contains('|'.join(strings_to_remove))
 
             # Apply the mask to remove rows
             Assists = Assists[~rows_to_remove]
 
             # Replace 'shot_assist' string in the 'type_secondary' column
-            Assists['type_secondary'] = Assists['type_secondary'].str.replace('shot_assist', '')
+            Assists['type.secondary'] = Assists['type.secondary'].str.replace('shot_assist', '')
 
             # Filter rows that contain 'assist' in the modified 'type_secondary' column
-            Assists = Assists[Assists['type_secondary'].str.contains('assist')]
+            Assists = Assists[Assists['type.secondary'].str.contains('assist')]
 
             Målscorer = df.copy()
             strings_to_remove = ['goal_kick', 'goalkeeper_exit','conceded_goal']
-            rows_to_remove = Målscorer['type_secondary'].str.contains('|'.join(strings_to_remove))
+            rows_to_remove = Målscorer['type.secondary'].str.contains('|'.join(strings_to_remove))
             Målscorer = Målscorer[~rows_to_remove]
-            Målscorer = Målscorer[Målscorer['type_secondary'].str.contains('goal')]
+            Målscorer = Målscorer[Målscorer['type.secondary'].str.contains('goal')]
 
 
             col1, col2, col3, col4 = st.columns(4)
             with col1:
                 
-                Shotxg = df[['Player name','Shot xg']]
-                Shotxg = Shotxg.groupby('Player name')['Shot xg'].sum()
+                Shotxg = df[['player.name','shot.xg']]
+                Shotxg = Shotxg.groupby('player.name')['shot.xg'].sum()
                 Shotxg = Shotxg.nlargest(3)
                 st.write('Xg')
                 st.dataframe(Shotxg)
 
             with col2:
                 
-                Postshotxg = df[['Player name','postShotXg']]
-                Postshotxg = Postshotxg.groupby('Player name')['postShotXg'].sum()
+                Postshotxg = df[['player.name','shot.postShotXg']]
+                Postshotxg = Postshotxg.groupby('player.name')['shot.postShotXg'].sum()
                 Postshotxg = Postshotxg.nlargest(3)
                 st.write('Postshot xG')
                 st.dataframe(Postshotxg)
 
             with col3:
-                top_player_names = Assists['Player name'].value_counts().head(3)
+                top_player_names = Assists['player.name'].value_counts().head(3)
                 top_player_names = top_player_names.rename_axis("Spiller navn").reset_index()
                 top_player_names.columns = ["Player name", "Assists"]
                 top_player_names = top_player_names.set_index('Player name')
@@ -8002,10 +8002,10 @@ if username == valid_username and password == valid_password:
                 st.dataframe(top_player_names)
 
             with col4:
-                top_player_names = Målscorer['Player name'].value_counts().head(3)
+                top_player_names = Målscorer['player.name'].value_counts().head(3)
                 top_player_names = top_player_names.rename_axis("Spiller navn").reset_index()
-                top_player_names.columns = ["Player name", "Mål"]
-                top_player_names = top_player_names.set_index('Player name')
+                top_player_names.columns = ["player.name", "Mål"]
+                top_player_names = top_player_names.set_index('player.name')
                 st.write('Mål')
                 st.dataframe(top_player_names)
 
@@ -8027,22 +8027,22 @@ if username == valid_username and password == valid_password:
 
             with col34:
                 xgplacering = df.copy()
-                xgplacering = df[df['Shot xg'].astype(float) > 0]
-                spillere = xgplacering['Player name'].drop_duplicates(keep='first')
+                xgplacering = df[df['shot.xg'].astype(float) > 0]
+                spillere = xgplacering['player.name'].drop_duplicates(keep='first')
                 spillere = spillere.dropna()
                 spillere = sorted(spillere)
-                option4 = st.multiselect('Vælg spiller (hvis ingen vælges vises alle))',spillere)
+                option4 = st.multiselect('Vælg spiller (hvis ingen vælges vises alle)',spillere)
                 if len(option4) > 0:
                     filtreretdfkamp = option4
                 else:
                     filtreretdfkamp = spillere
 
-                xgplacering = xgplacering[xgplacering['Player name'].isin(filtreretdfkamp)]
+                xgplacering = xgplacering[xgplacering['player.name'].isin(filtreretdfkamp)]
 
-                x = xgplacering['Action location start x']
-                y = xgplacering['Action location start y']
-                shot_xg = xgplacering['Shot xg'].astype(float)
-                min_size = 1 # Minimum dot size
+                x = xgplacering['location.x']
+                y = xgplacering['location.y']
+                shot_xg = xgplacering['shot.xg'].astype(float)
+                min_size = 1  # Minimum dot size
                 max_size = 50  # Maximum dot size
                 sizes = np.interp(shot_xg, (shot_xg.min(), shot_xg.max()), (min_size, max_size))
 
@@ -8061,10 +8061,10 @@ if username == valid_username and password == valid_password:
                 fig, ax = pitch.draw()
 
                 for _, row in Deep_completion.iterrows():
-                    start_x = row['Action location start x']
-                    start_y = row['Action location start y']
-                    end_x = row['Pass end x']
-                    end_y = row['Pass end y']
+                    start_x = row['location.x']
+                    start_y = row['location.y']
+                    end_x = row['pass.endLocation.x']
+                    end_y = row['pass.endLocation.y']
                     
                     arrow_dx = end_x - start_x
                     arrow_dy = end_y - start_y
@@ -8084,10 +8084,10 @@ if username == valid_username and password == valid_password:
                 fig, ax = pitch.draw()
 
                 for _, row in Assists.iterrows():
-                    start_x = row['Action location start x']
-                    start_y = row['Action location start y']
-                    end_x = row['Pass end x']
-                    end_y = row['Pass end y']
+                    start_x = row['location.x']
+                    start_y = row['location.y']
+                    end_x = row['pass.endLocation.x']
+                    end_y = row['pass.endLocation.y']
                     
                     arrow_dx = end_x - start_x
                     arrow_dy = end_y - start_y
@@ -8104,24 +8104,24 @@ if username == valid_username and password == valid_password:
 
             col1, col2, col3, col4 = st.columns(4)
             with col1:
-                top_player_names = Deep_completion['Player name'].value_counts().head(3)
+                top_player_names = Deep_completion['player.name'].value_counts().head(3)
                 st.write('Top 3 spillere på Deep completions')
                 top_player_df = top_player_names.to_frame(name='Antal')
                 st.dataframe(top_player_df)
 
             with col2:    
-                top_player_positions = Deep_completion['Player position'].value_counts().head(3)
+                top_player_positions = Deep_completion['player.position'].value_counts().head(3)
                 st.write('Top 3 positioner for Deep completions')
                 top_player_df = top_player_positions.to_frame(name='Antal')
                 st.dataframe(top_player_df)
 
             with col3:
-                top_player_names = Assists['Player name'].value_counts().head(3)
+                top_player_names = Assists['player.name'].value_counts().head(3)
                 st.write('Top 3 spillere på Assists')
                 top_player_df = top_player_names.to_frame(name='Antal')
                 st.dataframe(top_player_df)
             with col4:    
-                top_player_positions = Assists['Player position'].value_counts().head(3)
+                top_player_positions = Assists['player.position'].value_counts().head(3)
                 st.write('Top 3 positioner for Assists')
                 top_player_df = top_player_positions.to_frame(name='Antal')
                 st.dataframe(top_player_df)
@@ -8130,33 +8130,33 @@ if username == valid_username and password == valid_password:
 
             Forward_passes = df
             Forward_passes = Forward_passes[
-                (Forward_passes['type_primary'].str.contains('pass')) &
-                (Forward_passes['Action location start x'].astype(float) <= 50) &
-                (Forward_passes['Action location start x'] + 10 <= Forward_passes['Pass end x']) &
-                (Forward_passes['Pass accurate'] ==True)
+                (Forward_passes['type.primary'].str.contains('pass')) &
+                (Forward_passes['location.x'].astype(float) <= 50) &
+                (Forward_passes['location.x'] + 10 <= Forward_passes['pass.endLocation.x']) &
+                (Forward_passes['pass.accurate'] ==True)
             ]
-            top_combinationsf = Forward_passes.groupby(['Player name', 'Pass recipient name']).agg({
-                'Player position': 'first',
-                'Pass recipient position': 'first',
-                'Player name': 'count'
-            }).nlargest(5, 'Player name')
+            top_combinationsf = Forward_passes.groupby(['player.name', 'pass.recipient.name']).agg({
+                'player.position': 'first',
+                'pass.recipient.position': 'first',
+                'player.name': 'count'
+            }).nlargest(5, 'player.name')
 
-            top_combinationsf = top_combinationsf.rename(columns={'Player name':'Antal'})
+            top_combinationsf = top_combinationsf.rename(columns={'player.name':'Antal'})
 
             st.write("Top 5 mest frekvente fremadrettede pasninger på mere end 10 meter")
             st.dataframe(top_combinationsf)
 
             Losses = df
             Losses = Losses[
-                (Losses['type_secondary'].str.contains('loss')) &
-                (Losses['Action location start x'].astype(float) <= 50)
+                (Losses['type.secondary'].str.contains('loss')) &
+                (Losses['location.x'].astype(float) <= 50)
             ]
-            top_combinations = Losses.groupby(['Player name']).agg({
-                'Player position': 'first',
-                'Player name': 'count'
-            }).nlargest(5, 'Player name')
+            top_combinations = Losses.groupby(['player.name']).agg({
+                'player.position': 'first',
+                'player.name': 'count'
+            }).nlargest(5, 'player.name')
 
-            top_combinations = top_combinations.rename(columns={'Player name':'Antal'})
+            top_combinations = top_combinations.rename(columns={'player.name':'Antal'})
 
 
             # Create two columns using st.beta_columns()
@@ -8168,10 +8168,10 @@ if username == valid_username and password == valid_password:
                 fig, ax = pitch.draw()
 
                 for _, row in Forward_passes.iterrows():
-                    start_x = row['Action location start x']
-                    start_y = row['Action location start y']
-                    end_x = row['Pass end x']
-                    end_y = row['Pass end y']
+                    start_x = row['location.x']
+                    start_y = row['location.y']
+                    end_x = row['pass.endLocation.x']
+                    end_y = row['pass.endLocation.y']
 
                     arrow_dx = end_x - start_x
                     arrow_dy = end_y - start_y
@@ -8192,10 +8192,10 @@ if username == valid_username and password == valid_password:
                 fig, ax = pitch.draw()
 
                 for _, row in Losses.iterrows():
-                    start_x = row['Action location start x']
-                    start_y = row['Action location start y']
-                    end_x = row['Pass end x']
-                    end_y = row['Pass end y']
+                    start_x = row['location.x']
+                    start_y = row['location.y']
+                    end_x = row['pass.endLocation.x']
+                    end_y = row['pass.endLocation.y']
 
                     arrow_dx = end_x - start_x
                     arrow_dy = end_y - start_y
@@ -8219,14 +8219,14 @@ if username == valid_username and password == valid_password:
             col1, col2 = st.columns(2)
             with col1:
                 st.write('Boldtab højde på banen')
-                plot = px.histogram(data_frame=Losses,x=Losses['Action location start x'],nbins=10)
+                plot = px.histogram(data_frame=Losses,x=Losses['location.x'],nbins=10)
                 st.plotly_chart(plot,use_container_width=True)
 
             with col2:
                 st.write('Boldtab bredde på banen')
-                plot = px.histogram(data_frame=Losses,x=Losses['Action location start y'],nbins=10)
+                plot = px.histogram(data_frame=Losses,x=Losses['location.y'],nbins=10)
                 plot.update_xaxes(range=[0, 100])
-                st.plotly_chart(plot,use_container_width=True)
+                st.plotly_chart(plot,use_container_width=True) 
 
         Årgange = {'U15':U15,
                 'U17':U17,

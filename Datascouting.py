@@ -967,8 +967,7 @@ def U17_liga ():
     xT['xT Rank'] = xT['xT'].rank(ascending=False).astype(int)
 
     xgc = df1
-    xgchold = xgc.drop_duplicates(subset='possession.id',keep='first')
-    xgchold = xgchold.rename(columns={'possession.attack.xg': 'Hold xG'})
+    xgchold = xgc.rename(columns={'shot.xg': 'Hold xG'})
     xgchold = xgchold.groupby('team.name')['Hold xG'].agg('sum').reset_index()
     xgchold = xgchold.sort_values(by='Hold xG',ascending=False)
     xgchold['Hold xG rank'] = xgchold['Hold xG'].rank(ascending=False).astype(int)
@@ -1471,8 +1470,7 @@ def U19_liga ():
     xT['xT Rank'] = xT['xT'].rank(ascending=False).astype(int)
 
     xgc = df1
-    xgchold = xgc.drop_duplicates(subset='possession.id',keep='first')
-    xgchold = xgchold.rename(columns={'possession.attack.xg': 'Hold xG'})
+    xgchold = xgc.rename(columns={'shot.xg': 'Hold xG'})
     xgchold = xgchold.groupby('team.name')['Hold xG'].agg('sum').reset_index()
     xgchold = xgchold.sort_values(by='Hold xG',ascending=False)
     xgchold['Hold xG rank'] = xgchold['Hold xG'].rank(ascending=False).astype(int)
@@ -1975,8 +1973,7 @@ def U19_Division ():
     xT['xT Rank'] = xT['xT'].rank(ascending=False).astype(int)
 
     xgc = df1
-    xgchold = xgc.drop_duplicates(subset='possession.id',keep='first')
-    xgchold = xgchold.rename(columns={'possession.attack.xg': 'Hold xG'})
+    xgchold = xgc.rename(columns={'shot.xg': 'Hold xG'})
     xgchold = xgchold.groupby('team.name')['Hold xG'].agg('sum').reset_index()
     xgchold = xgchold.sort_values(by='Hold xG',ascending=False)
     xgchold['Hold xG rank'] = xgchold['Hold xG'].rank(ascending=False).astype(int)
@@ -2479,8 +2476,7 @@ def U17_Division ():
     xT['xT Rank'] = xT['xT'].rank(ascending=False).astype(int)
 
     xgc = df1
-    xgchold = xgc.drop_duplicates(subset='possession.id',keep='first')
-    xgchold = xgchold.rename(columns={'possession.attack.xg': 'Hold xG'})
+    xgchold = xgc.rename(columns={'shot.xg': 'Hold xG'})
     xgchold = xgchold.groupby('team.name')['Hold xG'].agg('sum').reset_index()
     xgchold = xgchold.sort_values(by='Hold xG',ascending=False)
     xgchold['Hold xG rank'] = xgchold['Hold xG'].rank(ascending=False).astype(int)
@@ -2982,8 +2978,7 @@ def Superliga ():
     xT['xT Rank'] = xT['xT'].rank(ascending=False).astype(int)
 
     xgc = df1
-    xgchold = xgc.drop_duplicates(subset='possession.id',keep='first')
-    xgchold = xgchold.rename(columns={'possession.attack.xg': 'Hold xG'})
+    xgchold = xgc.rename(columns={'shot.xg': 'Hold xG'})
     xgchold = xgchold.groupby('team.name')['Hold xG'].agg('sum').reset_index()
     xgchold = xgchold.sort_values(by='Hold xG',ascending=False)
     xgchold['Hold xG rank'] = xgchold['Hold xG'].rank(ascending=False).astype(int)
@@ -3486,8 +3481,7 @@ def Første_division ():
     xT['xT Rank'] = xT['xT'].rank(ascending=False).astype(int)
 
     xgc = df1
-    xgchold = xgc.drop_duplicates(subset='possession.id',keep='first')
-    xgchold = xgchold.rename(columns={'possession.attack.xg': 'Hold xG'})
+    xgchold = xgc.rename(columns={'shot.xg': 'Hold xG'})
     xgchold = xgchold.groupby('team.name')['Hold xG'].agg('sum').reset_index()
     xgchold = xgchold.sort_values(by='Hold xG',ascending=False)
     xgchold['Hold xG rank'] = xgchold['Hold xG'].rank(ascending=False).astype(int)
@@ -3990,8 +3984,7 @@ def Anden_division ():
     xT['xT Rank'] = xT['xT'].rank(ascending=False).astype(int)
 
     xgc = df1
-    xgchold = xgc.drop_duplicates(subset='possession.id',keep='first')
-    xgchold = xgchold.rename(columns={'possession.attack.xg': 'Hold xG'})
+    xgchold = xgc.rename(columns={'shot.xg': 'Hold xG'})
     xgchold = xgchold.groupby('team.name')['Hold xG'].agg('sum').reset_index()
     xgchold = xgchold.sort_values(by='Hold xG',ascending=False)
     xgchold['Hold xG rank'] = xgchold['Hold xG'].rank(ascending=False).astype(int)
@@ -4494,8 +4487,7 @@ def Tredje_division ():
     xT['xT Rank'] = xT['xT'].rank(ascending=False).astype(int)
 
     xgc = df1
-    xgchold = xgc.drop_duplicates(subset='possession.id',keep='first')
-    xgchold = xgchold.rename(columns={'possession.attack.xg': 'Hold xG'})
+    xgchold = xgc.rename(columns={'shot.xg': 'Hold xG'})
     xgchold = xgchold.groupby('team.name')['Hold xG'].agg('sum').reset_index()
     xgchold = xgchold.sort_values(by='Hold xG',ascending=False)
     xgchold['Hold xG rank'] = xgchold['Hold xG'].rank(ascending=False).astype(int)

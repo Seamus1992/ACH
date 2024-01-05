@@ -8110,7 +8110,8 @@ if username == valid_username and password == valid_password:
                 top_player_names = Deep_completion.groupby(['player.id', 'player.name']).size().sort_values(ascending=False).head(3)
                 st.write('Top 3 spillere på Deep completions')
                 top_player_df = top_player_names.to_frame(name='Antal')
-                #top_player_df = top_player_df[['player.name','Antal']]
+                top_player_df = top_player_df.reset_index()
+                top_player_df = top_player_df[['player.name','Antal']]
                 st.dataframe(top_player_df)
 
             with col2:    

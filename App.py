@@ -7983,7 +7983,7 @@ if username == valid_username and password == valid_password:
                 Shotxg = Shotxg.groupby(['player.id', 'player.name'])['shot.xg'].sum()
                 Shotxg = Shotxg.nlargest(3)
                 st.write('Xg')
-                Shotxg.reset_index()
+                Shotxg = Shotxg.reset_index()
                 st.dataframe(Shotxg)
 
             with col2:

@@ -7891,6 +7891,7 @@ if username == valid_username and password == valid_password:
 
             dfteamstats = pd.read_csv(r'Teamsheet alle kampe U19.csv')
             df = pd.read_csv(r'xT/U19 Ligaen 23 24.csv')
+            df.loc[df['player.id'] == 624663, 'player.name'] = 'Je. Beluli'
             holdnavne = df['team.name'].drop_duplicates(keep= 'first')
             modstander = st.selectbox('Vælg modstander',holdnavne)
 
@@ -8109,6 +8110,7 @@ if username == valid_username and password == valid_password:
                 top_player_names = Deep_completion.groupby(['player.id', 'player.name']).size().sort_values(ascending=False).head(3)
                 st.write('Top 3 spillere på Deep completions')
                 top_player_df = top_player_names.to_frame(name='Antal')
+                top_player_df = top_player_df[['player.name','Antal']]
                 st.dataframe(top_player_df)
 
             with col2:    
@@ -8121,14 +8123,13 @@ if username == valid_username and password == valid_password:
                 top_player_names = Assists.groupby(['player.id', 'player.name']).size().sort_values(ascending=False).head(3)
                 st.write('Top 3 spillere på Assists')
                 top_player_df = top_player_names.to_frame(name='Antal')
+                top_player_names = top_player_names[['player.name','Antal']]
                 st.dataframe(top_player_df)
             with col4:    
                 top_player_positions = Assists['player.position'].value_counts().head(3)
                 st.write('Top 3 positioner for Assists')
                 top_player_df = top_player_positions.to_frame(name='Antal')
                 st.dataframe(top_player_df)
-
-
 
             Forward_passes = df
             Forward_passes = Forward_passes[

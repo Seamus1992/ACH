@@ -7330,6 +7330,7 @@ if username == valid_username and password == valid_password:
             with col2:
                 st.write('PPDA')
                 average_ppda_df.index.values[0] = modstander
+                average_ppda_df['PPDA'] = average_ppda_df['PPDA'].round(2)
                 st.dataframe(average_ppda_df)
                 st.write('Challenge intensity')
                 average_challengeintensity_df.index.values[0] = modstander

@@ -8112,7 +8112,7 @@ if username == valid_username and password == valid_password:
                 top_player_df = top_player_names.to_frame(name='Antal')
                 top_player_df = top_player_df.reset_index()
                 top_player_df = top_player_df[['player.name','Antal']]
-                st.dataframe(top_player_df)
+                st.dataframe(top_player_df,hide_index=True)
 
             with col2:    
                 top_player_positions = Deep_completion['player.position'].value_counts().head(3)
@@ -8124,8 +8124,10 @@ if username == valid_username and password == valid_password:
                 top_player_names = Assists.groupby(['player.id', 'player.name']).size().sort_values(ascending=False).head(3)
                 st.write('Top 3 spillere på Assists')
                 top_player_df = top_player_names.to_frame(name='Antal')
+                top_player_df = top_player_df.reset_index()
                 top_player_names = top_player_names[['player.name','Antal']]
-                st.dataframe(top_player_df)
+                st.dataframe(top_player_df,hide_index=True)
+            
             with col4:    
                 top_player_positions = Assists['player.position'].value_counts().head(3)
                 st.write('Top 3 positioner for Assists')

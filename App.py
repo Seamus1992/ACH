@@ -8031,8 +8031,7 @@ if username == valid_username and password == valid_password:
             with col34:
                 xgplacering = df.copy()
                 xgplacering = df[df['shot.xg'].astype(float) > 0]
-                spillere = xgplacering('player.name').drop_duplicates(keep='first')
-                spillere = spillere.dropna()
+                spillere = xgplacering['player.name'].drop_duplicates(keep='first').dropna()
                 spillere = sorted(spillere)
                 option4 = st.multiselect('Vælg spiller (hvis ingen vælges vises alle)',spillere)
                 if len(option4) > 0:

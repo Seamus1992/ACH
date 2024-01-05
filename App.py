@@ -8003,7 +8003,7 @@ if username == valid_username and password == valid_password:
                 top_player_names = top_player_names.reset_index()
                 top_player_names.columns = ["player.id", "player.name", "Assists"]
                 top_player_names = top_player_names[['player.name','Assists']]
-                st.dataframe(top_player_names)
+                st.dataframe(top_player_names,hide_index=True)
 
             with col4:
                 top_player_names = Målscorer.groupby(['player.id', 'player.name']).size().sort_values(ascending=False).head(3)
@@ -8011,7 +8011,7 @@ if username == valid_username and password == valid_password:
                 top_player_names = top_player_names.reset_index()
                 top_player_names.columns = ["player.id", "player.name", "Mål"]
                 top_player_names = top_player_names[['player.name','Mål']]
-                st.dataframe(top_player_names)
+                st.dataframe(top_player_names,hide_index=True)
 
             col1, col2, col34 = st.columns([1,1,2])
 

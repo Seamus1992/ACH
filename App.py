@@ -7323,7 +7323,7 @@ if username == valid_username and password == valid_password:
 
             with col1:
                 st.write("Pasninger")
-                average_passes_df = average_passes_df.copy()
+                st.dataframe(average_passes_df)
                 average_passes_df['Pasninger'] = average_passes_df['Pasninger'].round(2)
                 average_passes_df.columns = ['Antal']
                 st.dataframe(average_passes_df)

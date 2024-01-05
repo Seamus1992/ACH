@@ -7995,17 +7995,15 @@ if username == valid_username and password == valid_password:
                 st.write('Postshot xG')
                 Postshotxg = Postshotxg.reset_index()
                 Postshotxg = Postshotxg[['player.name','shot.postShotXg']]
-                st.dataframe(Postshotxg)
+                st.dataframe(Postshotxg,hide_index=True)
 
             with col3:
                 top_player_names = Assists.groupby(['player.id', 'player.name']).size().sort_values(ascending=False).head(3)
-                top_player_names.columns = ["player.name", "Assists"]
                 st.write('Assist')
                 st.dataframe(top_player_names)
 
             with col4:
                 top_player_names = Målscorer.groupby(['player.id', 'player.name']).size().sort_values(ascending=False).head(3)
-                top_player_names.columns = ["player.name", "Mål"]
                 st.write('Mål')
                 st.dataframe(top_player_names)
 

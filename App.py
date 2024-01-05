@@ -7892,6 +7892,8 @@ if username == valid_username and password == valid_password:
             dfteamstats = pd.read_csv(r'Teamsheet alle kampe U19.csv')
             df = pd.read_csv(r'xT/U19 Ligaen 23 24.csv')
             df.loc[df['player.id'] == 624663, 'player.name'] = 'Je. Beluli'
+            df.loc[df['pass.recipient.id'] == 624663, 'pass.recipient.name'] = 'Je. Beluli'
+
             holdnavne = df['team.name'].drop_duplicates(keep= 'first')
             modstander = st.selectbox('Vælg modstander',holdnavne)
 

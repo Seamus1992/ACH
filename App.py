@@ -7248,7 +7248,7 @@ if username == valid_username and password == valid_password:
             average_ppda = dfteamstatsmodstander.loc[:, ppda_columns].mean()
             average_ppda_df = average_ppda.to_frame(name='PPDA')
 
-            team_formation_counts = df['Team formation'].value_counts()
+            team_formation_counts = df['team.formation'].value_counts()
             total_rows = len(df)
             team_formation_percentages = (team_formation_counts / total_rows) * 100
             top_formations = team_formation_percentages.head(3)
@@ -7533,6 +7533,7 @@ if username == valid_username and password == valid_password:
                 plot = px.histogram(data_frame=Losses,x=Losses['location.y'],nbins=10)
                 plot.update_xaxes(range=[0, 100])
                 st.plotly_chart(plot,use_container_width=True) 
+
         def U17 ():
             import pandas as pd
             import streamlit as st
@@ -7879,6 +7880,7 @@ if username == valid_username and password == valid_password:
                 plot = px.histogram(data_frame=Losses,x=Losses['Action location start y'],nbins=10)
                 plot.update_xaxes(range=[0, 100])
                 st.plotly_chart(plot,use_container_width=True) 
+
         def U19 ():
             import pandas as pd
             import streamlit as st

@@ -7995,7 +7995,6 @@ if username == valid_username and password == valid_password:
 
             with col3:
                 top_player_names = Assists.groupby(['player.id', 'player.name']).size().sort_values(ascending=False).head(3)
-                top_player_names = top_player_names.rename_axis("Player name").reset_index()
                 top_player_names.columns = ["player.id", "player.name", "Assists"]
                 top_player_names = top_player_names.set_index('player.name')
                 st.write('Assist')

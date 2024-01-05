@@ -464,7 +464,7 @@ def U15_liga ():
     xT['xT Rank'] = xT['xT'].rank(ascending=False).astype(int)
 
     xgc = df1
-    xgchold = xgchold.rename(columns={'shot.xg': 'Hold xG'})
+    xgchold = xgc.rename(columns={'shot.xg': 'Hold xG'})
     xgchold = xgchold.groupby('team.name')['Hold xG'].agg('sum').reset_index()
     xgchold = xgchold.sort_values(by='Hold xG',ascending=False)
     xgchold['Hold xG rank'] = xgchold['Hold xG'].rank(ascending=False).astype(int)

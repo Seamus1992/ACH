@@ -7590,7 +7590,6 @@ if username == valid_username and password == valid_password:
 
             average_passes_df = average_passes_df.reset_index(drop=True)
             average_passes_df = average_passes_df.round(2)
-
             average_passes_df.index = ['Antal', 'Succesfulde','Lange', 'Procent','Long pass %']
 
             average_passes_df.loc['Procent', :] = average_passes_df.loc['Procent', :].apply(lambda x: f"{x:.2%}" if isinstance(x, float) else x)
@@ -7683,9 +7682,11 @@ if username == valid_username and password == valid_password:
             with col2:
                 st.write('PPDA')
                 average_ppda_df.index.values[0] = modstander
+                average_ppda_df = average_ppda_df.round(2)
                 st.dataframe(average_ppda_df)
                 st.write('Challenge intensity')
                 average_challengeintensity_df.index.values[0] = modstander
+                average_challengeintensity_df = average_challengeintensity_df.round(2)
                 st.dataframe(average_challengeintensity_df)
 
             with col34:

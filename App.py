@@ -7983,6 +7983,7 @@ if username == valid_username and password == valid_password:
                 Shotxg = Shotxg.groupby(['player.id', 'player.name'])['shot.xg'].sum()
                 Shotxg = Shotxg.nlargest(3)
                 st.write('Xg')
+                Shotxg = Shotxg[['player.name','shot.xg']]
                 st.dataframe(Shotxg)
 
             with col2:
@@ -7991,17 +7992,18 @@ if username == valid_username and password == valid_password:
                 Postshotxg = Postshotxg.groupby(['player.id', 'player.name'])['shot.postShotXg'].sum()
                 Postshotxg = Postshotxg.nlargest(3)
                 st.write('Postshot xG')
+                Postshotxg = Postshotxg[['player.name','shot.postShotXg']]
                 st.dataframe(Postshotxg)
 
             with col3:
                 top_player_names = Assists.groupby(['player.id', 'player.name']).size().sort_values(ascending=False).head(3)
-                top_player_names.columns = ["player.id", "player.name", "Assists"]
+                top_player_names.columns = ["player.name", "Assists"]
                 st.write('Assist')
                 st.dataframe(top_player_names)
 
             with col4:
                 top_player_names = Målscorer.groupby(['player.id', 'player.name']).size().sort_values(ascending=False).head(3)
-                top_player_names.columns = ["player.id", "player.name", "Mål"]
+                top_player_names.columns = ["player.name", "Mål"]
                 st.write('Mål')
                 st.dataframe(top_player_names)
 

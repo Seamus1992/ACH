@@ -7993,6 +7993,7 @@ if username == valid_username and password == valid_password:
                 Postshotxg = Postshotxg.groupby(['player.id', 'player.name'])['shot.postShotXg'].sum()
                 Postshotxg = Postshotxg.nlargest(3)
                 st.write('Postshot xG')
+                Postshotxg = Postshotxg.reset_index()
                 Postshotxg = Postshotxg[['player.name','shot.postShotXg']]
                 st.dataframe(Postshotxg)
 

@@ -8039,7 +8039,7 @@ if username == valid_username and password == valid_password:
                 else:
                     filtreretdfkamp = spillere
 
-                xgplacering = xgplacering[xgplacering['player.id','player.name'].isin(filtreretdfkamp)]
+                xgplacering = xgplacering[xgplacering['player.name'].isin(filtreretdfkamp)]
 
                 x = xgplacering['location.x']
                 y = xgplacering['location.y']

@@ -7979,32 +7979,32 @@ if username == valid_username and password == valid_password:
             col1, col2, col3, col4 = st.columns(4)
             with col1:
                 
-                Shotxg = df[['player.name','shot.xg']]
-                Shotxg = Shotxg.groupby('player.name')['shot.xg'].sum()
+                Shotxg = df[['player.id','player.name','shot.xg']]
+                Shotxg = Shotxg.groupby('player.id','player.name')['shot.xg'].sum()
                 Shotxg = Shotxg.nlargest(3)
                 st.write('Xg')
                 st.dataframe(Shotxg)
 
             with col2:
                 
-                Postshotxg = df[['player.name','shot.postShotXg']]
-                Postshotxg = Postshotxg.groupby('player.name')['shot.postShotXg'].sum()
+                Postshotxg = df[['player.id','player.name','shot.postShotXg']]
+                Postshotxg = Postshotxg.groupby('player.id','player.name')['shot.postShotXg'].sum()
                 Postshotxg = Postshotxg.nlargest(3)
                 st.write('Postshot xG')
                 st.dataframe(Postshotxg)
 
             with col3:
-                top_player_names = Assists['player.name'].value_counts().head(3)
+                top_player_names = Assists['player.id','player.name'].value_counts().head(3)
                 top_player_names = top_player_names.rename_axis("Spiller navn").reset_index()
-                top_player_names.columns = ["Player name", "Assists"]
+                top_player_names.columns = ["player.id","player.name", "Assists"]
                 top_player_names = top_player_names.set_index('Player name')
                 st.write('Assists')
                 st.dataframe(top_player_names)
 
             with col4:
-                top_player_names = Målscorer['player.name'].value_counts().head(3)
+                top_player_names = Målscorer['player.id','player.name'].value_counts().head(3)
                 top_player_names = top_player_names.rename_axis("Spiller navn").reset_index()
-                top_player_names.columns = ["player.name", "Mål"]
+                top_player_names.columns = ["player.id","player.name", "Mål"]
                 top_player_names = top_player_names.set_index('player.name')
                 st.write('Mål')
                 st.dataframe(top_player_names)
@@ -8028,7 +8028,7 @@ if username == valid_username and password == valid_password:
             with col34:
                 xgplacering = df.copy()
                 xgplacering = df[df['shot.xg'].astype(float) > 0]
-                spillere = xgplacering['player.name'].drop_duplicates(keep='first')
+                spillere = xgplacering['player.id','player.name'].drop_duplicates(keep='first')
                 spillere = spillere.dropna()
                 spillere = sorted(spillere)
                 option4 = st.multiselect('Vælg spiller (hvis ingen vælges vises alle)',spillere)
@@ -8037,7 +8037,7 @@ if username == valid_username and password == valid_password:
                 else:
                     filtreretdfkamp = spillere
 
-                xgplacering = xgplacering[xgplacering['player.name'].isin(filtreretdfkamp)]
+                xgplacering = xgplacering[xgplacering['player.id','player.name'].isin(filtreretdfkamp)]
 
                 x = xgplacering['location.x']
                 y = xgplacering['location.y']
@@ -8104,7 +8104,7 @@ if username == valid_username and password == valid_password:
 
             col1, col2, col3, col4 = st.columns(4)
             with col1:
-                top_player_names = Deep_completion['player.name'].value_counts().head(3)
+                top_player_names = Deep_completion['player.id','player.name'].value_counts().head(3)
                 st.write('Top 3 spillere på Deep completions')
                 top_player_df = top_player_names.to_frame(name='Antal')
                 st.dataframe(top_player_df)
@@ -8116,7 +8116,7 @@ if username == valid_username and password == valid_password:
                 st.dataframe(top_player_df)
 
             with col3:
-                top_player_names = Assists['player.name'].value_counts().head(3)
+                top_player_names = Assists['player.id','player.name'].value_counts().head(3)
                 st.write('Top 3 spillere på Assists')
                 top_player_df = top_player_names.to_frame(name='Antal')
                 st.dataframe(top_player_df)
@@ -8151,7 +8151,7 @@ if username == valid_username and password == valid_password:
                 (Losses['type.secondary'].str.contains('loss')) &
                 (Losses['location.x'].astype(float) <= 50)
             ]
-            top_combinations = Losses.groupby(['player.name']).agg({
+            top_combinations = Losses.groupby(['player.id','player.name']).agg({
                 'player.position': 'first',
                 'player.name': 'count'
             }).nlargest(5, 'player.name')

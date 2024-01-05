@@ -7984,7 +7984,8 @@ if username == valid_username and password == valid_password:
                 Shotxg = Shotxg.nlargest(3)
                 st.write('Xg')
                 Shotxg = Shotxg.reset_index()
-                st.dataframe(Shotxg)
+                Shotxg = Shotxg[['player.name','shot.xg']]
+                st.dataframe(Shotxg,hide_index=True)
 
             with col2:
                 

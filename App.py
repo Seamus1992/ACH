@@ -7323,8 +7323,8 @@ if username == valid_username and password == valid_password:
 
             with col1:
                 st.write("Pasninger")
-                average_passes_df.columns = ['Antal']
                 average_passes_df = average_passes_df.round(2)
+                average_passes_df.columns = ['Antal']
                 st.dataframe(average_passes_df)
 
             with col2:

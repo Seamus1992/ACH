@@ -7980,7 +7980,7 @@ if username == valid_username and password == valid_password:
             with col1:
                 
                 Shotxg = df[['player.id','player.name','shot.xg']]
-                Shotxg = Shotxg.groupby('player.id','player.name')['shot.xg'].sum()
+                Shotxg = Shotxg.groupby(['player.id', 'player.name'])['shot.xg'].sum()
                 Shotxg = Shotxg.nlargest(3)
                 st.write('Xg')
                 st.dataframe(Shotxg)
@@ -7988,7 +7988,7 @@ if username == valid_username and password == valid_password:
             with col2:
                 
                 Postshotxg = df[['player.id','player.name','shot.postShotXg']]
-                Postshotxg = Postshotxg.groupby('player.id','player.name')['shot.postShotXg'].sum()
+                Postshotxg = Postshotxg.groupby(['player.id', 'player.name'])['shot.postShotXg'].sum()
                 Postshotxg = Postshotxg.nlargest(3)
                 st.write('Postshot xG')
                 st.dataframe(Postshotxg)

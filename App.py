@@ -8000,13 +8000,16 @@ if username == valid_username and password == valid_password:
             with col3:
                 top_player_names = Assists.groupby(['player.id', 'player.name']).size().sort_values(ascending=False).head(3)
                 st.write('Assist')
+                top_player_names = top_player_names.reset_index()
+                top_player_names = top_player_names[['player.name','0']]
                 st.dataframe(top_player_names)
 
             with col4:
                 top_player_names = Målscorer.groupby(['player.id', 'player.name']).size().sort_values(ascending=False).head(3)
                 st.write('Mål')
+                top_player_names = top_player_names.reset_index()
+                top_player_names = top_player_names[['player.name','0']]
                 st.dataframe(top_player_names)
-
 
             col1, col2, col34 = st.columns([1,1,2])
 

@@ -8125,7 +8125,7 @@ if username == valid_username and password == valid_password:
                 st.write('Top 3 spillere på Assists')
                 top_player_df = top_player_names.to_frame(name='Antal')
                 top_player_df = top_player_df.reset_index()
-                top_player_names = top_player_names[['player.name','Antal']]
+                #top_player_names = top_player_names[['player.name','Antal']]
                 st.dataframe(top_player_df,hide_index=True)
             
             with col4:    

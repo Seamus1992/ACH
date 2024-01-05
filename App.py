@@ -8001,6 +8001,7 @@ if username == valid_username and password == valid_password:
                 top_player_names = Assists.groupby(['player.id', 'player.name']).size().sort_values(ascending=False).head(3)
                 st.write('Assist')
                 top_player_names = top_player_names.reset_index()
+                top_player_names.columns = ["player.id", "player.name", "Assists"]
                 st.dataframe(top_player_names)
 
             with col4:

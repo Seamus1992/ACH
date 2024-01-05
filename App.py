@@ -7994,7 +7994,7 @@ if username == valid_username and password == valid_password:
                 st.dataframe(Postshotxg)
 
             with col3:
-                top_player_names = Assists['player.id','player.name'].value_counts().head(3)
+                top_player_names = Assists(['player.id','player.name']).value_counts().head(3)
                 top_player_names = top_player_names.rename_axis("Spiller navn").reset_index()
                 top_player_names.columns = ["player.id","player.name", "Assists"]
                 top_player_names = top_player_names.set_index('Player name')
@@ -8002,7 +8002,7 @@ if username == valid_username and password == valid_password:
                 st.dataframe(top_player_names)
 
             with col4:
-                top_player_names = Målscorer['player.id','player.name'].value_counts().head(3)
+                top_player_names = Målscorer(['player.id','player.name']).value_counts().head(3)
                 top_player_names = top_player_names.rename_axis("Spiller navn").reset_index()
                 top_player_names.columns = ["player.id","player.name", "Mål"]
                 top_player_names = top_player_names.set_index('player.name')

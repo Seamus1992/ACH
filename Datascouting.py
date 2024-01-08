@@ -1025,12 +1025,12 @@ def U19_liga ():
     df = df.astype(str)
     dfevents = pd.read_csv('U19 eventdata alle.csv',low_memory=False)
     dfevents = dfevents[['Player id','Player name','team_name','label','date','matchId']]
+    dfevents.loc[dfevents['Player id'] == 624663, 'Player name'] = 'Je. Beluli'
     dfspillernavn = df[['Player id','matchId','positions','average','percent','total']]
     dfspillernavn = dfspillernavn.astype(str)
     dfevents['Player id'] = dfevents['Player id'].astype(str)
     dfevents['matchId'] = dfevents['matchId'].astype(str)
     df = dfspillernavn.merge(dfevents)
-    df.loc[df['Player id'] == 624663, 'Player name'] = 'Je. Beluli'
 
     df['Player&matchId'] = df['Player id'] + df['matchId']
     df['Player&matchId'] = df['Player&matchId'].drop_duplicates(keep='first')

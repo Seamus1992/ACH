@@ -2421,7 +2421,7 @@ if username == valid_username and password == valid_password:
                         dx_carry = carry_end_x - x
                         dy_carry = carry_end_y - y
                         ax.arrow(x, y, dx_carry, dy_carry, color='yellow', length_includes_head=True, head_width=1, head_length=0.8)
-                        pitch.scatter(x, y, color='yellow', ax=ax)
+                        pitch.scatter(dx_carry, dy_carry, color='yellow', ax=ax)
 
 
             st.title('Pasninger')

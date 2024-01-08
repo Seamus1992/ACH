@@ -1030,6 +1030,7 @@ def U19_liga ():
     dfevents['Player id'] = dfevents['Player id'].astype(str)
     dfevents['matchId'] = dfevents['matchId'].astype(str)
     df = dfspillernavn.merge(dfevents)
+    df.loc[df['Player id'] == 624663, 'Player name'] = 'Je. Beluli'
 
     df['Player&matchId'] = df['Player id'] + df['matchId']
     df['Player&matchId'] = df['Player&matchId'].drop_duplicates(keep='first')

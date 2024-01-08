@@ -2391,7 +2391,7 @@ if username == valid_username and password == valid_password:
                 st.pyplot(plt.gcf(), use_container_width=True)
                                 
             team_passes = (df1['type.primary'] == 'pass') & (df1['team.name'] == hold) & (df1['type.secondary'] != "Throw-in")
-            team_passes = df1.loc[team_passes, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y', 'player.name','player.id','pass.recipient.name','pass.recipient.id','pass.accurate','carry.progression','carry.endlocation.x','carry.endlocation.y']]
+            team_passes = df1.loc[team_passes, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y', 'player.name','player.id','pass.recipient.name','pass.recipient.id','pass.accurate','carry.progression','carry.endLocation.y','carry.endLocation.x']]
             players = team_passes[['player.id','player.name']]
             players = players.drop_duplicates()
             pitch = Pitch(pitch_type='wyscout',line_color='white', pitch_color='#02540b', pad_top=20)

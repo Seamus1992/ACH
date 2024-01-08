@@ -2416,12 +2416,12 @@ if username == valid_username and password == valid_password:
                         pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='red', ax=ax)
 
                     if player_df['carry.progression'][i] != '':
-                        carry_end_x = player_df['carry.endLocation.x'][i]
-                        carry_end_y = player_df['carry.endLocation.y'][i]
-                        dx_carry = carry_end_x - x
-                        dy_carry = carry_end_y - y
+                        x_carry = player_df['location.x']
+                        y_carry = player_df['location.y']
+                        dx_carry = player_df['carry.endLocation.x'][i] - player_df['location.x'][i]
+                        dy_carry = player_df['carry.endLocation.y'][i] - player_df['location.y'][i]
                         ax.arrow(x, y, dx_carry, dy_carry, color='yellow', length_includes_head=True, head_width=1, head_length=0.8)
-                        pitch.scatter(dx_carry, dy_carry, color='yellow', ax=ax)
+                        pitch.scatter(x_carry,y_carry, color='yellow', ax=ax)
 
 
             st.title('Pasninger')

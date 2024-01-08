@@ -6196,12 +6196,12 @@ if username == valid_username and password == valid_password:
             df = df.astype(str)
             dfevents = pd.read_csv('U19 eventdata alle.csv',low_memory=False)
             dfevents1 = dfevents[['Player id','Player name','team_name','label','date','matchId']]
+            dfevents1.loc[dfevents1['Player id'] == 624663, 'Player name'] = 'Je. Beluli'
             dfspillernavn = df[['Player id','matchId','positions','average','percent','total']]
             dfspillernavn = dfspillernavn.astype(str)
             dfevents1['Player id'] = dfevents1['Player id'].astype(str)
             dfevents1['matchId'] = dfevents1['matchId'].astype(str)
             df = dfspillernavn.merge(dfevents1)
-            df.loc[df['Player id'] == 624663, 'Player name'] = 'Je. Beluli'
 
             df['Player&matchId'] = df['Player id'] + df['matchId']
             df['Player&matchId'] = df['Player&matchId'].drop_duplicates(keep='first')

@@ -2390,7 +2390,7 @@ if username == valid_username and password == valid_password:
                 st.write('Xg plot (Jo større markering, jo større xG)')
                 st.pyplot(plt.gcf(), use_container_width=True)
                                 
-            team_passes = (np.logical_or(df['type.primary'] == 'pass', df['carry.progression'] > 0)) & (df['team.name'] == 'hold') & (df['type.secondary'] != "Throw-in")
+            team_passes = (df['type.primary'] == 'pass') & (df['team.name'] == hold) & (df['type.secondary'] != "Throw-in")
             team_passes = df.loc[team_passes, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y', 'player.name','player.id','pass.recipient.name','pass.recipient.id','pass.accurate']]
             players = team_passes[['player.id','player.name']]
             players = players.drop_duplicates()

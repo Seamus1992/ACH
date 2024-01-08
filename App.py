@@ -2403,28 +2403,17 @@ if username == valid_username and password == valid_password:
                 xT_score = xTspiller.loc[xTspiller["player.name"] == name, "xT"].values[0]  # Fetch xT score for the player
                 ax.text(60, -10, f"{name} ({xT_score:.3f} xT)", ha='center', va='center', fontsize=8, color='white')
 
-            for i in player_df.index:
-                x = player_df['location.x'][i]
-                y = player_df['location.y'][i]
-                dx = player_df['pass.endLocation.x'][i] - player_df['location.x'][i]
-                dy = player_df['pass.endLocation.y'][i] - player_df['location.y'][i]
-                
-                if player_df['pass.accurate'][i]:
-                    ax.arrow(x, y, dx, dy, color='#0dff00', length_includes_head=True, head_width=1, head_length=0.8)
-                    pitch.scatter(x, y, color='#0dff00', ax=ax)
-                else:
-                    ax.arrow(x, y, dx, dy, color='red', length_includes_head=True, head_width=1, head_length=0.8)
-                    pitch.scatter(x, y, color='red', ax=ax)
-
-                if player_df['carry.progression'][i] != '':
-                    carry_x = player_df['carry.endLocation.x'][i]
-                    carry_y = player_df['carry.endLocation.y'][i]
-                    carry_dx = carry_x - x
-                    carry_dy = carry_y - y
-                    ax.arrow(x, y, carry_dx, carry_dy, color='yellow', length_includes_head=True, head_width=1, head_length=0.8)
-                    pitch.scatter(carry_x, carry_y, color='yellow', ax=ax)
-                else:
-                    pitch.scatter(x, y, color='red' if not player_df['pass.accurate'][i] else '#0dff00', ax=ax)
+                for i in player_df.index:
+                    x = player_df['location.x'][i]
+                    y = player_df['location.y'][i]
+                    dx = player_df['pass.endLocation.x'][i] - player_df['location.x'][i]
+                    dy = player_df['pass.endLocation.y'][i] - player_df['location.y'][i]
+                    if player_df['pass.accurate'][i]:  # Changed df to player_df here
+                        ax.arrow(x, y, dx, dy, color='#0dff00', length_includes_head=True, head_width=1, head_length=0.8)
+                        pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='#0dff00', ax=ax)
+                    else:
+                        ax.arrow(x, y, dx, dy, color='red', length_includes_head=True, head_width=1, head_length=0.8)
+                        pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='red', ax=ax)
 
             st.title('Pasninger')
             st.pyplot(fig)

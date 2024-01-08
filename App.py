@@ -2415,18 +2415,6 @@ if username == valid_username and password == valid_password:
                         ax.arrow(x, y, dx, dy, color='red', length_includes_head=True, head_width=1, head_length=0.8)
                         pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='red', ax=ax)
 
-                    if player_df['carry.progression'][i] != '':
-                        x_carry = player_df['location.x'][i]
-                        y_carry = player_df['location.y'][i]
-                        dx_carry = player_df['carry.endLocation.x'][i] - x_carry
-                        dy_carry = player_df['carry.endLocation.y'][i] - y_carry
-                        ax.arrow(x_carry, y_carry, dx_carry, dy_carry, color='yellow', length_includes_head=True, head_width=1, head_length=0.8)
-                        
-                        # Adjusting only the carry progression dots to be yellow
-                        pitch.scatter(x_carry, y_carry, color='yellow', ax=ax)  # Scatter for carry progression
-                        pitch.scatter(x, y, color='red' if not player_df['pass.accurate'][i] else '#0dff00', ax=ax)  # Scatter for pass
-
-
             st.title('Pasninger')
             st.pyplot(fig)
 

@@ -2238,7 +2238,6 @@ if username == valid_username and password == valid_password:
             df1 = df1[~df1['possession.types'].str.contains('free_kick')]
             df1 = df1[~df1['possession.types'].str.contains('corner')]
 
-
             conditions = [
                 (df['location.x'] <= 30) & ((df['location.y'] <= 19) | (df['location.y'] >= 81)),
                 (df['location.x'] <= 30) & ((df['location.y'] >= 19) | (df['location.y'] <= 81)),
@@ -2350,7 +2349,6 @@ if username == valid_username and password == valid_password:
             xgcspiller = xgcspiller.sort_values(by='xGCC',ascending=False)
             xgcspiller = xgcspiller[xgcspiller['team.name'] == hold]
 
-
             col1,col2, col34 = st.columns([1,1,2])
             with col1:  
                 xTspiller = df.groupby(['player.name','team.name'])['xT'].agg('sum').reset_index()
@@ -2389,7 +2387,6 @@ if username == valid_username and password == valid_password:
                 ax.text(0.3, 0.5, label_text, color='black', ha='center', va='center',
                         transform=ax.transAxes, fontsize=10, bbox=dict(facecolor='white', alpha=0.7))
 
-
                 st.write('Xg plot (Jo større markering, jo større xG)')
                 st.pyplot(plt.gcf(), use_container_width=True)
                                 
@@ -2416,7 +2413,6 @@ if username == valid_username and password == valid_password:
                     else:
                         ax.arrow(x, y, dx, dy, color='red', length_includes_head=True, head_width=1, head_length=0.8)
                         pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='red', ax=ax)
-
 
             st.title('Pasninger')
             st.pyplot(fig)

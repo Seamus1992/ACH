@@ -2439,9 +2439,6 @@ if username == valid_username and password == valid_password:
                     if player_df['pass.accurate'][i]:  # Changed df to player_df here
                         ax.arrow(x, y, dx, dy, color='#0dff00', length_includes_head=True, head_width=1, head_length=0.8)
                         pitch.scatter(player_df['pass.endLocation.x'][i], player_df['pass.endLocation.y'][i], color='#0dff00', ax=ax)
-                    else:
-                        ax.arrow(dx, dy, x, y, color='red', length_includes_head=True, head_width=1, head_length=0.8)
-                        pitch.scatter(player_df['pass.endLocation.x'][i], player_df['pass.endLocation.y'][i], color='red', ax=ax)
 
             st.title('Modtagne pasninger')
             st.pyplot(fig)

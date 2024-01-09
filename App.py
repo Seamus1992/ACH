@@ -3384,10 +3384,14 @@ if username == valid_username and password == valid_password:
             players = players.drop_duplicates()
 
             combined_df = pd.concat([team_passes, team_dribbles])
-            combined_df = combined_df[combined_df['player.name'] != combined_df['pass.recipient.name']]
-
-            mask = (combined_df['pass.endLocation.x'].notnull()) | (combined_df['pass.endLocation.y'].notnull())
-            combined_df.loc[mask, ['carry.progression', 'carry.endLocation.x', 'carry.endLocation.y']] = None
+            combined_df = combined_df[
+                ~(
+                    (combined_df['carry.endLocation.x'] > 0) &
+                    (combined_df['carry.endLocation.y'] > 0) &
+                    (combined_df['pass.endLocation.x'] > 0) &
+                    (combined_df['pass.endLocation.y'] > 0)
+                )
+            ]            
             st.dataframe(combined_df)
             # Plotting
             pitch = Pitch(pitch_type='wyscout', line_color='white', pitch_color='#02540b', pad_top=20)

@@ -2904,24 +2904,24 @@ if username == valid_username and password == valid_password:
                 xT_score = xTspiller.loc[xTspiller["player.name"] == name, "xT"].values[0]  # Fetch xT score for the player
                 ax.text(60, -10, f"{name} ({xT_score:.3f} xT)", ha='center', va='center', fontsize=8, color='white')
 
-            for i in player_df.index:
-                x = player_df['location.x'][i]
-                y = player_df['location.y'][i]
-                dx_pass = player_df['pass.endLocation.x'][i] - player_df['location.x'][i]
-                dy_pass = player_df['pass.endLocation.y'][i] - player_df['location.y'][i]
-                dx_carry = player_df['carry.endLocation.x'][i] - player_df['location.x'][i]
-                dy_carry = player_df['carry.endLocation.y'][i] - player_df['location.y'][i]
+                for i in player_df.index:
+                    x = player_df['location.x'][i]
+                    y = player_df['location.y'][i]
+                    dx_pass = player_df['pass.endLocation.x'][i] - player_df['location.x'][i]
+                    dy_pass = player_df['pass.endLocation.y'][i] - player_df['location.y'][i]
+                    dx_carry = player_df['carry.endLocation.x'][i] - player_df['location.x'][i]
+                    dy_carry = player_df['carry.endLocation.y'][i] - player_df['location.y'][i]
 
-                if 'carry.progression' in player_df.columns and not player_df['carry.progression'].isnull().iloc[i]:
-                    ax.arrow(x, y, dx_carry, dy_carry, color='yellow', length_includes_head=True, head_width=1, head_length=0.8)
-                    pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='yellow', ax=ax)
-                else:
-                    if not player_df['pass.accurate'].isnull().iloc[i] and not player_df['pass.accurate'].iloc[i]:
-                        ax.arrow(x, y, dx_pass, dy_pass, color='red', length_includes_head=True, head_width=1, head_length=0.8)
-                        pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='red', ax=ax)
+                    if 'carry.progression' in player_df.columns and not pd.isnull(player_df['carry.progression'][i]):
+                        ax.arrow(x, y, dx_carry, dy_carry, color='yellow', length_includes_head=True, head_width=1, head_length=0.8)
+                        pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='yellow', ax=ax)
                     else:
-                        ax.arrow(x, y, dx_pass, dy_pass, color='#0dff00', length_includes_head=True, head_width=1, head_length=0.8)
-                        pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='#0dff00', ax=ax)
+                        if not pd.isnull(player_df['pass.accurate'][i]) and not player_df['pass.accurate'][i]:
+                            ax.arrow(x, y, dx_pass, dy_pass, color='red', length_includes_head=True, head_width=1, head_length=0.8)
+                            pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='red', ax=ax)
+                        else:
+                            ax.arrow(x, y, dx_pass, dy_pass, color='#0dff00', length_includes_head=True, head_width=1, head_length=0.8)
+                            pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='#0dff00', ax=ax)
 
             st.title('Pasninger og driblinger')
             st.pyplot(fig)
@@ -3187,6 +3187,7 @@ if username == valid_username and password == valid_password:
                     pitch.lines(player1_x, player1_y, player2_x, player2_y,
                                 alpha=1, lw=line_width, zorder=2, color="yellow", ax=ax["pitch"])
             st.pyplot(fig)
+
 
         def U19():
             import json

@@ -2421,7 +2421,6 @@ if username == valid_username and password == valid_password:
             
             team_dribbles = ((df1['carry.progression'] < 0) | (df1['carry.progression'] > 0)) & (df1['team.name'] == hold)
             team_dribbles = df1.loc[team_dribbles, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y', 'player.name','player.id','carry.progression','carry.endLocation.y','carry.endLocation.x']]
-            st.dataframe(team_dribbles)
             players = team_dribbles[['player.id','player.name']]
             players = players.drop_duplicates()
             pitch = Pitch(pitch_type='wyscout',line_color='white', pitch_color='#02540b', pad_top=20)
@@ -2441,9 +2440,6 @@ if username == valid_username and password == valid_password:
                     if player_df['carry.progression'][i] != None:
                         ax.arrow(x, y, dx_pass, dy_pass, color='#0dff00', length_includes_head=True, head_width=1, head_length=0.8)
                         pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='#0dff00', ax=ax)
-                    else:
-                        ax.arrow(x, y, dx_pass, dy_pass, color='red', length_includes_head=True, head_width=1, head_length=0.8)
-                        pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='red', ax=ax)
 
             st.title('Driblinger')
             st.pyplot(fig)

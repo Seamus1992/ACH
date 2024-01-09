@@ -2469,11 +2469,14 @@ if username == valid_username and password == valid_password:
                         ax.arrow(x, y, dx_carry, dy_carry, color='yellow', length_includes_head=True, head_width=1, head_length=0.8)
                         pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='yellow', ax=ax)
                     else:
-                        ax.arrow(x, y, dx_pass, dy_pass, color='#0dff00', length_includes_head=True, head_width=1, head_length=0.8)
-                        pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='#0dff00', ax=ax)
-
-            plt.title('Combined Passes and Dribbles')
-            st.pyplot(fig)
+                        if not pd.isnull(player_df['pass.accurate'][i]) and not player_df['pass.accurate'][i]:
+                            ax.arrow(x, y, dx_pass, dy_pass, color='red', length_includes_head=True, head_width=1, head_length=0.8)
+                            pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='red', ax=ax)
+                        else:
+                            ax.arrow(x, y, dx_pass, dy_pass, color='#0dff00', length_includes_head=True, head_width=1, head_length=0.8)
+                            pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='#0dff00', ax=ax)
+                        st.title('Pasninger og driblinger')
+                        st.pyplot(fig)
 
 
             team_passes = (df1['type.primary'] == 'pass') & (df1['team.name'] == hold) & (df1['type.secondary'] != "Throw-in")

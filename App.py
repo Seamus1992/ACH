@@ -2891,12 +2891,7 @@ if username == valid_username and password == valid_password:
             players = players.drop_duplicates()
 
             combined_df = pd.concat([team_passes, team_dribbles])
-            combined_df['pass.accurate'] = np.where(
-                combined_df['player.name'] == combined_df['pass.recipient.name'],
-                False,
-                combined_df['pass.accurate']
-            )
-            combined_df.loc[combined_df['carry.progression'] != 0, ['pass.endLocation.x', 'pass.endLocation.y']] = np.nan
+            combined_df = combined_df[combined_df['player.name'] != combined_df['pass.recipient.name']]
             st.dataframe(combined_df)
             pitch = Pitch(pitch_type='wyscout', line_color='white', pitch_color='#02540b', pad_top=20)
             fig, axs = pitch.grid(ncols=4, nrows=5, grid_height=0.85, title_height=0.00, axis=False, title_space=0.04, endnote_space=0.01)

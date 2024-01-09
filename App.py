@@ -3395,7 +3395,6 @@ if username == valid_username and password == valid_password:
             team_dribbles = df1.loc[team_dribbles, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y', 'player.name','player.id','carry.progression','carry.endLocation.y','carry.endLocation.x']]
             players = team_dribbles[['player.id','player.name']]
             players = players.drop_duplicates()
-            players = players.merge(xTspiller[['player.id', 'xT']], on='player.id', how='left').sort_values(by='xT', ascending=False)
 
             combined_df = pd.concat([team_passes, team_dribbles])
             combined_df = combined_df[

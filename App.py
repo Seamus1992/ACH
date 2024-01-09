@@ -2916,7 +2916,7 @@ if username == valid_username and password == valid_password:
                         ax.arrow(x, y, dx_carry, dy_carry, color='yellow', length_includes_head=True, head_width=1, head_length=0.8)
                         pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='yellow', ax=ax)
                     else:
-                        if not pd.isnull(player_df['pass.accurate'][i]) and not player_df['pass.accurate'][i]:
+                        if not pd.isnull(player_df['pass.accurate'][i]) and player_df['pass.accurate'][i]:
                             ax.arrow(x, y, dx_pass, dy_pass, color='red', length_includes_head=True, head_width=1, head_length=0.8)
                             pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='red', ax=ax)
                         else:

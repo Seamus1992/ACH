@@ -3385,7 +3385,7 @@ if username == valid_username and password == valid_password:
 
             combined_df = pd.concat([team_passes, team_dribbles])
             combined_df = combined_df[combined_df['player.name'] != combined_df['pass.recipient.name']]
-
+            st.dataframe(combined_df)
             # Plotting
             pitch = Pitch(pitch_type='wyscout', line_color='white', pitch_color='#02540b', pad_top=20)
             fig, axs = pitch.grid(ncols=4, nrows=5, grid_height=0.85, title_height=0.00, axis=False, title_space=0.04, endnote_space=0.01)

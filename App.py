@@ -2730,7 +2730,6 @@ if username == valid_username and password == valid_password:
             df1 = df1[~df1['possession.types'].str.contains('free_kick')]
             df1 = df1[~df1['possession.types'].str.contains('corner')]
 
-
             conditions = [
                 (df['location.x'] <= 30) & ((df['location.y'] <= 19) | (df['location.y'] >= 81)),
                 (df['location.x'] <= 30) & ((df['location.y'] >= 19) | (df['location.y'] <= 81)),
@@ -2842,7 +2841,6 @@ if username == valid_username and password == valid_password:
             xgcspiller = xgcspiller.sort_values(by='xGCC',ascending=False)
             xgcspiller = xgcspiller[xgcspiller['team.name'] == hold]
 
-
             col1,col2, col34 = st.columns([1,1,2])
             with col1:  
                 xTspiller = df.groupby(['player.name','team.name'])['xT'].agg('sum').reset_index()
@@ -2881,39 +2879,55 @@ if username == valid_username and password == valid_password:
                 ax.text(0.3, 0.5, label_text, color='black', ha='center', va='center',
                         transform=ax.transAxes, fontsize=10, bbox=dict(facecolor='white', alpha=0.7))
 
-
                 st.write('Xg plot (Jo større markering, jo større xG)')
                 st.pyplot(plt.gcf(), use_container_width=True)
-                
-            team_passes = (df1['type.primary'] == 'pass') & (df1['team.name'] == hold) & (df1['type.secondary'] != "Throw-in")
-            team_passes = df1.loc[team_passes, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y', 'player.name','player.id','pass.recipient.name','pass.recipient.id','pass.accurate']]
+        
+            team_passes = (df1['type.primary'] == 'pass') & (df1['team.name'] == hold)
+            team_passes = df1.loc[team_passes, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y', 'player.name','player.id','pass.recipient.name','pass.recipient.id','pass.accurate','carry.progression','carry.endLocation.y','carry.endLocation.x']]
             players = team_passes[['player.id','player.name']]
             players = players.drop_duplicates()
-            pitch = Pitch(pitch_type='wyscout',line_color='white', pitch_color='#02540b', pad_top=20)
+            
+            team_dribbles = ((df1['carry.progression'] < 0) | (df1['carry.progression'] > 0)) & (df1['team.name'] == hold)
+            team_dribbles = df1.loc[team_dribbles, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y', 'player.name','player.id','carry.progression','carry.endLocation.y','carry.endLocation.x']]
+            players = team_dribbles[['player.id','player.name']]
+            players = players.drop_duplicates()
+
+            combined_df = pd.concat([team_passes, team_dribbles])
+
+            # Plotting
+            pitch = Pitch(pitch_type='wyscout', line_color='white', pitch_color='#02540b', pad_top=20)
             fig, axs = pitch.grid(ncols=4, nrows=5, grid_height=0.85, title_height=0.00, axis=False, title_space=0.04, endnote_space=0.01)
             plt.figure()
+
             for name, ax in zip(players['player.name'], axs['pitch'].flat[:len(players)]):
-                player_df = team_passes.loc[team_passes["player.name"] == name]
+                player_df = combined_df.loc[combined_df["player.name"] == name]
                 xT_score = xTspiller.loc[xTspiller["player.name"] == name, "xT"].values[0]  # Fetch xT score for the player
                 ax.text(60, -10, f"{name} ({xT_score:.3f} xT)", ha='center', va='center', fontsize=8, color='white')
 
                 for i in player_df.index:
                     x = player_df['location.x'][i]
                     y = player_df['location.y'][i]
-                    dx = player_df['pass.endLocation.x'][i] - player_df['location.x'][i]
-                    dy = player_df['pass.endLocation.y'][i] - player_df['location.y'][i]
-                    if player_df['pass.accurate'][i]:  # Changed df to player_df here
-                        ax.arrow(x, y, dx, dy, color='#0dff00', length_includes_head=True, head_width=1, head_length=0.8)
-                        pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='#0dff00', ax=ax)
+                    dx_pass = player_df['pass.endLocation.x'][i] - player_df['location.x'][i]
+                    dy_pass = player_df['pass.endLocation.y'][i] - player_df['location.y'][i]
+                    dx_carry = player_df['carry.endLocation.x'][i] - player_df['location.x'][i]
+                    dy_carry = player_df['carry.endLocation.y'][i] - player_df['location.y'][i]
+
+                    if 'carry.progression' in player_df.columns and not pd.isnull(player_df['carry.progression'][i]):
+                        ax.arrow(x, y, dx_carry, dy_carry, color='yellow', length_includes_head=True, head_width=1, head_length=0.8)
+                        pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='yellow', ax=ax)
                     else:
-                        ax.arrow(x, y, dx, dy, color='red', length_includes_head=True, head_width=1, head_length=0.8)
-                        pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='red', ax=ax)
+                        if not pd.isnull(player_df['pass.accurate'][i]) and not player_df['pass.accurate'][i]:
+                            ax.arrow(x, y, dx_pass, dy_pass, color='red', length_includes_head=True, head_width=1, head_length=0.8)
+                            pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='red', ax=ax)
+                        else:
+                            ax.arrow(x, y, dx_pass, dy_pass, color='#0dff00', length_includes_head=True, head_width=1, head_length=0.8)
+                            pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='#0dff00', ax=ax)
 
-
-            st.title('Pasninger')
+            st.title('Pasninger og driblinger')
             st.pyplot(fig)
 
-            team_passes = (df1['type.primary'] == 'pass') & (df1['team.name'] == hold) & (df1['type.secondary'] != "Throw-in") & (df1['pass.accurate'] == True)
+
+            team_passes = (df1['type.primary'] == 'pass') & (df1['team.name'] == hold) & (df1['type.secondary'] != "Throw-in")
             team_passes = df1.loc[team_passes, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y','player.name','player.id','pass.recipient.name','pass.recipient.id','pass.accurate']]
             players = players.rename(columns={'player.id': 'pass.recipient.id', 'player.name': 'pass.recipient.name'})
             players = players.drop_duplicates()
@@ -2934,9 +2948,6 @@ if username == valid_username and password == valid_password:
                     if player_df['pass.accurate'][i]:  # Changed df to player_df here
                         ax.arrow(x, y, dx, dy, color='#0dff00', length_includes_head=True, head_width=1, head_length=0.8)
                         pitch.scatter(player_df['pass.endLocation.x'][i], player_df['pass.endLocation.y'][i], color='#0dff00', ax=ax)
-                    else:
-                        ax.arrow(dx, dy, x, y, color='red', length_includes_head=True, head_width=1, head_length=0.8)
-                        pitch.scatter(player_df['pass.endLocation.x'][i], player_df['pass.endLocation.y'][i], color='red', ax=ax)
 
             st.title('Modtagne pasninger')
             st.pyplot(fig)
@@ -3011,7 +3022,7 @@ if username == valid_username and password == valid_password:
                     (df['type.secondary'] != "Throw-in"))    
                 # Select necessary columns
                 pass_df = df.loc[passes, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y', 'player.name', 'pass.recipient.name']]
-                pass_df = pass_df[(pass_df['location.x'] > 33) & (pass_df['location.x'] < 66)]
+                pass_df = pass_df[pass_df['location.x'] > 33]
                 # Adjusting that only the surname of a player is presented.
                 pass_df["player.name"] = pass_df["player.name"].apply(lambda x: str(x).split()[-1])
                 pass_df["pass.recipient.name"] = pass_df["pass.recipient.name"].apply(lambda x: str(x).split()[-1])
@@ -3193,8 +3204,6 @@ if username == valid_username and password == valid_password:
             df['date'] = pd.to_datetime(df['date'])
             df = df.sort_values(by='date',ascending=False)
             valgtekamp = st.multiselect('Vælg kamp', df['label'].unique(),default=df['label'].unique()[0])
-            df.loc[df['player.id'] == 624663, 'player.name'] = 'Je. Beluli'
-            df.loc[df['pass.recipient.id'] == 624663, 'pass.recipient.name'] = 'Je. Beluli'
 
             df1 = df.copy()
 
@@ -3213,7 +3222,6 @@ if username == valid_username and password == valid_password:
             df1 = df1[~df1['possession.types'].str.contains('throw_in')]
             df1 = df1[~df1['possession.types'].str.contains('free_kick')]
             df1 = df1[~df1['possession.types'].str.contains('corner')]
-
 
             conditions = [
                 (df['location.x'] <= 30) & ((df['location.y'] <= 19) | (df['location.y'] >= 81)),
@@ -3289,7 +3297,7 @@ if username == valid_username and password == valid_password:
                     image = Image.open('xT/xT zoner.png')
                     st.image(image,'xT zoner')
                 with col2:
-                    zoner = pd.read_csv('xT/Zone scores.csv')
+                    zoner = pd.read_csv(r'xT/Zone scores.csv')
                     zoner = zoner[['Start Zone','Start zone score']]
                     zoner = zoner.rename(columns={'Start Zone': 'Zone'})
                     zoner = zoner.rename(columns={'Start zone score': 'Zone score'})
@@ -3317,8 +3325,6 @@ if username == valid_username and password == valid_password:
 
             st.dataframe(xThold,hide_index=True)
                 
-
-
             xgc = xgc[xgc['team.name'] == hold]
 
             xgcspiller = xgc.groupby(['player.id','player.name','team.name','Hold xG i åbent spil'])['possession.attack.xg'].agg('sum').reset_index()
@@ -3366,39 +3372,55 @@ if username == valid_username and password == valid_password:
                 ax.text(0.3, 0.5, label_text, color='black', ha='center', va='center',
                         transform=ax.transAxes, fontsize=10, bbox=dict(facecolor='white', alpha=0.7))
 
-
                 st.write('Xg plot (Jo større markering, jo større xG)')
                 st.pyplot(plt.gcf(), use_container_width=True)
-                
-            team_passes = (df1['type.primary'] == 'pass') & (df1['team.name'] == hold) & (df1['type.secondary'] != "Throw-in")
-            team_passes = df1.loc[team_passes, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y', 'player.name','player.id','pass.recipient.name','pass.recipient.id','pass.accurate']]
+        
+            team_passes = (df1['type.primary'] == 'pass') & (df1['team.name'] == hold)
+            team_passes = df1.loc[team_passes, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y', 'player.name','player.id','pass.recipient.name','pass.recipient.id','pass.accurate','carry.progression','carry.endLocation.y','carry.endLocation.x']]
             players = team_passes[['player.id','player.name']]
             players = players.drop_duplicates()
-            pitch = Pitch(pitch_type='wyscout',line_color='white', pitch_color='#02540b', pad_top=20)
+            
+            team_dribbles = ((df1['carry.progression'] < 0) | (df1['carry.progression'] > 0)) & (df1['team.name'] == hold)
+            team_dribbles = df1.loc[team_dribbles, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y', 'player.name','player.id','carry.progression','carry.endLocation.y','carry.endLocation.x']]
+            players = team_dribbles[['player.id','player.name']]
+            players = players.drop_duplicates()
+
+            combined_df = pd.concat([team_passes, team_dribbles])
+
+            # Plotting
+            pitch = Pitch(pitch_type='wyscout', line_color='white', pitch_color='#02540b', pad_top=20)
             fig, axs = pitch.grid(ncols=4, nrows=5, grid_height=0.85, title_height=0.00, axis=False, title_space=0.04, endnote_space=0.01)
             plt.figure()
+
             for name, ax in zip(players['player.name'], axs['pitch'].flat[:len(players)]):
-                player_df = team_passes.loc[team_passes["player.name"] == name]
+                player_df = combined_df.loc[combined_df["player.name"] == name]
                 xT_score = xTspiller.loc[xTspiller["player.name"] == name, "xT"].values[0]  # Fetch xT score for the player
                 ax.text(60, -10, f"{name} ({xT_score:.3f} xT)", ha='center', va='center', fontsize=8, color='white')
 
                 for i in player_df.index:
                     x = player_df['location.x'][i]
                     y = player_df['location.y'][i]
-                    dx = player_df['pass.endLocation.x'][i] - player_df['location.x'][i]
-                    dy = player_df['pass.endLocation.y'][i] - player_df['location.y'][i]
-                    if player_df['pass.accurate'][i]:  # Changed df to player_df here
-                        ax.arrow(x, y, dx, dy, color='#0dff00', length_includes_head=True, head_width=1, head_length=0.8)
-                        pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='#0dff00', ax=ax)
+                    dx_pass = player_df['pass.endLocation.x'][i] - player_df['location.x'][i]
+                    dy_pass = player_df['pass.endLocation.y'][i] - player_df['location.y'][i]
+                    dx_carry = player_df['carry.endLocation.x'][i] - player_df['location.x'][i]
+                    dy_carry = player_df['carry.endLocation.y'][i] - player_df['location.y'][i]
+
+                    if 'carry.progression' in player_df.columns and not pd.isnull(player_df['carry.progression'][i]):
+                        ax.arrow(x, y, dx_carry, dy_carry, color='yellow', length_includes_head=True, head_width=1, head_length=0.8)
+                        pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='yellow', ax=ax)
                     else:
-                        ax.arrow(x, y, dx, dy, color='red', length_includes_head=True, head_width=1, head_length=0.8)
-                        pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='red', ax=ax)
+                        if not pd.isnull(player_df['pass.accurate'][i]) and not player_df['pass.accurate'][i]:
+                            ax.arrow(x, y, dx_pass, dy_pass, color='red', length_includes_head=True, head_width=1, head_length=0.8)
+                            pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='red', ax=ax)
+                        else:
+                            ax.arrow(x, y, dx_pass, dy_pass, color='#0dff00', length_includes_head=True, head_width=1, head_length=0.8)
+                            pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='#0dff00', ax=ax)
 
-
-            st.title('Pasninger')
+            st.title('Pasninger og driblinger')
             st.pyplot(fig)
 
-            team_passes = (df1['type.primary'] == 'pass') & (df1['team.name'] == hold) & (df1['type.secondary'] != "Throw-in") & (df1['pass.accurate'] == True)
+
+            team_passes = (df1['type.primary'] == 'pass') & (df1['team.name'] == hold) & (df1['type.secondary'] != "Throw-in")
             team_passes = df1.loc[team_passes, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y','player.name','player.id','pass.recipient.name','pass.recipient.id','pass.accurate']]
             players = players.rename(columns={'player.id': 'pass.recipient.id', 'player.name': 'pass.recipient.name'})
             players = players.drop_duplicates()
@@ -3419,9 +3441,6 @@ if username == valid_username and password == valid_password:
                     if player_df['pass.accurate'][i]:  # Changed df to player_df here
                         ax.arrow(x, y, dx, dy, color='#0dff00', length_includes_head=True, head_width=1, head_length=0.8)
                         pitch.scatter(player_df['pass.endLocation.x'][i], player_df['pass.endLocation.y'][i], color='#0dff00', ax=ax)
-                    else:
-                        ax.arrow(dx, dy, x, y, color='red', length_includes_head=True, head_width=1, head_length=0.8)
-                        pitch.scatter(player_df['pass.endLocation.x'][i], player_df['pass.endLocation.y'][i], color='red', ax=ax)
 
             st.title('Modtagne pasninger')
             st.pyplot(fig)
@@ -3496,7 +3515,7 @@ if username == valid_username and password == valid_password:
                     (df['type.secondary'] != "Throw-in"))    
                 # Select necessary columns
                 pass_df = df.loc[passes, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y', 'player.name', 'pass.recipient.name']]
-                pass_df = pass_df[(pass_df['location.x'] > 33) & (pass_df['location.x'] < 66)]
+                pass_df = pass_df[pass_df['location.x'] > 33]
                 # Adjusting that only the surname of a player is presented.
                 pass_df["player.name"] = pass_df["player.name"].apply(lambda x: str(x).split()[-1])
                 pass_df["pass.recipient.name"] = pass_df["pass.recipient.name"].apply(lambda x: str(x).split()[-1])

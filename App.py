@@ -2702,9 +2702,9 @@ if username == valid_username and password == valid_password:
             from mplsoccer.pitch import Pitch
             import numpy as np
             import streamlit as st
-            df = pd.read_csv(r'xT/U15 Ligaen 23 24.csv')
+            df = pd.read_csv(r'xT/U17 Ligaen 23 24.csv')
 
-            hold = 'Horsens U15'
+            hold = 'Horsens U17'
             df = df[df['label'].str.contains(hold)]
             df['date'] = pd.to_datetime(df['date'])
             df = df.sort_values(by='date',ascending=False)
@@ -3193,9 +3193,9 @@ if username == valid_username and password == valid_password:
             from mplsoccer.pitch import Pitch
             import numpy as np
             import streamlit as st
-            df = pd.read_csv(r'xT/U15 Ligaen 23 24.csv')
+            df = pd.read_csv(r'xT/U19 Ligaen 23 24.csv')
 
-            hold = 'Horsens U15'
+            hold = 'Horsens U19'
             df = df[df['label'].str.contains(hold)]
             df['date'] = pd.to_datetime(df['date'])
             df = df.sort_values(by='date',ascending=False)

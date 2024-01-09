@@ -2696,10 +2696,986 @@ if username == valid_username and password == valid_password:
             st.pyplot(fig)
 
         def U17():
+            import pandas as pd
+            import matplotlib.pyplot as plt
+            import seaborn as sns
+            from mplsoccer.pitch import Pitch
+            import numpy as np
+            import streamlit as st
+            df = pd.read_csv(r'xT/U15 Ligaen 23 24.csv')
 
+            hold = 'Horsens U15'
+            df = df[df['label'].str.contains(hold)]
+            df['date'] = pd.to_datetime(df['date'])
+            df = df.sort_values(by='date',ascending=False)
+            valgtekamp = st.multiselect('Vælg kamp', df['label'].unique(),default=df['label'].unique()[0])
+
+            df1 = df.copy()
+
+            df = df[df['label'].isin(valgtekamp)]
+            df = df[(df['pass.accurate'] ==True) | (df['carry.progression'] > 0)]
+            df = df[~df['type.primary'].str.contains('infraction')]
+            df = df[~df['type.primary'].str.contains('game_interruption')]
+            df = df[~df['type.primary'].str.contains('throw_in')]
+            df = df[~df['type.primary'].str.contains('free_kick')]
+            df = df[~df['type.primary'].str.contains('penalty')]
+            df = df[~df['type.primary'].str.contains('corner')]
+
+            df1 = df1[df1['label'].isin(valgtekamp)]
+            df1['possession.types'] = df1['possession.types'].astype(str)
+            df1 = df1[~df1['possession.types'].str.contains('set_piece_attack')]
+            df1 = df1[~df1['possession.types'].str.contains('throw_in')]
+            df1 = df1[~df1['possession.types'].str.contains('free_kick')]
+            df1 = df1[~df1['possession.types'].str.contains('corner')]
+
+            conditions = [
+                (df['location.x'] <= 30) & ((df['location.y'] <= 19) | (df['location.y'] >= 81)),
+                (df['location.x'] <= 30) & ((df['location.y'] >= 19) | (df['location.y'] <= 81)),
+                ((df['location.x'] >= 30) & (df['location.x'] <= 50)),
+                ((df['location.x'] >= 50) & (df['location.x'] <= 70)),
+                ((df['location.x'] >= 70) & ((df['location.y'] <= 15) | (df['location.y'] >= 84))),
+                (((df['location.x'] >= 70) & (df['location.x'] <= 84)) & ((df['location.y'] >= 15) & (df['location.y'] <= 84))),
+                ((df['location.x'] >= 84) & ((df['location.y'] >= 15) & (df['location.y'] <= 37)) | ((df['location.y'] <= 84) & (df['location.y'] >= 63))),
+                ((df['location.x'] >= 84) & ((df['location.y'] >= 37) & (df['location.y'] <= 63)))
+            ]
+
+            # Define corresponding zone values
+            zone_values = ['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4', 'Zone 5', 'Zone 6', 'Zone 7', 'Zone 8']
+
+            # Assign 'Start Zone' based on conditions
+            df['Start Zone'] = np.select(conditions, zone_values, default=None)
+
+            conditions_pass_end = [
+                (df['pass.endLocation.x'] <= 30) & ((df['pass.endLocation.y'] <= 19) | (df['pass.endLocation.y'] >= 81)),
+                (df['pass.endLocation.x'] <= 30) & ((df['pass.endLocation.y'] >= 19) | (df['pass.endLocation.y'] <= 81)),
+                ((df['pass.endLocation.x'] >= 30) & (df['pass.endLocation.x'] <= 50)),
+                ((df['pass.endLocation.x'] >= 50) & (df['pass.endLocation.x'] <= 70)),
+                ((df['pass.endLocation.x'] >= 70) & ((df['pass.endLocation.y'] <= 15) | (df['pass.endLocation.y'] >= 84))),
+                (((df['pass.endLocation.x'] >= 70) & (df['pass.endLocation.x'] <= 84)) & ((df['pass.endLocation.y'] >= 15) & (df['pass.endLocation.y'] <= 84))),
+                ((df['pass.endLocation.x'] >= 84) & ((df['pass.endLocation.y'] >= 15) & (df['pass.endLocation.y'] <= 37)) | ((df['pass.endLocation.y'] <= 84) & (df['pass.endLocation.y'] >= 63))),
+                ((df['pass.endLocation.x'] >= 84) & ((df['pass.endLocation.y'] >= 37) & (df['pass.endLocation.y'] <= 63)))
+            ]
+
+            # Define conditions for zone assignment for 'carry.endLocation'
+            conditions_carry_end = [
+                (df['carry.endLocation.x'] <= 30) & ((df['carry.endLocation.y'] <= 19) | (df['carry.endLocation.y'] >= 81)),
+                (df['carry.endLocation.x'] <= 30) & ((df['carry.endLocation.y'] >= 19) | (df['carry.endLocation.y'] <= 81)),
+                ((df['carry.endLocation.x'] >= 30) & (df['carry.endLocation.x'] <= 50)),
+                ((df['carry.endLocation.x'] >= 50) & (df['carry.endLocation.x'] <= 70)),
+                ((df['carry.endLocation.x'] >= 70) & ((df['carry.endLocation.y'] <= 15) | (df['carry.endLocation.y'] >= 84))),
+                (((df['carry.endLocation.x'] >= 70) & (df['carry.endLocation.x'] <= 84)) & ((df['carry.endLocation.y'] >= 15) & (df['carry.endLocation.y'] <= 84))),
+                ((df['carry.endLocation.x'] >= 84) & ((df['carry.endLocation.y'] >= 15) & (df['carry.endLocation.y'] <= 37)) | ((df['carry.endLocation.y'] <= 84) & (df['carry.endLocation.y'] >= 63))),
+                ((df['carry.endLocation.x'] >= 84) & ((df['carry.endLocation.y'] >= 37) & (df['carry.endLocation.y'] <= 63)))
+            ]
+
+            # Define corresponding zone values
+            zone_values = ['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4', 'Zone 5', 'Zone 6', 'Zone 7', 'Zone 8']
+
+            df['End Zone'] = None
+            # Assign 'End Zone' based on conditions for 'pass.endLocation' and 'carry.endLocation'
+            df['End Zone'] = np.select(
+                [
+                    df['End Zone'].isnull() & np.isin(np.select(conditions_pass_end, zone_values, default=None), zone_values),
+                    df['End Zone'].isnull() & np.isin(np.select(conditions_carry_end, zone_values, default=None), zone_values)
+                ],
+                [
+                    np.select(conditions_pass_end, zone_values, default=None),
+                    np.select(conditions_carry_end, zone_values, default=None)
+                ],
+                default=df['End Zone']
+            )
+
+            dfscore = pd.read_csv(r'xT/Zone scores.csv')
+
+            df = df.merge(dfscore[['Start Zone', 'Start zone score']], on='Start Zone', how='left')
+
+            # Merge 'End Zone' scores
+            df = df.merge(dfscore[['End Zone', 'End zone score']], on='End Zone', how='left')
+
+            df['xT'] = df['End zone score'] - df['Start zone score']
+            xThold = df.groupby(['team.name'])['xT'].agg('sum').reset_index()
+
+            with st.expander('Se xT model'):
+                col1,col2 = st.columns(2)
+                with col1:
+                    from PIL import Image
+                    image = Image.open('xT/xT zoner.png')
+                    st.image(image,'xT zoner')
+                with col2:
+                    zoner = pd.read_csv(r'xT/Zone scores.csv')
+                    zoner = zoner[['Start Zone','Start zone score']]
+                    zoner = zoner.rename(columns={'Start Zone': 'Zone'})
+                    zoner = zoner.rename(columns={'Start zone score': 'Zone score'})
+
+                    st.dataframe(zoner,hide_index=True)
+                    st.write('xT udregnes som: zonen hvor pasning/dribling slutter - zone hvor pasning/dribling starter')
+                    st.write('Zonernes værdi er udregnet på baggrund af de seneste 8 sæsoner i 1. div og Superligaen med udgangspunkt i den gennemsnitlige værdi for en boldbesiddelse i zonen. Den er så vægtet efter hvor mange aktioner der går fra boldbesiddelsen i zonen til en afslutning. Jo flere jo lavere vægtning')
+
+            xgc = df1
+            xgchold = xgc.rename(columns={'shot.xg': 'Hold xG i åbent spil'})
+            xgchold = xgchold.groupby('team.name')['Hold xG i åbent spil'].agg('sum').reset_index()
+            xgchold = xgchold.sort_values(by='Hold xG i åbent spil',ascending=False)
+            xgc = xgc.merge(xgchold, on='team.name', how='left')
+            xThold = xThold.merge(xgchold)
+            if hold in xThold['team.name'].values:
+                hold_xG_open_play = xThold.loc[xThold['team.name'] == hold, 'Hold xG i åbent spil'].values[0]
+                hold_xT = xThold.loc[xThold['team.name'] == hold, 'xT'].values[0]
+
+                num_teams = len(xThold['team.name'].unique())    
+                if num_teams > 1:
+                    xThold.loc[xThold['team.name'] == hold, 'Hold xG i åbent spil'] = hold_xG_open_play / (num_teams - 1)
+                    xThold.loc[xThold['team.name'] == hold,'xT'] = hold_xT/(num_teams-1)
+                else:
+                    st.write("There is only one team in the dataset. Unable to calculate.")
+
+            st.dataframe(xThold,hide_index=True)
+                
+            xgc = xgc[xgc['team.name'] == hold]
+
+            xgcspiller = xgc.groupby(['player.id','player.name','team.name','Hold xG i åbent spil'])['possession.attack.xg'].agg('sum').reset_index()
+            xgcspiller = xgcspiller[['player.name','team.name','possession.attack.xg','Hold xG i åbent spil']]
+            xgcspiller['xGCC'] = xgcspiller['possession.attack.xg'] / xgcspiller['Hold xG i åbent spil']
+            xgcspiller = xgcspiller.rename(columns={'possession.attack.xg': 'xGC'})
+            xgcspiller = xgcspiller.sort_values(by='xGCC',ascending=False)
+            xgcspiller = xgcspiller[xgcspiller['team.name'] == hold]
+
+            col1,col2, col34 = st.columns([1,1,2])
+            with col1:  
+                xTspiller = df.groupby(['player.name','team.name'])['xT'].agg('sum').reset_index()
+                xTspiller = xTspiller[xTspiller['team.name'] == hold]
+                xTspiller = xTspiller.sort_values(by='xT', ascending=False)
+                xTspiller = xTspiller[['player.name','xT']]
+                st.dataframe(xTspiller,hide_index=True)
+                samlet = xgcspiller.merge(xTspiller)
+            with col2:
+                xgcspiller = xgcspiller[['player.name','xGC','xGCC']]
+                st.dataframe(xgcspiller,hide_index=True)
+            
+            with col34:
+                xgplacering = df1
+                xgplacering = xgplacering[xgplacering['shot.xg'] > 0]
+                xgplacering = xgplacering[xgplacering['team.name'] == hold]
+                
+                x = xgplacering['location.x']
+                y = xgplacering['location.y']
+                player_names = xgplacering['player.name']  # Extract player names
+                label_text = xgplacering.sort_values(by='shot.xg',ascending=False)
+                label_text = label_text[['player.name', 'shot.xg']].to_string(index=False,header=False)
+                shot_xg = xgplacering['shot.xg'].astype(float)
+                min_size = 5  # Minimum dot size
+                max_size = 100  # Maximum dot size
+                sizes = np.interp(shot_xg, (shot_xg.min(), shot_xg.max()), (min_size, max_size))
+
+                pitch = Pitch(pitch_type='wyscout', pitch_color='grass', line_color='white', stripe=True)
+                fig, ax = pitch.draw()
+                sc = pitch.scatter(x, y, ax=ax, s=sizes)
+
+                # Add player names as labels using annotate
+                for i, txt in enumerate(player_names):
+                    ax.annotate(txt, (x.iloc[i], y.iloc[i]), color='white', fontsize=8, ha='center', va='bottom')
+
+                ax.text(0.3, 0.5, label_text, color='black', ha='center', va='center',
+                        transform=ax.transAxes, fontsize=10, bbox=dict(facecolor='white', alpha=0.7))
+
+                st.write('Xg plot (Jo større markering, jo større xG)')
+                st.pyplot(plt.gcf(), use_container_width=True)
+        
+            team_passes = (df1['type.primary'] == 'pass') & (df1['team.name'] == hold)
+            team_passes = df1.loc[team_passes, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y', 'player.name','player.id','pass.recipient.name','pass.recipient.id','pass.accurate','carry.progression','carry.endLocation.y','carry.endLocation.x']]
+            players = team_passes[['player.id','player.name']]
+            players = players.drop_duplicates()
+            
+            team_dribbles = ((df1['carry.progression'] < 0) | (df1['carry.progression'] > 0)) & (df1['team.name'] == hold)
+            team_dribbles = df1.loc[team_dribbles, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y', 'player.name','player.id','carry.progression','carry.endLocation.y','carry.endLocation.x']]
+            players = team_dribbles[['player.id','player.name']]
+            players = players.drop_duplicates()
+
+            combined_df = pd.concat([team_passes, team_dribbles])
+
+            # Plotting
+            pitch = Pitch(pitch_type='wyscout', line_color='white', pitch_color='#02540b', pad_top=20)
+            fig, axs = pitch.grid(ncols=4, nrows=5, grid_height=0.85, title_height=0.00, axis=False, title_space=0.04, endnote_space=0.01)
+            plt.figure()
+
+            for name, ax in zip(players['player.name'], axs['pitch'].flat[:len(players)]):
+                player_df = combined_df.loc[combined_df["player.name"] == name]
+                xT_score = xTspiller.loc[xTspiller["player.name"] == name, "xT"].values[0]  # Fetch xT score for the player
+                ax.text(60, -10, f"{name} ({xT_score:.3f} xT)", ha='center', va='center', fontsize=8, color='white')
+
+                for i in player_df.index:
+                    x = player_df['location.x'][i]
+                    y = player_df['location.y'][i]
+                    dx_pass = player_df['pass.endLocation.x'][i] - player_df['location.x'][i]
+                    dy_pass = player_df['pass.endLocation.y'][i] - player_df['location.y'][i]
+                    dx_carry = player_df['carry.endLocation.x'][i] - player_df['location.x'][i]
+                    dy_carry = player_df['carry.endLocation.y'][i] - player_df['location.y'][i]
+
+                    if 'carry.progression' in player_df.columns and not pd.isnull(player_df['carry.progression'][i]):
+                        ax.arrow(x, y, dx_carry, dy_carry, color='yellow', length_includes_head=True, head_width=1, head_length=0.8)
+                        pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='yellow', ax=ax)
+                    else:
+                        if not pd.isnull(player_df['pass.accurate'][i]) and not player_df['pass.accurate'][i]:
+                            ax.arrow(x, y, dx_pass, dy_pass, color='red', length_includes_head=True, head_width=1, head_length=0.8)
+                            pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='red', ax=ax)
+                        else:
+                            ax.arrow(x, y, dx_pass, dy_pass, color='#0dff00', length_includes_head=True, head_width=1, head_length=0.8)
+                            pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='#0dff00', ax=ax)
+
+            st.title('Pasninger og driblinger')
+            st.pyplot(fig)
+
+
+            team_passes = (df1['type.primary'] == 'pass') & (df1['team.name'] == hold) & (df1['type.secondary'] != "Throw-in")
+            team_passes = df1.loc[team_passes, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y','player.name','player.id','pass.recipient.name','pass.recipient.id','pass.accurate']]
+            players = players.rename(columns={'player.id': 'pass.recipient.id', 'player.name': 'pass.recipient.name'})
+            players = players.drop_duplicates()
+            players = players.dropna()
+            pitch = Pitch(pitch_type='wyscout',line_color='white', pitch_color='#02540b', pad_top=20)
+            fig, axs = pitch.grid(ncols=4, nrows=5, grid_height=0.85, title_height=0.00, axis=False, title_space=0.04, endnote_space=0.01)
+            plt.figure()
+            for name, ax in zip(players['pass.recipient.name'], axs['pitch'].flat[:len(players)]):
+                player_df = team_passes.loc[team_passes["pass.recipient.name"] == name]
+                xT_score = xTspiller.loc[xTspiller["player.name"] == name, "xT"].values[0]  # Fetch xT score for the player
+                ax.text(60, -10, f"{name} ({xT_score:.3f} xT)", ha='center', va='center', fontsize=8, color='white')
+
+                for i in player_df.index:
+                    x = player_df['location.x'][i]
+                    y = player_df['location.y'][i]
+                    dx = player_df['pass.endLocation.x'][i] - player_df['location.x'][i]
+                    dy = player_df['pass.endLocation.y'][i] - player_df['location.y'][i]
+                    if player_df['pass.accurate'][i]:  # Changed df to player_df here
+                        ax.arrow(x, y, dx, dy, color='#0dff00', length_includes_head=True, head_width=1, head_length=0.8)
+                        pitch.scatter(player_df['pass.endLocation.x'][i], player_df['pass.endLocation.y'][i], color='#0dff00', ax=ax)
+
+            st.title('Modtagne pasninger')
+            st.pyplot(fig)
+
+            col1,col2,col3 = st.columns(3)
+            #Pasningsnetværk
+                # Check for the index of the first substitution
+                
+            with col1:
+                passes = (
+                    (df['type.primary'] == 'pass') &
+                    (df['team.name'] == hold) &
+                    (df['pass.accurate'] == True) &
+                    (df['type.secondary'] != "Throw-in"))    
+                # Select necessary columns
+                pass_df = df.loc[passes, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y', 'player.name', 'pass.recipient.name']]
+                pass_df = pass_df[(pass_df['location.x'] < 33)]
+                # Adjusting that only the surname of a player is presented.
+                pass_df["player.name"] = pass_df["player.name"].apply(lambda x: str(x).split()[-1])
+                pass_df["pass.recipient.name"] = pass_df["pass.recipient.name"].apply(lambda x: str(x).split()[-1])
+
+                scatter_df = pd.DataFrame()
+                for i, name in enumerate(pass_df["player.name"].unique()):
+                    pass_x = pass_df.loc[pass_df["player.name"] == name]["location.x"].to_numpy()
+                    rec_x = pass_df.loc[pass_df["pass.recipient.name"] == name]["pass.endLocation.x"].to_numpy()
+                    pass_y = pass_df.loc[pass_df["player.name"] == name]["location.y"].to_numpy()
+                    rec_y = pass_df.loc[pass_df["pass.recipient.name"] == name]["pass.endLocation.y"].to_numpy()
+                    scatter_df.at[i, "player.name"] = name
+                    # Make sure that x and y location for each circle representing the player is the average of passes and receptions
+                    scatter_df.at[i, "x"] = np.mean(np.concatenate([pass_x, rec_x]))
+                    scatter_df.at[i, "y"] = np.mean(np.concatenate([pass_y, rec_y]))
+                    # Calculate number of passes
+                    scatter_df.at[i, "no"] = pass_df.loc[pass_df["player.name"] == name].count().iloc[0]
+                    
+                    # Adjust the size of a circle so that the player who made more passes
+                scatter_df['marker_size'] = (scatter_df["no"] / scatter_df["no"].max() * 1500)
+
+                # Counting passes between players
+                pass_df["pair_key"] = pass_df.apply(lambda x: "_".join(sorted([x["player.name"], x["pass.recipient.name"]])), axis=1)
+                lines_df = pass_df.groupby(["pair_key"]).size().reset_index(name='pass_count')
+                # Setting a threshold. You can try to investigate how it changes when you change it.
+                lines_df = lines_df[lines_df['pass_count'] > 2]
+
+                # Plot once again pitch and vertices
+                pitch = Pitch(pitch_type='wyscout',line_color='white', pitch_color='#02540b')
+                fig, ax = pitch.grid(grid_height=0.9, title_height=0.06, axis=False,
+                                    endnote_height=0.04, title_space=0, endnote_space=0)
+                pitch.scatter(scatter_df.x, scatter_df.y, s=scatter_df.marker_size, color='yellow', edgecolors='black', linewidth=1, alpha=1, ax=ax["pitch"], zorder=3)
+                for i, row in scatter_df.iterrows():
+                    pitch.annotate(row["player.name"], xy=(row.x, row.y), c='black', va='center', ha='center', weight="bold", size=12, ax=ax["pitch"], zorder=3)
+                for i, row in lines_df.iterrows():
+                    player1 = row["pair_key"].split("_")[0]
+                    player2 = row['pair_key'].split("_")[1]
+
+                    # Check if data exists for player1 and player2
+                    if player1 in scatter_df['player.name'].values and player2 in scatter_df['player.name'].values:
+                        player1_x = scatter_df.loc[scatter_df["player.name"] == player1]['x'].iloc[0]
+                        player1_y = scatter_df.loc[scatter_df["player.name"] == player1]['y'].iloc[0]
+                        player2_x = scatter_df.loc[scatter_df["player.name"] == player2]['x'].iloc[0]
+                        player2_y = scatter_df.loc[scatter_df["player.name"] == player2]['y'].iloc[0]
+
+                        num_passes = row["pass_count"]
+                        line_width = (num_passes / lines_df['pass_count'].max() * 10)
+                        pitch.lines(player1_x, player1_y, player2_x, player2_y,
+                                    alpha=1, lw=line_width, zorder=2, color="yellow", ax=ax["pitch"])
+                st.pyplot(fig)
+            with col2:
+                passes = (
+                    (df['type.primary'] == 'pass') &
+                    (df['team.name'] == hold) &
+                    (df['pass.accurate'] == True) &
+                    (df['type.secondary'] != "Throw-in"))    
+                # Select necessary columns
+                pass_df = df.loc[passes, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y', 'player.name', 'pass.recipient.name']]
+                pass_df = pass_df[pass_df['location.x'] > 33]
+                # Adjusting that only the surname of a player is presented.
+                pass_df["player.name"] = pass_df["player.name"].apply(lambda x: str(x).split()[-1])
+                pass_df["pass.recipient.name"] = pass_df["pass.recipient.name"].apply(lambda x: str(x).split()[-1])
+
+                scatter_df = pd.DataFrame()
+                for i, name in enumerate(pass_df["player.name"].unique()):
+                    pass_x = pass_df.loc[pass_df["player.name"] == name]["location.x"].to_numpy()
+                    rec_x = pass_df.loc[pass_df["pass.recipient.name"] == name]["pass.endLocation.x"].to_numpy()
+                    pass_y = pass_df.loc[pass_df["player.name"] == name]["location.y"].to_numpy()
+                    rec_y = pass_df.loc[pass_df["pass.recipient.name"] == name]["pass.endLocation.y"].to_numpy()
+                    scatter_df.at[i, "player.name"] = name
+                    # Make sure that x and y location for each circle representing the player is the average of passes and receptions
+                    scatter_df.at[i, "x"] = np.mean(np.concatenate([pass_x, rec_x]))
+                    scatter_df.at[i, "y"] = np.mean(np.concatenate([pass_y, rec_y]))
+                    # Calculate number of passes
+                    scatter_df.at[i, "no"] = pass_df.loc[pass_df["player.name"] == name].count().iloc[0]
+                    
+                    # Adjust the size of a circle so that the player who made more passes
+                scatter_df['marker_size'] = (scatter_df["no"] / scatter_df["no"].max() * 1500)
+
+                # Counting passes between players
+                pass_df["pair_key"] = pass_df.apply(lambda x: "_".join(sorted([x["player.name"], x["pass.recipient.name"]])), axis=1)
+                lines_df = pass_df.groupby(["pair_key"]).size().reset_index(name='pass_count')
+                # Setting a threshold. You can try to investigate how it changes when you change it.
+                lines_df = lines_df[lines_df['pass_count'] > 2]
+
+                # Plot once again pitch and vertices
+                pitch = Pitch(pitch_type='wyscout',line_color='white', pitch_color='#02540b')
+                fig, ax = pitch.grid(grid_height=0.9, title_height=0.06, axis=False,
+                                    endnote_height=0.04, title_space=0, endnote_space=0)
+                pitch.scatter(scatter_df.x, scatter_df.y, s=scatter_df.marker_size, color='yellow', edgecolors='black', linewidth=1, alpha=1, ax=ax["pitch"], zorder=3)
+                for i, row in scatter_df.iterrows():
+                    pitch.annotate(row["player.name"], xy=(row.x, row.y), c='black', va='center', ha='center', weight="bold", size=12, ax=ax["pitch"], zorder=3)
+                for i, row in lines_df.iterrows():
+                    player1 = row["pair_key"].split("_")[0]
+                    player2 = row['pair_key'].split("_")[1]
+
+                    # Check if data exists for player1 and player2
+                    if player1 in scatter_df['player.name'].values and player2 in scatter_df['player.name'].values:
+                        player1_x = scatter_df.loc[scatter_df["player.name"] == player1]['x'].iloc[0]
+                        player1_y = scatter_df.loc[scatter_df["player.name"] == player1]['y'].iloc[0]
+                        player2_x = scatter_df.loc[scatter_df["player.name"] == player2]['x'].iloc[0]
+                        player2_y = scatter_df.loc[scatter_df["player.name"] == player2]['y'].iloc[0]
+
+                        num_passes = row["pass_count"]
+                        line_width = (num_passes / lines_df['pass_count'].max() * 10)
+                        pitch.lines(player1_x, player1_y, player2_x, player2_y,
+                                    alpha=1, lw=line_width, zorder=2, color="yellow", ax=ax["pitch"])
+                st.pyplot(fig)
+
+            with col3:
+                passes = (
+                    (df['type.primary'] == 'pass') &
+                    (df['team.name'] == hold) &
+                    (df['pass.accurate'] == True) &
+                    (df['type.secondary'] != "Throw-in"))    
+                # Select necessary columns
+                pass_df = df.loc[passes, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y', 'player.name', 'pass.recipient.name']]
+                pass_df = pass_df[pass_df['location.x'] > 66]
+                # Adjusting that only the surname of a player is presented.
+                pass_df["player.name"] = pass_df["player.name"].apply(lambda x: str(x).split()[-1])
+                pass_df["pass.recipient.name"] = pass_df["pass.recipient.name"].apply(lambda x: str(x).split()[-1])
+
+                scatter_df = pd.DataFrame()
+                for i, name in enumerate(pass_df["player.name"].unique()):
+                    pass_x = pass_df.loc[pass_df["player.name"] == name]["location.x"].to_numpy()
+                    rec_x = pass_df.loc[pass_df["pass.recipient.name"] == name]["pass.endLocation.x"].to_numpy()
+                    pass_y = pass_df.loc[pass_df["player.name"] == name]["location.y"].to_numpy()
+                    rec_y = pass_df.loc[pass_df["pass.recipient.name"] == name]["pass.endLocation.y"].to_numpy()
+                    scatter_df.at[i, "player.name"] = name
+                    # Make sure that x and y location for each circle representing the player is the average of passes and receptions
+                    scatter_df.at[i, "x"] = np.mean(np.concatenate([pass_x, rec_x]))
+                    scatter_df.at[i, "y"] = np.mean(np.concatenate([pass_y, rec_y]))
+                    # Calculate number of passes
+                    scatter_df.at[i, "no"] = pass_df.loc[pass_df["player.name"] == name].count().iloc[0]
+                    
+                    # Adjust the size of a circle so that the player who made more passes
+                scatter_df['marker_size'] = (scatter_df["no"] / scatter_df["no"].max() * 1500)
+
+                # Counting passes between players
+                pass_df["pair_key"] = pass_df.apply(lambda x: "_".join(sorted([x["player.name"], x["pass.recipient.name"]])), axis=1)
+                lines_df = pass_df.groupby(["pair_key"]).size().reset_index(name='pass_count')
+                # Setting a threshold. You can try to investigate how it changes when you change it.
+                lines_df = lines_df[lines_df['pass_count'] > 2]
+
+                # Plot once again pitch and vertices
+                pitch = Pitch(pitch_type='wyscout',line_color='white', pitch_color='#02540b')
+                fig, ax = pitch.grid(grid_height=0.9, title_height=0.06, axis=False,
+                                    endnote_height=0.04, title_space=0, endnote_space=0)
+                pitch.scatter(scatter_df.x, scatter_df.y, s=scatter_df.marker_size, color='yellow', edgecolors='black', linewidth=1, alpha=1, ax=ax["pitch"], zorder=3)
+                for i, row in scatter_df.iterrows():
+                    pitch.annotate(row["player.name"], xy=(row.x, row.y), c='black', va='center', ha='center', weight="bold", size=12, ax=ax["pitch"], zorder=3)
+                for i, row in lines_df.iterrows():
+                    player1 = row["pair_key"].split("_")[0]
+                    player2 = row['pair_key'].split("_")[1]
+
+                    # Check if data exists for player1 and player2
+                    if player1 in scatter_df['player.name'].values and player2 in scatter_df['player.name'].values:
+                        player1_x = scatter_df.loc[scatter_df["player.name"] == player1]['x'].iloc[0]
+                        player1_y = scatter_df.loc[scatter_df["player.name"] == player1]['y'].iloc[0]
+                        player2_x = scatter_df.loc[scatter_df["player.name"] == player2]['x'].iloc[0]
+                        player2_y = scatter_df.loc[scatter_df["player.name"] == player2]['y'].iloc[0]
+
+                        num_passes = row["pass_count"]
+                        line_width = (num_passes / lines_df['pass_count'].max() * 10)
+                        pitch.lines(player1_x, player1_y, player2_x, player2_y,
+                                    alpha=1, lw=line_width, zorder=2, color="yellow", ax=ax["pitch"])
+                st.pyplot(fig)
+                
+            passes = (
+                (df['type.primary'] == 'pass') &
+                (df['team.name'] == hold) &
+                (df['pass.accurate'] == True) &
+                (df['type.secondary'] != "Throw-in"))    
+                # Select necessary columns
+            pass_df = df.loc[passes, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y', 'player.name', 'pass.recipient.name']]
+                # Adjusting that only the surname of a player is presented.
+            pass_df["player.name"] = pass_df["player.name"].apply(lambda x: str(x).split()[-1])
+            pass_df["pass.recipient.name"] = pass_df["pass.recipient.name"].apply(lambda x: str(x).split()[-1])
+
+            scatter_df = pd.DataFrame()
+            for i, name in enumerate(pass_df["player.name"].unique()):
+                pass_x = pass_df.loc[pass_df["player.name"] == name]["location.x"].to_numpy()
+                rec_x = pass_df.loc[pass_df["pass.recipient.name"] == name]["pass.endLocation.x"].to_numpy()
+                pass_y = pass_df.loc[pass_df["player.name"] == name]["location.y"].to_numpy()
+                rec_y = pass_df.loc[pass_df["pass.recipient.name"] == name]["pass.endLocation.y"].to_numpy()
+                scatter_df.at[i, "player.name"] = name
+                # Make sure that x and y location for each circle representing the player is the average of passes and receptions
+                scatter_df.at[i, "x"] = np.mean(np.concatenate([pass_x, rec_x]))
+                scatter_df.at[i, "y"] = np.mean(np.concatenate([pass_y, rec_y]))
+                # Calculate number of passes
+                scatter_df.at[i, "no"] = pass_df.loc[pass_df["player.name"] == name].count().iloc[0]
+                    
+                # Adjust the size of a circle so that the player who made more passes
+            scatter_df['marker_size'] = (scatter_df["no"] / scatter_df["no"].max() * 1500)
+
+                # Counting passes between players
+            pass_df["pair_key"] = pass_df.apply(lambda x: "_".join(sorted([x["player.name"], x["pass.recipient.name"]])), axis=1)
+            lines_df = pass_df.groupby(["pair_key"]).size().reset_index(name='pass_count')
+            # Setting a threshold. You can try to investigate how it changes when you change it.
+            lines_df = lines_df[lines_df['pass_count'] > 2]
+
+                # Plot once again pitch and vertices
+            pitch = Pitch(pitch_type='wyscout',line_color='white', pitch_color='#02540b')
+            fig, ax = pitch.grid(grid_height=0.9, title_height=0.06, axis=False,
+                                endnote_height=0.04, title_space=0, endnote_space=0)
+            pitch.scatter(scatter_df.x, scatter_df.y, s=scatter_df.marker_size, color='yellow', edgecolors='black', linewidth=1, alpha=1, ax=ax["pitch"], zorder=3)
+            for i, row in scatter_df.iterrows():
+                pitch.annotate(row["player.name"], xy=(row.x, row.y), c='black', va='center', ha='center', weight="bold", size=12, ax=ax["pitch"], zorder=3)
+            for i, row in lines_df.iterrows():
+                player1 = row["pair_key"].split("_")[0]
+                player2 = row['pair_key'].split("_")[1]
+
+                # Check if data exists for player1 and player2
+                if player1 in scatter_df['player.name'].values and player2 in scatter_df['player.name'].values:
+                    player1_x = scatter_df.loc[scatter_df["player.name"] == player1]['x'].iloc[0]
+                    player1_y = scatter_df.loc[scatter_df["player.name"] == player1]['y'].iloc[0]
+                    player2_x = scatter_df.loc[scatter_df["player.name"] == player2]['x'].iloc[0]
+                    player2_y = scatter_df.loc[scatter_df["player.name"] == player2]['y'].iloc[0]
+                    num_passes = row["pass_count"]
+                    line_width = (num_passes / lines_df['pass_count'].max() * 10)
+                    pitch.lines(player1_x, player1_y, player2_x, player2_y,
+                                alpha=1, lw=line_width, zorder=2, color="yellow", ax=ax["pitch"])
+            st.pyplot(fig)
 
         def U19():
+            import pandas as pd
+            import matplotlib.pyplot as plt
+            import seaborn as sns
+            from mplsoccer.pitch import Pitch
+            import numpy as np
+            import streamlit as st
+            df = pd.read_csv(r'xT/U15 Ligaen 23 24.csv')
 
+            hold = 'Horsens U15'
+            df = df[df['label'].str.contains(hold)]
+            df['date'] = pd.to_datetime(df['date'])
+            df = df.sort_values(by='date',ascending=False)
+            valgtekamp = st.multiselect('Vælg kamp', df['label'].unique(),default=df['label'].unique()[0])
+
+            df1 = df.copy()
+
+            df = df[df['label'].isin(valgtekamp)]
+            df = df[(df['pass.accurate'] ==True) | (df['carry.progression'] > 0)]
+            df = df[~df['type.primary'].str.contains('infraction')]
+            df = df[~df['type.primary'].str.contains('game_interruption')]
+            df = df[~df['type.primary'].str.contains('throw_in')]
+            df = df[~df['type.primary'].str.contains('free_kick')]
+            df = df[~df['type.primary'].str.contains('penalty')]
+            df = df[~df['type.primary'].str.contains('corner')]
+
+            df1 = df1[df1['label'].isin(valgtekamp)]
+            df1['possession.types'] = df1['possession.types'].astype(str)
+            df1 = df1[~df1['possession.types'].str.contains('set_piece_attack')]
+            df1 = df1[~df1['possession.types'].str.contains('throw_in')]
+            df1 = df1[~df1['possession.types'].str.contains('free_kick')]
+            df1 = df1[~df1['possession.types'].str.contains('corner')]
+
+            conditions = [
+                (df['location.x'] <= 30) & ((df['location.y'] <= 19) | (df['location.y'] >= 81)),
+                (df['location.x'] <= 30) & ((df['location.y'] >= 19) | (df['location.y'] <= 81)),
+                ((df['location.x'] >= 30) & (df['location.x'] <= 50)),
+                ((df['location.x'] >= 50) & (df['location.x'] <= 70)),
+                ((df['location.x'] >= 70) & ((df['location.y'] <= 15) | (df['location.y'] >= 84))),
+                (((df['location.x'] >= 70) & (df['location.x'] <= 84)) & ((df['location.y'] >= 15) & (df['location.y'] <= 84))),
+                ((df['location.x'] >= 84) & ((df['location.y'] >= 15) & (df['location.y'] <= 37)) | ((df['location.y'] <= 84) & (df['location.y'] >= 63))),
+                ((df['location.x'] >= 84) & ((df['location.y'] >= 37) & (df['location.y'] <= 63)))
+            ]
+
+            # Define corresponding zone values
+            zone_values = ['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4', 'Zone 5', 'Zone 6', 'Zone 7', 'Zone 8']
+
+            # Assign 'Start Zone' based on conditions
+            df['Start Zone'] = np.select(conditions, zone_values, default=None)
+
+            conditions_pass_end = [
+                (df['pass.endLocation.x'] <= 30) & ((df['pass.endLocation.y'] <= 19) | (df['pass.endLocation.y'] >= 81)),
+                (df['pass.endLocation.x'] <= 30) & ((df['pass.endLocation.y'] >= 19) | (df['pass.endLocation.y'] <= 81)),
+                ((df['pass.endLocation.x'] >= 30) & (df['pass.endLocation.x'] <= 50)),
+                ((df['pass.endLocation.x'] >= 50) & (df['pass.endLocation.x'] <= 70)),
+                ((df['pass.endLocation.x'] >= 70) & ((df['pass.endLocation.y'] <= 15) | (df['pass.endLocation.y'] >= 84))),
+                (((df['pass.endLocation.x'] >= 70) & (df['pass.endLocation.x'] <= 84)) & ((df['pass.endLocation.y'] >= 15) & (df['pass.endLocation.y'] <= 84))),
+                ((df['pass.endLocation.x'] >= 84) & ((df['pass.endLocation.y'] >= 15) & (df['pass.endLocation.y'] <= 37)) | ((df['pass.endLocation.y'] <= 84) & (df['pass.endLocation.y'] >= 63))),
+                ((df['pass.endLocation.x'] >= 84) & ((df['pass.endLocation.y'] >= 37) & (df['pass.endLocation.y'] <= 63)))
+            ]
+
+            # Define conditions for zone assignment for 'carry.endLocation'
+            conditions_carry_end = [
+                (df['carry.endLocation.x'] <= 30) & ((df['carry.endLocation.y'] <= 19) | (df['carry.endLocation.y'] >= 81)),
+                (df['carry.endLocation.x'] <= 30) & ((df['carry.endLocation.y'] >= 19) | (df['carry.endLocation.y'] <= 81)),
+                ((df['carry.endLocation.x'] >= 30) & (df['carry.endLocation.x'] <= 50)),
+                ((df['carry.endLocation.x'] >= 50) & (df['carry.endLocation.x'] <= 70)),
+                ((df['carry.endLocation.x'] >= 70) & ((df['carry.endLocation.y'] <= 15) | (df['carry.endLocation.y'] >= 84))),
+                (((df['carry.endLocation.x'] >= 70) & (df['carry.endLocation.x'] <= 84)) & ((df['carry.endLocation.y'] >= 15) & (df['carry.endLocation.y'] <= 84))),
+                ((df['carry.endLocation.x'] >= 84) & ((df['carry.endLocation.y'] >= 15) & (df['carry.endLocation.y'] <= 37)) | ((df['carry.endLocation.y'] <= 84) & (df['carry.endLocation.y'] >= 63))),
+                ((df['carry.endLocation.x'] >= 84) & ((df['carry.endLocation.y'] >= 37) & (df['carry.endLocation.y'] <= 63)))
+            ]
+
+            # Define corresponding zone values
+            zone_values = ['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4', 'Zone 5', 'Zone 6', 'Zone 7', 'Zone 8']
+
+            df['End Zone'] = None
+            # Assign 'End Zone' based on conditions for 'pass.endLocation' and 'carry.endLocation'
+            df['End Zone'] = np.select(
+                [
+                    df['End Zone'].isnull() & np.isin(np.select(conditions_pass_end, zone_values, default=None), zone_values),
+                    df['End Zone'].isnull() & np.isin(np.select(conditions_carry_end, zone_values, default=None), zone_values)
+                ],
+                [
+                    np.select(conditions_pass_end, zone_values, default=None),
+                    np.select(conditions_carry_end, zone_values, default=None)
+                ],
+                default=df['End Zone']
+            )
+
+            dfscore = pd.read_csv(r'xT/Zone scores.csv')
+
+            df = df.merge(dfscore[['Start Zone', 'Start zone score']], on='Start Zone', how='left')
+
+            # Merge 'End Zone' scores
+            df = df.merge(dfscore[['End Zone', 'End zone score']], on='End Zone', how='left')
+
+            df['xT'] = df['End zone score'] - df['Start zone score']
+            xThold = df.groupby(['team.name'])['xT'].agg('sum').reset_index()
+
+            with st.expander('Se xT model'):
+                col1,col2 = st.columns(2)
+                with col1:
+                    from PIL import Image
+                    image = Image.open('xT/xT zoner.png')
+                    st.image(image,'xT zoner')
+                with col2:
+                    zoner = pd.read_csv(r'xT/Zone scores.csv')
+                    zoner = zoner[['Start Zone','Start zone score']]
+                    zoner = zoner.rename(columns={'Start Zone': 'Zone'})
+                    zoner = zoner.rename(columns={'Start zone score': 'Zone score'})
+
+                    st.dataframe(zoner,hide_index=True)
+                    st.write('xT udregnes som: zonen hvor pasning/dribling slutter - zone hvor pasning/dribling starter')
+                    st.write('Zonernes værdi er udregnet på baggrund af de seneste 8 sæsoner i 1. div og Superligaen med udgangspunkt i den gennemsnitlige værdi for en boldbesiddelse i zonen. Den er så vægtet efter hvor mange aktioner der går fra boldbesiddelsen i zonen til en afslutning. Jo flere jo lavere vægtning')
+
+            xgc = df1
+            xgchold = xgc.rename(columns={'shot.xg': 'Hold xG i åbent spil'})
+            xgchold = xgchold.groupby('team.name')['Hold xG i åbent spil'].agg('sum').reset_index()
+            xgchold = xgchold.sort_values(by='Hold xG i åbent spil',ascending=False)
+            xgc = xgc.merge(xgchold, on='team.name', how='left')
+            xThold = xThold.merge(xgchold)
+            if hold in xThold['team.name'].values:
+                hold_xG_open_play = xThold.loc[xThold['team.name'] == hold, 'Hold xG i åbent spil'].values[0]
+                hold_xT = xThold.loc[xThold['team.name'] == hold, 'xT'].values[0]
+
+                num_teams = len(xThold['team.name'].unique())    
+                if num_teams > 1:
+                    xThold.loc[xThold['team.name'] == hold, 'Hold xG i åbent spil'] = hold_xG_open_play / (num_teams - 1)
+                    xThold.loc[xThold['team.name'] == hold,'xT'] = hold_xT/(num_teams-1)
+                else:
+                    st.write("There is only one team in the dataset. Unable to calculate.")
+
+            st.dataframe(xThold,hide_index=True)
+                
+            xgc = xgc[xgc['team.name'] == hold]
+
+            xgcspiller = xgc.groupby(['player.id','player.name','team.name','Hold xG i åbent spil'])['possession.attack.xg'].agg('sum').reset_index()
+            xgcspiller = xgcspiller[['player.name','team.name','possession.attack.xg','Hold xG i åbent spil']]
+            xgcspiller['xGCC'] = xgcspiller['possession.attack.xg'] / xgcspiller['Hold xG i åbent spil']
+            xgcspiller = xgcspiller.rename(columns={'possession.attack.xg': 'xGC'})
+            xgcspiller = xgcspiller.sort_values(by='xGCC',ascending=False)
+            xgcspiller = xgcspiller[xgcspiller['team.name'] == hold]
+
+            col1,col2, col34 = st.columns([1,1,2])
+            with col1:  
+                xTspiller = df.groupby(['player.name','team.name'])['xT'].agg('sum').reset_index()
+                xTspiller = xTspiller[xTspiller['team.name'] == hold]
+                xTspiller = xTspiller.sort_values(by='xT', ascending=False)
+                xTspiller = xTspiller[['player.name','xT']]
+                st.dataframe(xTspiller,hide_index=True)
+                samlet = xgcspiller.merge(xTspiller)
+            with col2:
+                xgcspiller = xgcspiller[['player.name','xGC','xGCC']]
+                st.dataframe(xgcspiller,hide_index=True)
+            
+            with col34:
+                xgplacering = df1
+                xgplacering = xgplacering[xgplacering['shot.xg'] > 0]
+                xgplacering = xgplacering[xgplacering['team.name'] == hold]
+                
+                x = xgplacering['location.x']
+                y = xgplacering['location.y']
+                player_names = xgplacering['player.name']  # Extract player names
+                label_text = xgplacering.sort_values(by='shot.xg',ascending=False)
+                label_text = label_text[['player.name', 'shot.xg']].to_string(index=False,header=False)
+                shot_xg = xgplacering['shot.xg'].astype(float)
+                min_size = 5  # Minimum dot size
+                max_size = 100  # Maximum dot size
+                sizes = np.interp(shot_xg, (shot_xg.min(), shot_xg.max()), (min_size, max_size))
+
+                pitch = Pitch(pitch_type='wyscout', pitch_color='grass', line_color='white', stripe=True)
+                fig, ax = pitch.draw()
+                sc = pitch.scatter(x, y, ax=ax, s=sizes)
+
+                # Add player names as labels using annotate
+                for i, txt in enumerate(player_names):
+                    ax.annotate(txt, (x.iloc[i], y.iloc[i]), color='white', fontsize=8, ha='center', va='bottom')
+
+                ax.text(0.3, 0.5, label_text, color='black', ha='center', va='center',
+                        transform=ax.transAxes, fontsize=10, bbox=dict(facecolor='white', alpha=0.7))
+
+                st.write('Xg plot (Jo større markering, jo større xG)')
+                st.pyplot(plt.gcf(), use_container_width=True)
+        
+            team_passes = (df1['type.primary'] == 'pass') & (df1['team.name'] == hold)
+            team_passes = df1.loc[team_passes, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y', 'player.name','player.id','pass.recipient.name','pass.recipient.id','pass.accurate','carry.progression','carry.endLocation.y','carry.endLocation.x']]
+            players = team_passes[['player.id','player.name']]
+            players = players.drop_duplicates()
+            
+            team_dribbles = ((df1['carry.progression'] < 0) | (df1['carry.progression'] > 0)) & (df1['team.name'] == hold)
+            team_dribbles = df1.loc[team_dribbles, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y', 'player.name','player.id','carry.progression','carry.endLocation.y','carry.endLocation.x']]
+            players = team_dribbles[['player.id','player.name']]
+            players = players.drop_duplicates()
+
+            combined_df = pd.concat([team_passes, team_dribbles])
+
+            # Plotting
+            pitch = Pitch(pitch_type='wyscout', line_color='white', pitch_color='#02540b', pad_top=20)
+            fig, axs = pitch.grid(ncols=4, nrows=5, grid_height=0.85, title_height=0.00, axis=False, title_space=0.04, endnote_space=0.01)
+            plt.figure()
+
+            for name, ax in zip(players['player.name'], axs['pitch'].flat[:len(players)]):
+                player_df = combined_df.loc[combined_df["player.name"] == name]
+                xT_score = xTspiller.loc[xTspiller["player.name"] == name, "xT"].values[0]  # Fetch xT score for the player
+                ax.text(60, -10, f"{name} ({xT_score:.3f} xT)", ha='center', va='center', fontsize=8, color='white')
+
+                for i in player_df.index:
+                    x = player_df['location.x'][i]
+                    y = player_df['location.y'][i]
+                    dx_pass = player_df['pass.endLocation.x'][i] - player_df['location.x'][i]
+                    dy_pass = player_df['pass.endLocation.y'][i] - player_df['location.y'][i]
+                    dx_carry = player_df['carry.endLocation.x'][i] - player_df['location.x'][i]
+                    dy_carry = player_df['carry.endLocation.y'][i] - player_df['location.y'][i]
+
+                    if 'carry.progression' in player_df.columns and not pd.isnull(player_df['carry.progression'][i]):
+                        ax.arrow(x, y, dx_carry, dy_carry, color='yellow', length_includes_head=True, head_width=1, head_length=0.8)
+                        pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='yellow', ax=ax)
+                    else:
+                        if not pd.isnull(player_df['pass.accurate'][i]) and not player_df['pass.accurate'][i]:
+                            ax.arrow(x, y, dx_pass, dy_pass, color='red', length_includes_head=True, head_width=1, head_length=0.8)
+                            pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='red', ax=ax)
+                        else:
+                            ax.arrow(x, y, dx_pass, dy_pass, color='#0dff00', length_includes_head=True, head_width=1, head_length=0.8)
+                            pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='#0dff00', ax=ax)
+
+            st.title('Pasninger og driblinger')
+            st.pyplot(fig)
+
+
+            team_passes = (df1['type.primary'] == 'pass') & (df1['team.name'] == hold) & (df1['type.secondary'] != "Throw-in")
+            team_passes = df1.loc[team_passes, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y','player.name','player.id','pass.recipient.name','pass.recipient.id','pass.accurate']]
+            players = players.rename(columns={'player.id': 'pass.recipient.id', 'player.name': 'pass.recipient.name'})
+            players = players.drop_duplicates()
+            players = players.dropna()
+            pitch = Pitch(pitch_type='wyscout',line_color='white', pitch_color='#02540b', pad_top=20)
+            fig, axs = pitch.grid(ncols=4, nrows=5, grid_height=0.85, title_height=0.00, axis=False, title_space=0.04, endnote_space=0.01)
+            plt.figure()
+            for name, ax in zip(players['pass.recipient.name'], axs['pitch'].flat[:len(players)]):
+                player_df = team_passes.loc[team_passes["pass.recipient.name"] == name]
+                xT_score = xTspiller.loc[xTspiller["player.name"] == name, "xT"].values[0]  # Fetch xT score for the player
+                ax.text(60, -10, f"{name} ({xT_score:.3f} xT)", ha='center', va='center', fontsize=8, color='white')
+
+                for i in player_df.index:
+                    x = player_df['location.x'][i]
+                    y = player_df['location.y'][i]
+                    dx = player_df['pass.endLocation.x'][i] - player_df['location.x'][i]
+                    dy = player_df['pass.endLocation.y'][i] - player_df['location.y'][i]
+                    if player_df['pass.accurate'][i]:  # Changed df to player_df here
+                        ax.arrow(x, y, dx, dy, color='#0dff00', length_includes_head=True, head_width=1, head_length=0.8)
+                        pitch.scatter(player_df['pass.endLocation.x'][i], player_df['pass.endLocation.y'][i], color='#0dff00', ax=ax)
+
+            st.title('Modtagne pasninger')
+            st.pyplot(fig)
+
+            col1,col2,col3 = st.columns(3)
+            #Pasningsnetværk
+                # Check for the index of the first substitution
+                
+            with col1:
+                passes = (
+                    (df['type.primary'] == 'pass') &
+                    (df['team.name'] == hold) &
+                    (df['pass.accurate'] == True) &
+                    (df['type.secondary'] != "Throw-in"))    
+                # Select necessary columns
+                pass_df = df.loc[passes, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y', 'player.name', 'pass.recipient.name']]
+                pass_df = pass_df[(pass_df['location.x'] < 33)]
+                # Adjusting that only the surname of a player is presented.
+                pass_df["player.name"] = pass_df["player.name"].apply(lambda x: str(x).split()[-1])
+                pass_df["pass.recipient.name"] = pass_df["pass.recipient.name"].apply(lambda x: str(x).split()[-1])
+
+                scatter_df = pd.DataFrame()
+                for i, name in enumerate(pass_df["player.name"].unique()):
+                    pass_x = pass_df.loc[pass_df["player.name"] == name]["location.x"].to_numpy()
+                    rec_x = pass_df.loc[pass_df["pass.recipient.name"] == name]["pass.endLocation.x"].to_numpy()
+                    pass_y = pass_df.loc[pass_df["player.name"] == name]["location.y"].to_numpy()
+                    rec_y = pass_df.loc[pass_df["pass.recipient.name"] == name]["pass.endLocation.y"].to_numpy()
+                    scatter_df.at[i, "player.name"] = name
+                    # Make sure that x and y location for each circle representing the player is the average of passes and receptions
+                    scatter_df.at[i, "x"] = np.mean(np.concatenate([pass_x, rec_x]))
+                    scatter_df.at[i, "y"] = np.mean(np.concatenate([pass_y, rec_y]))
+                    # Calculate number of passes
+                    scatter_df.at[i, "no"] = pass_df.loc[pass_df["player.name"] == name].count().iloc[0]
+                    
+                    # Adjust the size of a circle so that the player who made more passes
+                scatter_df['marker_size'] = (scatter_df["no"] / scatter_df["no"].max() * 1500)
+
+                # Counting passes between players
+                pass_df["pair_key"] = pass_df.apply(lambda x: "_".join(sorted([x["player.name"], x["pass.recipient.name"]])), axis=1)
+                lines_df = pass_df.groupby(["pair_key"]).size().reset_index(name='pass_count')
+                # Setting a threshold. You can try to investigate how it changes when you change it.
+                lines_df = lines_df[lines_df['pass_count'] > 2]
+
+                # Plot once again pitch and vertices
+                pitch = Pitch(pitch_type='wyscout',line_color='white', pitch_color='#02540b')
+                fig, ax = pitch.grid(grid_height=0.9, title_height=0.06, axis=False,
+                                    endnote_height=0.04, title_space=0, endnote_space=0)
+                pitch.scatter(scatter_df.x, scatter_df.y, s=scatter_df.marker_size, color='yellow', edgecolors='black', linewidth=1, alpha=1, ax=ax["pitch"], zorder=3)
+                for i, row in scatter_df.iterrows():
+                    pitch.annotate(row["player.name"], xy=(row.x, row.y), c='black', va='center', ha='center', weight="bold", size=12, ax=ax["pitch"], zorder=3)
+                for i, row in lines_df.iterrows():
+                    player1 = row["pair_key"].split("_")[0]
+                    player2 = row['pair_key'].split("_")[1]
+
+                    # Check if data exists for player1 and player2
+                    if player1 in scatter_df['player.name'].values and player2 in scatter_df['player.name'].values:
+                        player1_x = scatter_df.loc[scatter_df["player.name"] == player1]['x'].iloc[0]
+                        player1_y = scatter_df.loc[scatter_df["player.name"] == player1]['y'].iloc[0]
+                        player2_x = scatter_df.loc[scatter_df["player.name"] == player2]['x'].iloc[0]
+                        player2_y = scatter_df.loc[scatter_df["player.name"] == player2]['y'].iloc[0]
+
+                        num_passes = row["pass_count"]
+                        line_width = (num_passes / lines_df['pass_count'].max() * 10)
+                        pitch.lines(player1_x, player1_y, player2_x, player2_y,
+                                    alpha=1, lw=line_width, zorder=2, color="yellow", ax=ax["pitch"])
+                st.pyplot(fig)
+            with col2:
+                passes = (
+                    (df['type.primary'] == 'pass') &
+                    (df['team.name'] == hold) &
+                    (df['pass.accurate'] == True) &
+                    (df['type.secondary'] != "Throw-in"))    
+                # Select necessary columns
+                pass_df = df.loc[passes, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y', 'player.name', 'pass.recipient.name']]
+                pass_df = pass_df[pass_df['location.x'] > 33]
+                # Adjusting that only the surname of a player is presented.
+                pass_df["player.name"] = pass_df["player.name"].apply(lambda x: str(x).split()[-1])
+                pass_df["pass.recipient.name"] = pass_df["pass.recipient.name"].apply(lambda x: str(x).split()[-1])
+
+                scatter_df = pd.DataFrame()
+                for i, name in enumerate(pass_df["player.name"].unique()):
+                    pass_x = pass_df.loc[pass_df["player.name"] == name]["location.x"].to_numpy()
+                    rec_x = pass_df.loc[pass_df["pass.recipient.name"] == name]["pass.endLocation.x"].to_numpy()
+                    pass_y = pass_df.loc[pass_df["player.name"] == name]["location.y"].to_numpy()
+                    rec_y = pass_df.loc[pass_df["pass.recipient.name"] == name]["pass.endLocation.y"].to_numpy()
+                    scatter_df.at[i, "player.name"] = name
+                    # Make sure that x and y location for each circle representing the player is the average of passes and receptions
+                    scatter_df.at[i, "x"] = np.mean(np.concatenate([pass_x, rec_x]))
+                    scatter_df.at[i, "y"] = np.mean(np.concatenate([pass_y, rec_y]))
+                    # Calculate number of passes
+                    scatter_df.at[i, "no"] = pass_df.loc[pass_df["player.name"] == name].count().iloc[0]
+                    
+                    # Adjust the size of a circle so that the player who made more passes
+                scatter_df['marker_size'] = (scatter_df["no"] / scatter_df["no"].max() * 1500)
+
+                # Counting passes between players
+                pass_df["pair_key"] = pass_df.apply(lambda x: "_".join(sorted([x["player.name"], x["pass.recipient.name"]])), axis=1)
+                lines_df = pass_df.groupby(["pair_key"]).size().reset_index(name='pass_count')
+                # Setting a threshold. You can try to investigate how it changes when you change it.
+                lines_df = lines_df[lines_df['pass_count'] > 2]
+
+                # Plot once again pitch and vertices
+                pitch = Pitch(pitch_type='wyscout',line_color='white', pitch_color='#02540b')
+                fig, ax = pitch.grid(grid_height=0.9, title_height=0.06, axis=False,
+                                    endnote_height=0.04, title_space=0, endnote_space=0)
+                pitch.scatter(scatter_df.x, scatter_df.y, s=scatter_df.marker_size, color='yellow', edgecolors='black', linewidth=1, alpha=1, ax=ax["pitch"], zorder=3)
+                for i, row in scatter_df.iterrows():
+                    pitch.annotate(row["player.name"], xy=(row.x, row.y), c='black', va='center', ha='center', weight="bold", size=12, ax=ax["pitch"], zorder=3)
+                for i, row in lines_df.iterrows():
+                    player1 = row["pair_key"].split("_")[0]
+                    player2 = row['pair_key'].split("_")[1]
+
+                    # Check if data exists for player1 and player2
+                    if player1 in scatter_df['player.name'].values and player2 in scatter_df['player.name'].values:
+                        player1_x = scatter_df.loc[scatter_df["player.name"] == player1]['x'].iloc[0]
+                        player1_y = scatter_df.loc[scatter_df["player.name"] == player1]['y'].iloc[0]
+                        player2_x = scatter_df.loc[scatter_df["player.name"] == player2]['x'].iloc[0]
+                        player2_y = scatter_df.loc[scatter_df["player.name"] == player2]['y'].iloc[0]
+
+                        num_passes = row["pass_count"]
+                        line_width = (num_passes / lines_df['pass_count'].max() * 10)
+                        pitch.lines(player1_x, player1_y, player2_x, player2_y,
+                                    alpha=1, lw=line_width, zorder=2, color="yellow", ax=ax["pitch"])
+                st.pyplot(fig)
+
+            with col3:
+                passes = (
+                    (df['type.primary'] == 'pass') &
+                    (df['team.name'] == hold) &
+                    (df['pass.accurate'] == True) &
+                    (df['type.secondary'] != "Throw-in"))    
+                # Select necessary columns
+                pass_df = df.loc[passes, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y', 'player.name', 'pass.recipient.name']]
+                pass_df = pass_df[pass_df['location.x'] > 66]
+                # Adjusting that only the surname of a player is presented.
+                pass_df["player.name"] = pass_df["player.name"].apply(lambda x: str(x).split()[-1])
+                pass_df["pass.recipient.name"] = pass_df["pass.recipient.name"].apply(lambda x: str(x).split()[-1])
+
+                scatter_df = pd.DataFrame()
+                for i, name in enumerate(pass_df["player.name"].unique()):
+                    pass_x = pass_df.loc[pass_df["player.name"] == name]["location.x"].to_numpy()
+                    rec_x = pass_df.loc[pass_df["pass.recipient.name"] == name]["pass.endLocation.x"].to_numpy()
+                    pass_y = pass_df.loc[pass_df["player.name"] == name]["location.y"].to_numpy()
+                    rec_y = pass_df.loc[pass_df["pass.recipient.name"] == name]["pass.endLocation.y"].to_numpy()
+                    scatter_df.at[i, "player.name"] = name
+                    # Make sure that x and y location for each circle representing the player is the average of passes and receptions
+                    scatter_df.at[i, "x"] = np.mean(np.concatenate([pass_x, rec_x]))
+                    scatter_df.at[i, "y"] = np.mean(np.concatenate([pass_y, rec_y]))
+                    # Calculate number of passes
+                    scatter_df.at[i, "no"] = pass_df.loc[pass_df["player.name"] == name].count().iloc[0]
+                    
+                    # Adjust the size of a circle so that the player who made more passes
+                scatter_df['marker_size'] = (scatter_df["no"] / scatter_df["no"].max() * 1500)
+
+                # Counting passes between players
+                pass_df["pair_key"] = pass_df.apply(lambda x: "_".join(sorted([x["player.name"], x["pass.recipient.name"]])), axis=1)
+                lines_df = pass_df.groupby(["pair_key"]).size().reset_index(name='pass_count')
+                # Setting a threshold. You can try to investigate how it changes when you change it.
+                lines_df = lines_df[lines_df['pass_count'] > 2]
+
+                # Plot once again pitch and vertices
+                pitch = Pitch(pitch_type='wyscout',line_color='white', pitch_color='#02540b')
+                fig, ax = pitch.grid(grid_height=0.9, title_height=0.06, axis=False,
+                                    endnote_height=0.04, title_space=0, endnote_space=0)
+                pitch.scatter(scatter_df.x, scatter_df.y, s=scatter_df.marker_size, color='yellow', edgecolors='black', linewidth=1, alpha=1, ax=ax["pitch"], zorder=3)
+                for i, row in scatter_df.iterrows():
+                    pitch.annotate(row["player.name"], xy=(row.x, row.y), c='black', va='center', ha='center', weight="bold", size=12, ax=ax["pitch"], zorder=3)
+                for i, row in lines_df.iterrows():
+                    player1 = row["pair_key"].split("_")[0]
+                    player2 = row['pair_key'].split("_")[1]
+
+                    # Check if data exists for player1 and player2
+                    if player1 in scatter_df['player.name'].values and player2 in scatter_df['player.name'].values:
+                        player1_x = scatter_df.loc[scatter_df["player.name"] == player1]['x'].iloc[0]
+                        player1_y = scatter_df.loc[scatter_df["player.name"] == player1]['y'].iloc[0]
+                        player2_x = scatter_df.loc[scatter_df["player.name"] == player2]['x'].iloc[0]
+                        player2_y = scatter_df.loc[scatter_df["player.name"] == player2]['y'].iloc[0]
+
+                        num_passes = row["pass_count"]
+                        line_width = (num_passes / lines_df['pass_count'].max() * 10)
+                        pitch.lines(player1_x, player1_y, player2_x, player2_y,
+                                    alpha=1, lw=line_width, zorder=2, color="yellow", ax=ax["pitch"])
+                st.pyplot(fig)
+                
+            passes = (
+                (df['type.primary'] == 'pass') &
+                (df['team.name'] == hold) &
+                (df['pass.accurate'] == True) &
+                (df['type.secondary'] != "Throw-in"))    
+                # Select necessary columns
+            pass_df = df.loc[passes, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y', 'player.name', 'pass.recipient.name']]
+                # Adjusting that only the surname of a player is presented.
+            pass_df["player.name"] = pass_df["player.name"].apply(lambda x: str(x).split()[-1])
+            pass_df["pass.recipient.name"] = pass_df["pass.recipient.name"].apply(lambda x: str(x).split()[-1])
+
+            scatter_df = pd.DataFrame()
+            for i, name in enumerate(pass_df["player.name"].unique()):
+                pass_x = pass_df.loc[pass_df["player.name"] == name]["location.x"].to_numpy()
+                rec_x = pass_df.loc[pass_df["pass.recipient.name"] == name]["pass.endLocation.x"].to_numpy()
+                pass_y = pass_df.loc[pass_df["player.name"] == name]["location.y"].to_numpy()
+                rec_y = pass_df.loc[pass_df["pass.recipient.name"] == name]["pass.endLocation.y"].to_numpy()
+                scatter_df.at[i, "player.name"] = name
+                # Make sure that x and y location for each circle representing the player is the average of passes and receptions
+                scatter_df.at[i, "x"] = np.mean(np.concatenate([pass_x, rec_x]))
+                scatter_df.at[i, "y"] = np.mean(np.concatenate([pass_y, rec_y]))
+                # Calculate number of passes
+                scatter_df.at[i, "no"] = pass_df.loc[pass_df["player.name"] == name].count().iloc[0]
+                    
+                # Adjust the size of a circle so that the player who made more passes
+            scatter_df['marker_size'] = (scatter_df["no"] / scatter_df["no"].max() * 1500)
+
+                # Counting passes between players
+            pass_df["pair_key"] = pass_df.apply(lambda x: "_".join(sorted([x["player.name"], x["pass.recipient.name"]])), axis=1)
+            lines_df = pass_df.groupby(["pair_key"]).size().reset_index(name='pass_count')
+            # Setting a threshold. You can try to investigate how it changes when you change it.
+            lines_df = lines_df[lines_df['pass_count'] > 2]
+
+                # Plot once again pitch and vertices
+            pitch = Pitch(pitch_type='wyscout',line_color='white', pitch_color='#02540b')
+            fig, ax = pitch.grid(grid_height=0.9, title_height=0.06, axis=False,
+                                endnote_height=0.04, title_space=0, endnote_space=0)
+            pitch.scatter(scatter_df.x, scatter_df.y, s=scatter_df.marker_size, color='yellow', edgecolors='black', linewidth=1, alpha=1, ax=ax["pitch"], zorder=3)
+            for i, row in scatter_df.iterrows():
+                pitch.annotate(row["player.name"], xy=(row.x, row.y), c='black', va='center', ha='center', weight="bold", size=12, ax=ax["pitch"], zorder=3)
+            for i, row in lines_df.iterrows():
+                player1 = row["pair_key"].split("_")[0]
+                player2 = row['pair_key'].split("_")[1]
+
+                # Check if data exists for player1 and player2
+                if player1 in scatter_df['player.name'].values and player2 in scatter_df['player.name'].values:
+                    player1_x = scatter_df.loc[scatter_df["player.name"] == player1]['x'].iloc[0]
+                    player1_y = scatter_df.loc[scatter_df["player.name"] == player1]['y'].iloc[0]
+                    player2_x = scatter_df.loc[scatter_df["player.name"] == player2]['x'].iloc[0]
+                    player2_y = scatter_df.loc[scatter_df["player.name"] == player2]['y'].iloc[0]
+                    num_passes = row["pass_count"]
+                    line_width = (num_passes / lines_df['pass_count'].max() * 10)
+                    pitch.lines(player1_x, player1_y, player2_x, player2_y,
+                                alpha=1, lw=line_width, zorder=2, color="yellow", ax=ax["pitch"])
+            st.pyplot(fig)
 
         Årgange = {
 

@@ -2390,9 +2390,8 @@ if username == valid_username and password == valid_password:
                 st.write('Xg plot (Jo større markering, jo større xG)')
                 st.pyplot(plt.gcf(), use_container_width=True)
         
-            team_passes = ((df1['type.primary'] == 'pass') | (df1['carry.progression'] != '')) & (df1['team.name'] == hold)
+            team_passes = (df1['type.primary'] == 'pass') & (df1['team.name'] == hold) & (df1['type.secondary'] != "Throw-in")
             team_passes = df1.loc[team_passes, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y', 'player.name','player.id','pass.recipient.name','pass.recipient.id','pass.accurate','carry.progression','carry.endLocation.y','carry.endLocation.x']]
-            st.dataframe(team_passes)
             players = team_passes[['player.id','player.name']]
             players = players.drop_duplicates()
             pitch = Pitch(pitch_type='wyscout',line_color='white', pitch_color='#02540b', pad_top=20)
@@ -2408,17 +2407,9 @@ if username == valid_username and password == valid_password:
                     y = player_df['location.y'][i]
                     dx = player_df['pass.endLocation.x'][i] - player_df['location.x'][i]
                     dy = player_df['pass.endLocation.y'][i] - player_df['location.y'][i]
-                    dx_carry = player_df['carry.endLocation.x'][i] - player_df['location.x'][i]
-                    dy_carry = player_df['carry.endLocation.y'][i] - player_df['location.y'][i]
-                    
                     if player_df['pass.accurate'][i]:  # Changed df to player_df here
                         ax.arrow(x, y, dx, dy, color='#0dff00', length_includes_head=True, head_width=1, head_length=0.8)
                         pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='#0dff00', ax=ax)
-                    
-                    if player_df['carry.progression'][i] !=0:  # Changed df to player_df here
-                        ax.arrow(x, y, dx_carry, dy_carry, color='yellow', length_includes_head=True, head_width=1, head_length=0.8)
-                        pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='yellow', ax=ax)
-
                     else:
                         ax.arrow(x, y, dx, dy, color='red', length_includes_head=True, head_width=1, head_length=0.8)
                         pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='red', ax=ax)

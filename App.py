@@ -3442,6 +3442,8 @@ if username == valid_username and password == valid_password:
             team_passes = df1.loc[team_passes, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y','player.name','player.id','pass.recipient.name','pass.recipient.id','pass.accurate']]
             players = players.rename(columns={'player.id': 'pass.recipient.id', 'player.name': 'pass.recipient.name'})
             players = players.drop_duplicates()
+            players = players.merge(xTspiller[['player.id', 'xT']], on='player.id', how='left').sort_values(by='xT', ascending=False)
+
             players = players.dropna()
             pitch = Pitch(pitch_type='wyscout',line_color='white', pitch_color='#02540b', pad_top=20)
             fig, axs = pitch.grid(ncols=4, nrows=5, grid_height=0.85, title_height=0.00, axis=False, title_space=0.04, endnote_space=0.01)

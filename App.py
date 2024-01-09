@@ -2415,7 +2415,7 @@ if username == valid_username and password == valid_password:
                         ax.arrow(x, y, dx, dy, color='#0dff00', length_includes_head=True, head_width=1, head_length=0.8)
                         pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='#0dff00', ax=ax)
                     
-                    if player_df['carry.progression'] != 0[i]:  # Changed df to player_df here
+                    if player_df['carry.progression'][i] !=0:  # Changed df to player_df here
                         ax.arrow(x, y, dx_carry, dy_carry, color='yellow', length_includes_head=True, head_width=1, head_length=0.8)
                         pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='yellow', ax=ax)
 

@@ -2419,7 +2419,7 @@ if username == valid_username and password == valid_password:
             st.title('Pasninger')
             st.pyplot(fig)
             
-            team_dribbles = (df1['carry.progression'] != None) & (df1['team.name'] == hold)
+            team_dribbles = (df1['carry.progression'] != 0) & (df1['team.name'] == hold)
             team_dribbles = df1.loc[team_dribbles, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y', 'player.name','player.id','carry.progression','carry.endLocation.y','carry.endLocation.x']]
             st.dataframe(team_dribbles)
             players = team_dribbles[['player.id','player.name']]

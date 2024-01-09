@@ -2912,7 +2912,7 @@ if username == valid_username and password == valid_password:
                     dx_carry = player_df['carry.endLocation.x'][i] - player_df['location.x'][i]
                     dy_carry = player_df['carry.endLocation.y'][i] - player_df['location.y'][i]
 
-                    if 'carry.progression' in player_df.columns and not pd.isnull(player_df['carry.progression'][i]):
+                    if 'carry.progression' in player_df.columns and not player_df['carry.progression'].isnull().any():
                         ax.arrow(x, y, dx_carry, dy_carry, color='yellow', length_includes_head=True, head_width=1, head_length=0.8)
                         pitch.scatter(player_df['location.x'][i], player_df['location.y'][i], color='yellow', ax=ax)
                     else:

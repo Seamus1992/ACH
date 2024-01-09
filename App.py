@@ -2530,7 +2530,7 @@ if username == valid_username and password == valid_password:
                     (df['type.secondary'] != "Throw-in"))    
                 # Select necessary columns
                 pass_df = df.loc[passes, ['location.x', 'location.y', 'pass.endLocation.x', 'pass.endLocation.y', 'player.name', 'pass.recipient.name']]
-                pass_df = pass_df[(pass_df['location.x'] > 33) & (pass_df['location.x'] < 66)]
+                pass_df = pass_df[pass_df['location.x'] > 33]
                 # Adjusting that only the surname of a player is presented.
                 pass_df["player.name"] = pass_df["player.name"].apply(lambda x: str(x).split()[-1])
                 pass_df["pass.recipient.name"] = pass_df["pass.recipient.name"].apply(lambda x: str(x).split()[-1])

@@ -2934,29 +2934,29 @@ def Superliga ():
     df['Start Zone'] = np.select(conditions, zone_labels, default=None)
 
     conditions_pass_end = [
-    (df['pass.endLocation.x'] <= 30) & ((df['pass.endLocation.y'] <= 19) | (df['pass.endLocation.y'] >= 81)),
-    (df['pass.endLocation.x'] <= 30) & ((df['pass.endLocation.y'] >= 19) & (df['pass.endLocation.y'] <= 81)),
-    ((df['pass.endLocation.x'] >= 30) & (df['pass.endLocation.x'] <= 50)) & ((df['pass.endLocation.y'] <= 15) | (df['pass.endLocation.y'] >= 84)),
-    ((df['pass.endLocation.x'] >= 30) & (df['pass.endLocation.x'] <= 50)) & ((df['pass.endLocation.y'] >= 15) & (df['pass.endLocation.y'] <= 84)),
-    ((df['pass.endLocation.x'] >= 50) & (df['pass.endLocation.x'] <= 70)) & ((df['pass.endLocation.y'] <= 15) | (df['pass.endLocation.y'] >= 84)),
-    ((df['pass.endLocation.x'] >= 50) & (df['pass.endLocation.x'] <= 70)) & ((df['pass.endLocation.y'] >= 15) & (df['pass.endLocation.y'] <= 84)),
-    ((df['pass.endLocation.x'] >= 70) & ((df['pass.endLocation.y'] <= 15) | (df['pass.endLocation.y'] >= 84))),
-    (((df['pass.endLocation.x'] >= 70) & (df['pass.endLocation.x'] <= 84)) & ((df['pass.endLocation.y'] >= 15) & (df['pass.endLocation.y'] <= 84))),
-    ((df['pass.endLocation.x'] >= 84) & ((df['pass.endLocation.y'] >= 15) & (df['pass.endLocation.y'] <= 37)) | ((df['pass.endLocation.x'] >= 84) & (df['pass.endLocation.y'] <= 84) & (df['pass.endLocation.y'] >= 63))),
-    ((df['pass.endLocation.x'] >= 84) & ((df['pass.endLocation.y'] >= 37) & (df['pass.endLocation.y'] <= 63)))
+        (df['pass.endLocation.x'] <= 30) & ((df['pass.endLocation.y'] <= 19) | (df['pass.endLocation.y'] >= 81)),
+        (df['pass.endLocation.x'] <= 30) & ((df['pass.endLocation.y'] >= 19) & (df['pass.endLocation.y'] <= 81)),
+        ((df['pass.endLocation.x'] >= 30) & (df['pass.endLocation.x'] <= 50)) & ((df['pass.endLocation.y'] <= 15) | (df['pass.endLocation.y'] >= 84)),
+        ((df['pass.endLocation.x'] >= 30) & (df['pass.endLocation.x'] <= 50)) & ((df['pass.endLocation.y'] >= 15) & (df['pass.endLocation.y'] <= 84)),
+        ((df['pass.endLocation.x'] >= 50) & (df['pass.endLocation.x'] <= 70)) & ((df['pass.endLocation.y'] <= 15) | (df['pass.endLocation.y'] >= 84)),
+        ((df['pass.endLocation.x'] >= 50) & (df['pass.endLocation.x'] <= 70)) & ((df['pass.endLocation.y'] >= 15) & (df['pass.endLocation.y'] <= 84)),
+        ((df['pass.endLocation.x'] >= 70) & ((df['pass.endLocation.y'] <= 15) | (df['pass.endLocation.y'] >= 84))),
+        (((df['pass.endLocation.x'] >= 70) & (df['pass.endLocation.x'] <= 84)) & ((df['pass.endLocation.y'] >= 15) & (df['pass.endLocation.y'] <= 84))),
+        ((df['pass.endLocation.x'] >= 84) & ((df['pass.endLocation.y'] >= 15) & (df['pass.endLocation.y'] <= 37)) | ((df['pass.endLocation.x'] >= 84) & (df['pass.endLocation.y'] <= 84) & (df['pass.endLocation.y'] >= 63))),
+        ((df['pass.endLocation.x'] >= 84) & ((df['pass.endLocation.y'] >= 37) & (df['pass.endLocation.y'] <= 63)))
     ]
             # Define conditions for zone assignment for 'carry.endLocation'
     conditions_carry_end = [
-    (df['carry.endLocation.x'] <= 30) & ((df['carry.endLocation.y'] <= 19) | (df['carry.endLocation.y'] >= 81)),
-    (df['carry.endLocation.x'] <= 30) & ((df['carry.endLocation.y'] >= 19) & (df['carry.endLocation.y'] <= 81)),
-    ((df['carry.endLocation.x'] >= 30) & (df['carry.endLocation.x'] <= 50)) & ((df['carry.endLocation.y'] <= 15) | (df['carry.endLocation.y'] >= 84)),
-    ((df['carry.endLocation.x'] >= 30) & (df['carry.endLocation.x'] <= 50)) & ((df['carry.endLocation.y'] >= 15) & (df['carry.endLocation.y'] <= 84)),
-    ((df['carry.endLocation.x'] >= 50) & (df['carry.endLocation.x'] <= 70)) & ((df['carry.endLocation.y'] <= 15) | (df['carry.endLocation.y'] >= 84)),
-    ((df['carry.endLocation.x'] >= 50) & (df['carry.endLocation.x'] <= 70)) & ((df['carry.endLocation.y'] >= 15) & (df['carry.endLocation.y'] <= 84)),
-    ((df['carry.endLocation.x'] >= 70) & ((df['carry.endLocation.y'] <= 15) | (df['carry.endLocation.y'] >= 84))),
-    (((df['carry.endLocation.x'] >= 70) & (df['carry.endLocation.x'] <= 84)) & ((df['carry.endLocation.y'] >= 15) & (df['carry.endLocation.y'] <= 84))),
-    ((df['carry.endLocation.x'] >= 84) & ((df['carry.endLocation.y'] >= 15) & (df['carry.endLocation.y'] <= 37)) | ((df['carry.endLocation.x'] >= 84) & (df['carry.endLocation.y'] <= 84) & (df['carry.endLocation.y'] >= 63))),
-    ((df['carry.endLocation.x'] >= 84) & ((df['carry.endLocation.y'] >= 37) & (df['carry.endLocation.y'] <= 63)))
+        (df['carry.endLocation.x'] <= 30) & ((df['carry.endLocation.y'] <= 19) | (df['carry.endLocation.y'] >= 81)),
+        (df['carry.endLocation.x'] <= 30) & ((df['carry.endLocation.y'] >= 19) & (df['carry.endLocation.y'] <= 81)),
+        ((df['carry.endLocation.x'] >= 30) & (df['carry.endLocation.x'] <= 50)) & ((df['carry.endLocation.y'] <= 15) | (df['carry.endLocation.y'] >= 84)),
+        ((df['carry.endLocation.x'] >= 30) & (df['carry.endLocation.x'] <= 50)) & ((df['carry.endLocation.y'] >= 15) & (df['carry.endLocation.y'] <= 84)),
+        ((df['carry.endLocation.x'] >= 50) & (df['carry.endLocation.x'] <= 70)) & ((df['carry.endLocation.y'] <= 15) | (df['carry.endLocation.y'] >= 84)),
+        ((df['carry.endLocation.x'] >= 50) & (df['carry.endLocation.x'] <= 70)) & ((df['carry.endLocation.y'] >= 15) & (df['carry.endLocation.y'] <= 84)),
+        ((df['carry.endLocation.x'] >= 70) & ((df['carry.endLocation.y'] <= 15) | (df['carry.endLocation.y'] >= 84))),
+        (((df['carry.endLocation.x'] >= 70) & (df['carry.endLocation.x'] <= 84)) & ((df['carry.endLocation.y'] >= 15) & (df['carry.endLocation.y'] <= 84))),
+        ((df['carry.endLocation.x'] >= 84) & ((df['carry.endLocation.y'] >= 15) & (df['carry.endLocation.y'] <= 37)) | ((df['carry.endLocation.x'] >= 84) & (df['carry.endLocation.y'] <= 84) & (df['carry.endLocation.y'] >= 63))),
+        ((df['carry.endLocation.x'] >= 84) & ((df['carry.endLocation.y'] >= 37) & (df['carry.endLocation.y'] <= 63)))
     ]
             # Define corresponding zone values
     zone_values = ['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4', 'Zone 5', 'Zone 6', 'Zone 7', 'Zone 8','Zone 9','Zone 10']

@@ -2246,10 +2246,10 @@ if username == valid_username and password == valid_password:
                 ((df['location.x'] >= 50) & (df['location.x'] <= 70)) & ((df['location.y'] >= 15) & (df['location.y'] <= 84)),
                 ((df['location.x'] >= 70) & ((df['location.y'] <= 15) | (df['location.y'] >= 84))),
                 (((df['location.x'] >= 70) & (df['location.x'] <= 84)) & ((df['location.y'] >= 15) & (df['location.y'] <= 84))),
-                ((df['location.x'] >= 84) & ((df['location.y'] >= 15) & (df['location.y'] <= 37)) | ((df['location.y'] <= 84) & (df['location.y'] >= 63))),
+                ((df['location.x'] >= 84) & ((df['location.y'] >= 15) & (df['location.y'] <= 37)) | ((df['location.x'] >= 84) & (df['location.y'] <= 84) & (df['location.y'] >= 63))),
                 ((df['location.x'] >= 84) & ((df['location.y'] >= 37) & (df['location.y'] <= 63)))
             ]
-
+            
             # Define corresponding zone values
             zone_labels = ['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4', 'Zone 5', 'Zone 6', 'Zone 7', 'Zone 8','Zone 9','Zone 10']
 
@@ -2265,7 +2265,7 @@ if username == valid_username and password == valid_password:
                 ((df['pass.endLocation.x'] >= 50) & (df['pass.endLocation.x'] <= 70)) & ((df['pass.endLocation.y'] >= 15) & (df['pass.endLocation.y'] <= 84)),
                 ((df['pass.endLocation.x'] >= 70) & ((df['pass.endLocation.y'] <= 15) | (df['pass.endLocation.y'] >= 84))),
                 (((df['pass.endLocation.x'] >= 70) & (df['pass.endLocation.x'] <= 84)) & ((df['pass.endLocation.y'] >= 15) & (df['pass.endLocation.y'] <= 84))),
-                ((df['pass.endLocation.x'] >= 84) & ((df['pass.endLocation.y'] >= 15) & (df['pass.endLocation.y'] <= 37)) | ((df['pass.endLocation.y'] <= 84) & (df['pass.endLocation.y'] >= 63))),
+                ((df['pass.endLocation.x'] >= 84) & ((df['pass.endLocation.y'] >= 15) & (df['pass.endLocation.y'] <= 37)) | ((df['pass.endLocation.x'] >= 84) & (df['pass.endLocation.y'] <= 84) & (df['pass.endLocation.y'] >= 63))),
                 ((df['pass.endLocation.x'] >= 84) & ((df['pass.endLocation.y'] >= 37) & (df['pass.endLocation.y'] <= 63)))
             ]
             # Define conditions for zone assignment for 'carry.endLocation'
@@ -2278,7 +2278,7 @@ if username == valid_username and password == valid_password:
                 ((df['carry.endLocation.x'] >= 50) & (df['carry.endLocation.x'] <= 70)) & ((df['carry.endLocation.y'] >= 15) & (df['carry.endLocation.y'] <= 84)),
                 ((df['carry.endLocation.x'] >= 70) & ((df['carry.endLocation.y'] <= 15) | (df['carry.endLocation.y'] >= 84))),
                 (((df['carry.endLocation.x'] >= 70) & (df['carry.endLocation.x'] <= 84)) & ((df['carry.endLocation.y'] >= 15) & (df['carry.endLocation.y'] <= 84))),
-                ((df['carry.endLocation.x'] >= 84) & ((df['carry.endLocation.y'] >= 15) & (df['carry.endLocation.y'] <= 37)) | ((df['carry.endLocation.y'] <= 84) & (df['carry.endLocation.y'] >= 63))),
+                ((df['carry.endLocation.x'] >= 84) & ((df['carry.endLocation.y'] >= 15) & (df['carry.endLocation.y'] <= 37)) | ((df['carry.endLocation.x'] >= 84) & (df['carry.endLocation.y'] <= 84) & (df['carry.endLocation.y'] >= 63))),
                 ((df['carry.endLocation.x'] >= 84) & ((df['carry.endLocation.y'] >= 37) & (df['carry.endLocation.y'] <= 63)))
             ]
             # Define corresponding zone values
@@ -2748,10 +2748,10 @@ if username == valid_username and password == valid_password:
                 ((df['location.x'] >= 50) & (df['location.x'] <= 70)) & ((df['location.y'] >= 15) & (df['location.y'] <= 84)),
                 ((df['location.x'] >= 70) & ((df['location.y'] <= 15) | (df['location.y'] >= 84))),
                 (((df['location.x'] >= 70) & (df['location.x'] <= 84)) & ((df['location.y'] >= 15) & (df['location.y'] <= 84))),
-                ((df['location.x'] >= 84) & ((df['location.y'] >= 15) & (df['location.y'] <= 37)) | ((df['location.y'] <= 84) & (df['location.y'] >= 63))),
+                ((df['location.x'] >= 84) & ((df['location.y'] >= 15) & (df['location.y'] <= 37)) | ((df['location.x'] >= 84) & (df['location.y'] <= 84) & (df['location.y'] >= 63))),
                 ((df['location.x'] >= 84) & ((df['location.y'] >= 37) & (df['location.y'] <= 63)))
             ]
-
+            
             # Define corresponding zone values
             zone_labels = ['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4', 'Zone 5', 'Zone 6', 'Zone 7', 'Zone 8','Zone 9','Zone 10']
 
@@ -2767,7 +2767,7 @@ if username == valid_username and password == valid_password:
                 ((df['pass.endLocation.x'] >= 50) & (df['pass.endLocation.x'] <= 70)) & ((df['pass.endLocation.y'] >= 15) & (df['pass.endLocation.y'] <= 84)),
                 ((df['pass.endLocation.x'] >= 70) & ((df['pass.endLocation.y'] <= 15) | (df['pass.endLocation.y'] >= 84))),
                 (((df['pass.endLocation.x'] >= 70) & (df['pass.endLocation.x'] <= 84)) & ((df['pass.endLocation.y'] >= 15) & (df['pass.endLocation.y'] <= 84))),
-                ((df['pass.endLocation.x'] >= 84) & ((df['pass.endLocation.y'] >= 15) & (df['pass.endLocation.y'] <= 37)) | ((df['pass.endLocation.y'] <= 84) & (df['pass.endLocation.y'] >= 63))),
+                ((df['pass.endLocation.x'] >= 84) & ((df['pass.endLocation.y'] >= 15) & (df['pass.endLocation.y'] <= 37)) | ((df['pass.endLocation.x'] >= 84) & (df['pass.endLocation.y'] <= 84) & (df['pass.endLocation.y'] >= 63))),
                 ((df['pass.endLocation.x'] >= 84) & ((df['pass.endLocation.y'] >= 37) & (df['pass.endLocation.y'] <= 63)))
             ]
             # Define conditions for zone assignment for 'carry.endLocation'
@@ -2780,7 +2780,7 @@ if username == valid_username and password == valid_password:
                 ((df['carry.endLocation.x'] >= 50) & (df['carry.endLocation.x'] <= 70)) & ((df['carry.endLocation.y'] >= 15) & (df['carry.endLocation.y'] <= 84)),
                 ((df['carry.endLocation.x'] >= 70) & ((df['carry.endLocation.y'] <= 15) | (df['carry.endLocation.y'] >= 84))),
                 (((df['carry.endLocation.x'] >= 70) & (df['carry.endLocation.x'] <= 84)) & ((df['carry.endLocation.y'] >= 15) & (df['carry.endLocation.y'] <= 84))),
-                ((df['carry.endLocation.x'] >= 84) & ((df['carry.endLocation.y'] >= 15) & (df['carry.endLocation.y'] <= 37)) | ((df['carry.endLocation.y'] <= 84) & (df['carry.endLocation.y'] >= 63))),
+                ((df['carry.endLocation.x'] >= 84) & ((df['carry.endLocation.y'] >= 15) & (df['carry.endLocation.y'] <= 37)) | ((df['carry.endLocation.x'] >= 84) & (df['carry.endLocation.y'] <= 84) & (df['carry.endLocation.y'] >= 63))),
                 ((df['carry.endLocation.x'] >= 84) & ((df['carry.endLocation.y'] >= 37) & (df['carry.endLocation.y'] <= 63)))
             ]
             # Define corresponding zone values
@@ -3252,10 +3252,10 @@ if username == valid_username and password == valid_password:
                 ((df['location.x'] >= 50) & (df['location.x'] <= 70)) & ((df['location.y'] >= 15) & (df['location.y'] <= 84)),
                 ((df['location.x'] >= 70) & ((df['location.y'] <= 15) | (df['location.y'] >= 84))),
                 (((df['location.x'] >= 70) & (df['location.x'] <= 84)) & ((df['location.y'] >= 15) & (df['location.y'] <= 84))),
-                ((df['location.x'] >= 84) & ((df['location.y'] >= 15) & (df['location.y'] <= 37)) | ((df['location.y'] <= 84) & (df['location.y'] >= 63))),
+                ((df['location.x'] >= 84) & ((df['location.y'] >= 15) & (df['location.y'] <= 37)) | ((df['location.x'] >= 84) & (df['location.y'] <= 84) & (df['location.y'] >= 63))),
                 ((df['location.x'] >= 84) & ((df['location.y'] >= 37) & (df['location.y'] <= 63)))
             ]
-
+            
             # Define corresponding zone values
             zone_labels = ['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4', 'Zone 5', 'Zone 6', 'Zone 7', 'Zone 8','Zone 9','Zone 10']
 
@@ -3271,7 +3271,7 @@ if username == valid_username and password == valid_password:
                 ((df['pass.endLocation.x'] >= 50) & (df['pass.endLocation.x'] <= 70)) & ((df['pass.endLocation.y'] >= 15) & (df['pass.endLocation.y'] <= 84)),
                 ((df['pass.endLocation.x'] >= 70) & ((df['pass.endLocation.y'] <= 15) | (df['pass.endLocation.y'] >= 84))),
                 (((df['pass.endLocation.x'] >= 70) & (df['pass.endLocation.x'] <= 84)) & ((df['pass.endLocation.y'] >= 15) & (df['pass.endLocation.y'] <= 84))),
-                ((df['pass.endLocation.x'] >= 84) & ((df['pass.endLocation.y'] >= 15) & (df['pass.endLocation.y'] <= 37)) | ((df['pass.endLocation.y'] <= 84) & (df['pass.endLocation.y'] >= 63))),
+                ((df['pass.endLocation.x'] >= 84) & ((df['pass.endLocation.y'] >= 15) & (df['pass.endLocation.y'] <= 37)) | ((df['pass.endLocation.x'] >= 84) & (df['pass.endLocation.y'] <= 84) & (df['pass.endLocation.y'] >= 63))),
                 ((df['pass.endLocation.x'] >= 84) & ((df['pass.endLocation.y'] >= 37) & (df['pass.endLocation.y'] <= 63)))
             ]
             # Define conditions for zone assignment for 'carry.endLocation'
@@ -3284,7 +3284,7 @@ if username == valid_username and password == valid_password:
                 ((df['carry.endLocation.x'] >= 50) & (df['carry.endLocation.x'] <= 70)) & ((df['carry.endLocation.y'] >= 15) & (df['carry.endLocation.y'] <= 84)),
                 ((df['carry.endLocation.x'] >= 70) & ((df['carry.endLocation.y'] <= 15) | (df['carry.endLocation.y'] >= 84))),
                 (((df['carry.endLocation.x'] >= 70) & (df['carry.endLocation.x'] <= 84)) & ((df['carry.endLocation.y'] >= 15) & (df['carry.endLocation.y'] <= 84))),
-                ((df['carry.endLocation.x'] >= 84) & ((df['carry.endLocation.y'] >= 15) & (df['carry.endLocation.y'] <= 37)) | ((df['carry.endLocation.y'] <= 84) & (df['carry.endLocation.y'] >= 63))),
+                ((df['carry.endLocation.x'] >= 84) & ((df['carry.endLocation.y'] >= 15) & (df['carry.endLocation.y'] <= 37)) | ((df['carry.endLocation.x'] >= 84) & (df['carry.endLocation.y'] <= 84) & (df['carry.endLocation.y'] >= 63))),
                 ((df['carry.endLocation.x'] >= 84) & ((df['carry.endLocation.y'] >= 37) & (df['carry.endLocation.y'] <= 63)))
             ]
             # Define corresponding zone values
@@ -3757,10 +3757,10 @@ if username == valid_username and password == valid_password:
                 ((df['location.x'] >= 50) & (df['location.x'] <= 70)) & ((df['location.y'] >= 15) & (df['location.y'] <= 84)),
                 ((df['location.x'] >= 70) & ((df['location.y'] <= 15) | (df['location.y'] >= 84))),
                 (((df['location.x'] >= 70) & (df['location.x'] <= 84)) & ((df['location.y'] >= 15) & (df['location.y'] <= 84))),
-                ((df['location.x'] >= 84) & ((df['location.y'] >= 15) & (df['location.y'] <= 37)) | ((df['location.y'] <= 84) & (df['location.y'] >= 63))),
+                ((df['location.x'] >= 84) & ((df['location.y'] >= 15) & (df['location.y'] <= 37)) | ((df['location.x'] >= 84) & (df['location.y'] <= 84) & (df['location.y'] >= 63))),
                 ((df['location.x'] >= 84) & ((df['location.y'] >= 37) & (df['location.y'] <= 63)))
             ]
-
+            
             # Define corresponding zone values
             zone_labels = ['Zone 1', 'Zone 2', 'Zone 3', 'Zone 4', 'Zone 5', 'Zone 6', 'Zone 7', 'Zone 8','Zone 9','Zone 10']
 
@@ -3776,7 +3776,7 @@ if username == valid_username and password == valid_password:
                 ((df['pass.endLocation.x'] >= 50) & (df['pass.endLocation.x'] <= 70)) & ((df['pass.endLocation.y'] >= 15) & (df['pass.endLocation.y'] <= 84)),
                 ((df['pass.endLocation.x'] >= 70) & ((df['pass.endLocation.y'] <= 15) | (df['pass.endLocation.y'] >= 84))),
                 (((df['pass.endLocation.x'] >= 70) & (df['pass.endLocation.x'] <= 84)) & ((df['pass.endLocation.y'] >= 15) & (df['pass.endLocation.y'] <= 84))),
-                ((df['pass.endLocation.x'] >= 84) & ((df['pass.endLocation.y'] >= 15) & (df['pass.endLocation.y'] <= 37)) | ((df['pass.endLocation.y'] <= 84) & (df['pass.endLocation.y'] >= 63))),
+                ((df['pass.endLocation.x'] >= 84) & ((df['pass.endLocation.y'] >= 15) & (df['pass.endLocation.y'] <= 37)) | ((df['pass.endLocation.x'] >= 84) & (df['pass.endLocation.y'] <= 84) & (df['pass.endLocation.y'] >= 63))),
                 ((df['pass.endLocation.x'] >= 84) & ((df['pass.endLocation.y'] >= 37) & (df['pass.endLocation.y'] <= 63)))
             ]
             # Define conditions for zone assignment for 'carry.endLocation'
@@ -3789,7 +3789,7 @@ if username == valid_username and password == valid_password:
                 ((df['carry.endLocation.x'] >= 50) & (df['carry.endLocation.x'] <= 70)) & ((df['carry.endLocation.y'] >= 15) & (df['carry.endLocation.y'] <= 84)),
                 ((df['carry.endLocation.x'] >= 70) & ((df['carry.endLocation.y'] <= 15) | (df['carry.endLocation.y'] >= 84))),
                 (((df['carry.endLocation.x'] >= 70) & (df['carry.endLocation.x'] <= 84)) & ((df['carry.endLocation.y'] >= 15) & (df['carry.endLocation.y'] <= 84))),
-                ((df['carry.endLocation.x'] >= 84) & ((df['carry.endLocation.y'] >= 15) & (df['carry.endLocation.y'] <= 37)) | ((df['carry.endLocation.y'] <= 84) & (df['carry.endLocation.y'] >= 63))),
+                ((df['carry.endLocation.x'] >= 84) & ((df['carry.endLocation.y'] >= 15) & (df['carry.endLocation.y'] <= 37)) | ((df['carry.endLocation.x'] >= 84) & (df['carry.endLocation.y'] <= 84) & (df['carry.endLocation.y'] >= 63))),
                 ((df['carry.endLocation.x'] >= 84) & ((df['carry.endLocation.y'] >= 37) & (df['carry.endLocation.y'] <= 63)))
             ]
             # Define corresponding zone values

@@ -991,6 +991,7 @@ def U17_liga ():
     samlet = xgcspiller.merge(xT)
     samlethold = xgchold.merge(xThold)
     samlet = samlet[['player.name','team.name','xGC','Hold xG','xGCC','xGCC Rank','xT','xT Rank']]
+    samlet = samlet.sort_values(by='xT Rank')
 
     fig = px.scatter(samlet, x='xGCC', y='xT', text='player.name', hover_name='player.name', title='xGCC vs xT')
     fig.update_traces(textposition='top center')
@@ -1499,6 +1500,7 @@ def U19_liga ():
     samlet = xgcspiller.merge(xT)
     samlethold = xgchold.merge(xThold)
     samlet = samlet[['player.name','team.name','xGC','Hold xG','xGCC','xGCC Rank','xT','xT Rank']]
+    samlet = samlet.sort_values(by='xT Rank')
 
     fig = px.scatter(samlet, x='xGCC', y='xT', text='player.name', hover_name='player.name', title='xGCC vs xT')
     fig.update_traces(textposition='top center')
@@ -2006,6 +2008,7 @@ def U19_Division ():
     samlet = xgcspiller.merge(xT)
     samlethold = xgchold.merge(xThold)
     samlet = samlet[['player.name','team.name','xGC','Hold xG','xGCC','xGCC Rank','xT','xT Rank']]
+    samlet = samlet.sort_values(by='xT Rank')
 
     fig = px.scatter(samlet, x='xGCC', y='xT', text='player.name', hover_name='player.name', title='xGCC vs xT')
     fig.update_traces(textposition='top center')
@@ -2513,6 +2516,7 @@ def U17_Division ():
     samlet = xgcspiller.merge(xT)
     samlethold = xgchold.merge(xThold)
     samlet = samlet[['player.name','team.name','xGC','Hold xG','xGCC','xGCC Rank','xT','xT Rank']]
+    samlet = samlet.sort_values(by='xT Rank')
 
     fig = px.scatter(samlet, x='xGCC', y='xT', text='player.name', hover_name='player.name', title='xGCC vs xT')
     fig.update_traces(textposition='top center')
@@ -3019,6 +3023,7 @@ def Superliga ():
     samlet = xgcspiller.merge(xT)
     samlethold = xgchold.merge(xThold)
     samlet = samlet[['player.name','team.name','xGC','Hold xG','xGCC','xGCC Rank','xT','xT Rank']]
+    samlet = samlet.sort_values(by='xT Rank')
 
     fig = px.scatter(samlet, x='xGCC', y='xT', text='player.name', hover_name='player.name', title='xGCC vs xT')
     fig.update_traces(textposition='top center')
@@ -3526,6 +3531,7 @@ def Første_division ():
     samlet = xgcspiller.merge(xT)
     samlethold = xgchold.merge(xThold)
     samlet = samlet[['player.name','team.name','xGC','Hold xG','xGCC','xGCC Rank','xT','xT Rank']]
+    samlet = samlet.sort_values(by='xT Rank')
 
     fig = px.scatter(samlet, x='xGCC', y='xT', text='player.name', hover_name='player.name', title='xGCC vs xT')
     fig.update_traces(textposition='top center')
@@ -4033,6 +4039,7 @@ def Anden_division ():
     samlet = xgcspiller.merge(xT)
     samlethold = xgchold.merge(xThold)
     samlet = samlet[['player.name','team.name','xGC','Hold xG','xGCC','xGCC Rank','xT','xT Rank']]
+    samlet = samlet.sort_values(by='xT Rank')
 
     fig = px.scatter(samlet, x='xGCC', y='xT', text='player.name', hover_name='player.name', title='xGCC vs xT')
     fig.update_traces(textposition='top center')
@@ -4540,6 +4547,7 @@ def Tredje_division ():
     samlet = xgcspiller.merge(xT)
     samlethold = xgchold.merge(xThold)
     samlet = samlet[['player.name','team.name','xGC','Hold xG','xGCC','xGCC Rank','xT','xT Rank']]
+    samlet = samlet.sort_values(by='xT Rank')
 
     fig = px.scatter(samlet, x='xGCC', y='xT', text='player.name', hover_name='player.name', title='xGCC vs xT')
     fig.update_traces(textposition='top center')

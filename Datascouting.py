@@ -1032,6 +1032,7 @@ def U19_liga ():
     df = pd.read_csv(r'Individuelt dashboard/Individuelt dashboard U19.csv')
     df.rename(columns={'playerId': 'Player id'}, inplace=True)
     df = df.astype(str)
+    df.loc[df['Player id'] == 624663, 'Player name'] = 'Je. Beluli'
     dfevents = pd.read_csv('U19 eventdata alle.csv',low_memory=False)
     dfevents = dfevents[['Player id','Player name','team_name','label','date','matchId']]
     dfevents.loc[dfevents['Player id'] == 624663, 'Player name'] = 'Je. Beluli'

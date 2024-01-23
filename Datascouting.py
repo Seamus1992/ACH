@@ -483,7 +483,8 @@ def U15_liga ():
     samlet = xgcspiller.merge(xT)
     samlethold = xgchold.merge(xThold)
     samlet = samlet[['player.name','team.name','xGC','Hold xG','xGCC','xGCC Rank','xT','xT Rank']]
-
+    samlet = samlet.sort_values(by='xT Rank')
+    
     fig = px.scatter(samlet, x='xGCC', y='xT', text='player.name', hover_name='player.name', title='xGCC vs xT')
     fig.update_traces(textposition='top center')
     col1,col2 = st.columns([2,2])

@@ -1379,6 +1379,7 @@ def U19_liga ():
     with st.expander('Angribere sæson'):
         st.write(df_Angriberesæsonen)
     df = pd.read_csv(r'xT/U19 Ligaen 23 24.csv')
+    df.loc[df['Player id'] == 624663, 'Player name'] = 'Je. Beluli'
 
     df1 = df.copy()
     df = df[(df['pass.accurate'] ==True) | (df['carry.progression'] > 0)]

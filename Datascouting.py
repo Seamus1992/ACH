@@ -1379,7 +1379,7 @@ def U19_liga ():
     with st.expander('Angribere sæson'):
         st.write(df_Angriberesæsonen)
     df = pd.read_csv(r'xT/U19 Ligaen 23 24.csv')
-    df.loc[df['Player id'] == 624663, 'Player name'] = 'Je. Beluli'
+    df.loc[df['player.id'] == 624663, 'player.name'] = 'Je. Beluli'
 
     df1 = df.copy()
     df = df[(df['pass.accurate'] ==True) | (df['carry.progression'] > 0)]
@@ -1494,6 +1494,7 @@ def U19_liga ():
 
     xgcspiller = xgc.groupby(['player.id','player.name','team.name','Hold xG'])['possession.attack.xg'].agg('sum').reset_index()
     xgcspiller = xgcspiller[['player.id','player.name','team.name','possession.attack.xg','Hold xG']]
+
     xgcspiller['xGCC'] = xgcspiller['possession.attack.xg'] / xgcspiller['Hold xG']
     xgcspiller = xgcspiller.rename(columns={'possession.attack.xg': 'xGC'})
     xgcspiller = xgcspiller.sort_values(by='xGCC',ascending=False)

@@ -4323,7 +4323,8 @@ if username == valid_username and password == valid_password:
             col1, col2 = st.columns([3,1])
 
             with col2:
-                træningsgruppe = sorted_data[['Træningsgruppe']].value_counts()
+                træningsgruppe = sorted_data[sorted_data['Træningsgruppe'] != '']
+                træningsgruppe = træningsgruppe[['Træningsgruppe']].value_counts()
                 træningsgruppe = træningsgruppe.rename_axis('Træningsgruppe').reset_index(name='Antal')
                 #træningsgruppe = træningsgruppe.set_index('Træningsgruppe')
                 #st.dataframe(træningsgruppe,use_container_width=True,hide_index=True)
@@ -4563,7 +4564,8 @@ if username == valid_username and password == valid_password:
             col1, col2 = st.columns([3,1])
 
             with col2:
-                træningsgruppe = sorted_data[['Træningsgruppe']].value_counts()
+                træningsgruppe = sorted_data[sorted_data['Træningsgruppe'] != '']
+                træningsgruppe = træningsgruppe[['Træningsgruppe']].value_counts()
                 træningsgruppe = træningsgruppe.rename_axis('Træningsgruppe').reset_index(name='Antal')
                 #træningsgruppe = træningsgruppe.set_index('Træningsgruppe')
                 #st.dataframe(træningsgruppe,use_container_width=True,hide_index=True)
@@ -5508,7 +5510,8 @@ if username == valid_username and password == valid_password:
             col1, col2 = st.columns([3,1])
 
             with col2:
-                træningsgruppe = sorted_data[['Træningsgruppe']].value_counts()
+                træningsgruppe = sorted_data[sorted_data['Træningsgruppe'] != '']
+                træningsgruppe = træningsgruppe[['Træningsgruppe']].value_counts()
                 træningsgruppe = træningsgruppe.rename_axis('Træningsgruppe').reset_index(name='Antal')
                 #træningsgruppe = træningsgruppe.set_index('Træningsgruppe')
                 #st.dataframe(træningsgruppe,use_container_width=True,hide_index=True)
@@ -7520,7 +7523,8 @@ if username == valid_username and password == valid_password:
             col1, col2 = st.columns([3,1])
 
             with col2:
-                træningsgruppe = sorted_data[['Træningsgruppe']].value_counts()
+                træningsgruppe = sorted_data[sorted_data['Træningsgruppe'] != '']
+                træningsgruppe = træningsgruppe[['Træningsgruppe']].value_counts()
                 træningsgruppe = træningsgruppe.rename_axis('Træningsgruppe').reset_index(name='Antal')
                 #træningsgruppe = træningsgruppe.set_index('Træningsgruppe')
                 #st.dataframe(træningsgruppe,use_container_width=True,hide_index=True)

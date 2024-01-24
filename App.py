@@ -383,6 +383,11 @@ if username == valid_username and password == valid_password:
                     data.loc[player, 'Kampårgang'] = ''
                     data.loc[player, 'Rådighed'] = ''
 
+            for player in data.index:
+                if (data.loc[player, 'Minutter spillet'] == 0) and \
+                (data.loc[player, 'Minutter til rådighed'] == 0):
+                    data.loc[player, 'Kampårgang'] = ''
+
                 
         data = data[data['Rådighed'] != '']
         st.write(data)
@@ -429,7 +434,7 @@ if username == valid_username and password == valid_password:
 
         st.write(all_df)
 
-    def Træningsregistrering():
+    def Træningsregistrering(): 
         import streamlit as st
         import pandas as pd
         from datetime import datetime

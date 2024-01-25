@@ -328,7 +328,7 @@ df.to_csv('xT/3. Division 23 24.csv',index=False)
 
 connection_string = 'SharedAccessSignature=sv=2020-08-04&ss=f&srt=sco&sp=rl&se=2025-01-11T22:47:25Z&st=2022-01-11T14:47:25Z&spr=https&sig=CXdXPlHz%2FhW0IRugFTfCrB7osNQVZJ%2BHjNR1EM2s6RU%3D;FileEndpoint=https://divforeningendataout1.file.core.windows.net/;'
 share_name = 'divisionsforeningen-outgoingdata'
-dir_path = 'KampData/Sæson 23-24/U17 Division/'
+dir_path = 'KampData/Sæson 22-23/U17 Division/'
 
 service_client = ShareServiceClient.from_connection_string(connection_string)
 share_client = service_client.get_share_client(share_name)

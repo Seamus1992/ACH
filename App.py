@@ -8908,7 +8908,7 @@ if username == valid_username and password == valid_password:
 
             excel_buffer.seek(0)
 
-            st.markdown(f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{base64.b64encode(excel_buffer.read()).decode()}" download="wellness_rådata.xlsx">Tryk for at hente rådata</a>', unsafe_allow_html=True)
+            st.markdown(f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{base64.b64encode(excel_buffer.read()).decode()}" download="træningsdata.xlsx">Tryk for at hente rådata</a>', unsafe_allow_html=True)
 
     overskrifter_til_menu = {
         'Wellness Data':Wellness_data,

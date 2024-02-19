@@ -8897,10 +8897,8 @@ if username == valid_username and password == valid_password:
 
         all_df = pd.DataFrame(all_data)
         st.dataframe(all_df)
-        today_date = date.today().strftime("%Y-%m-%d")
-        filename = f"{today_date}.csv"
 
-        all_df.to_csv(filename,index=False)
+        all_df.to_csv(r"C:/Users/SéamusPeareBartholdy/Desktop/Træningsdata.csv",index=False)
 
     overskrifter_til_menu = {
         'Wellness Data':Wellness_data,

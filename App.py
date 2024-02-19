@@ -8895,7 +8895,7 @@ if username == valid_username and password == valid_password:
                     st.error("Fejl: JSON-filen er tom eller har ugyldig struktur.")
 
         all_df = pd.DataFrame(all_data)
-        print(all_df)
+        st.dataframe(all_df)
 
 
     overskrifter_til_menu = {

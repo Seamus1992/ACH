@@ -8879,52 +8879,7 @@ if username == valid_username and password == valid_password:
         st.write('Målfarlighed: xG per 90, Goals per 90, xG per 90, Målfarlighed (goals-xg)')
         st.write('Fart: Progressive runs, Progressive runs, Progressive runs, Successful dribbles antal, Successful dribbles, %, Accelerations, Offensive duels won, %')
 
-    import pandas as pd
-    import psycopg2
-    import re
 
-    def save_to_database(df, db_navn, db_brugernavn, db_adgangskode, db_schema, db_host):
-        import pandas as pd
-        import psycopg2
-        import re
-        try:
-            # Opret forbindelse til databasen
-            conn = psycopg2.connect(
-                dbname=db_navn,
-                user=db_brugernavn,
-                password=db_adgangskode,
-                host=db_host,
-                port="5432"
-            )
-
-            # Opret en cursor
-            cur = conn.cursor()
-
-
-            # Opret tabel med kolonner fra DataFrame
-            columns = ', '.join([f'"{col}" VARCHAR' for col in df.columns])
-            create_table_query = f'CREATE TABLE "{db_schema}"."træningsregistrering" ({columns})'
-            cur.execute(create_table_query)
-
-            # Konverter DataFrame til liste af tuples
-            data_tuples = [tuple(row) for row in df.values]
-
-            # Indsæt data i databasen
-            insert_query = f'INSERT INTO "{db_schema}"."træningsregistrering" VALUES ({", ".join(["%s"] * len(df.columns))})'
-            cur.executemany(insert_query, data_tuples)
-
-            # Commit ændringerne
-            conn.commit()
-
-            print("Data er blevet indsat i databasen.")
-        except Exception as e:
-            print(f"Fejl under indsættelse af data: {e}")
-        finally:
-            # Luk cursor og forbindelse
-            cur.close()
-            conn.close()
-
-    # Example usage
     def gem_data():
         import pandas as pd
         import psycopg2
@@ -8943,24 +8898,6 @@ if username == valid_username and password == valid_password:
 
         all_df = pd.DataFrame(all_data)
         print(all_df)
-
-        # Define your database connection details here
-        db_navn = 'AC Horsens'
-        db_brugernavn = 'postgres'
-        db_adgangskode = 'AC Horsens'
-        db_schema = 'Træningsdata'
-        db_host = 'localhost'
-
-                # Get DataFrame
-        all_df = gem_data()
-
-                # Save entire DataFrame to database under the "træningsregistrering" schema
-        def save_data_to_db():
-            save_to_database(all_df, db_navn, db_brugernavn, db_adgangskode, db_schema, db_host)
-        if st.button('Tryk for at gemme data'):
-            save_data_to_db()
-
-
 
 
     overskrifter_til_menu = {

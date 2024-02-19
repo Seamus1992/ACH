@@ -8882,8 +8882,6 @@ if username == valid_username and password == valid_password:
 
     def gem_data():
         import pandas as pd
-        import psycopg2
-        import re
         import json
         import os
         json_filename = 'træningsregistrering.json'

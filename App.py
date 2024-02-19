@@ -8879,6 +8879,24 @@ if username == valid_username and password == valid_password:
         st.write('Målfarlighed: xG per 90, Goals per 90, xG per 90, Målfarlighed (goals-xg)')
         st.write('Fart: Progressive runs, Progressive runs, Progressive runs, Successful dribbles antal, Successful dribbles, %, Accelerations, Offensive duels won, %')
 
+    def gem_data():
+        import json
+        import os.path
+        import pandas as pd
+        json_filename = 'træningsregistrering.json'
+
+        all_data = []
+        if os.path.exists(json_filename) and os.path.getsize(json_filename) > 0:
+            with open(json_filename, 'r') as f:
+                try:
+                    all_data = json.load(f)
+                except json.JSONDecodeError:
+                    st.error("Fejl: JSON-filen er tom eller har ugyldig struktur.")
+
+        all_df = pd.DataFrame(all_data)            
+        st.write(all_df)
+
+
     overskrifter_til_menu = {
         'Wellness Data':Wellness_data,
         'Kampregistrering':Kampregistrering,
@@ -8888,7 +8906,8 @@ if username == valid_username and password == valid_password:
         'Kampevaluering': Kampevaluering,
         'Individuelt dashboard': Individuelt_dashboard,
         'Modstanderanalyse': modstanderanalyse,
-        'Forklaring af data':forklaring}
+        'Forklaring af data':forklaring,
+        'Gem data':gem_data}
 
     selected_tab = st.sidebar.radio("Vælg dataform", list(overskrifter_til_menu.keys()))
 

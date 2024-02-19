@@ -8884,6 +8884,8 @@ if username == valid_username and password == valid_password:
         import json
         import os
         from datetime import date
+        import io
+        import base64
 
         json_filename = 'træningsregistrering.json'
 
@@ -8897,8 +8899,16 @@ if username == valid_username and password == valid_password:
 
         all_df = pd.DataFrame(all_data)
         st.dataframe(all_df)
+        excel_buffer = io.BytesIO()
 
-        all_df.to_csv(r"C:/Users/SéamusPeareBartholdy/Desktop/Træningsdata.csv",index=False)
+        if st.button("Download til Excel"):
+
+            with pd.ExcelWriter(excel_buffer, engine="xlsxwriter", options={'strings_to_numbers': True}) as writer:
+                all_df.to_excel(writer, index=False, sheet_name='Sheet1')
+
+            excel_buffer.seek(0)
+
+            st.markdown(f'<a href="data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,{base64.b64encode(excel_buffer.read()).decode()}" download="wellness_rådata.xlsx">Tryk for at hente rådata</a>', unsafe_allow_html=True)
 
     overskrifter_til_menu = {
         'Wellness Data':Wellness_data,

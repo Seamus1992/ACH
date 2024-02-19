@@ -8879,11 +8879,12 @@ if username == valid_username and password == valid_password:
         st.write('Målfarlighed: xG per 90, Goals per 90, xG per 90, Målfarlighed (goals-xg)')
         st.write('Fart: Progressive runs, Progressive runs, Progressive runs, Successful dribbles antal, Successful dribbles, %, Accelerations, Offensive duels won, %')
 
-
     def gem_data():
         import pandas as pd
         import json
         import os
+        from datetime import date
+
         json_filename = 'træningsregistrering.json'
 
         all_data = []
@@ -8896,7 +8897,10 @@ if username == valid_username and password == valid_password:
 
         all_df = pd.DataFrame(all_data)
         st.dataframe(all_df)
+        today_date = date.today().strftime("%Y-%m-%d")
+        filename = f"{today_date}.csv"
 
+        all_df.to_csv(filename,index=False)
 
     overskrifter_til_menu = {
         'Wellness Data':Wellness_data,

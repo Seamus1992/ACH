@@ -2238,7 +2238,7 @@ if username == valid_username and password == valid_password:
             df1 = df1[df1['label'].isin(valgtekamp)]
             df1['possession.types'] = df1['possession.types'].astype(str)
             df1 = df1[~df1['possession.types'].str.contains('set_piece_attack')]
-            df1 = df1[~df1['possession.types'].str.contains('throw_in')]
+            #df1 = df1[~df1['possession.types'].str.contains('throw_in')]
             df1 = df1[~df1['possession.types'].str.contains('free_kick')]
             df1 = df1[~df1['possession.types'].str.contains('corner')]
 
@@ -2740,7 +2740,7 @@ if username == valid_username and password == valid_password:
             df1 = df1[df1['label'].isin(valgtekamp)]
             df1['possession.types'] = df1['possession.types'].astype(str)
             df1 = df1[~df1['possession.types'].str.contains('set_piece_attack')]
-            df1 = df1[~df1['possession.types'].str.contains('throw_in')]
+            #df1 = df1[~df1['possession.types'].str.contains('throw_in')]
             df1 = df1[~df1['possession.types'].str.contains('free_kick')]
             df1 = df1[~df1['possession.types'].str.contains('corner')]
 
@@ -3243,7 +3243,7 @@ if username == valid_username and password == valid_password:
             df1 = df1[df1['label'].isin(valgtekamp)]
             df1['possession.types'] = df1['possession.types'].astype(str)
             df1 = df1[~df1['possession.types'].str.contains('set_piece_attack')]
-            df1 = df1[~df1['possession.types'].str.contains('throw_in')]
+            #df1 = df1[~df1['possession.types'].str.contains('throw_in')]
             df1 = df1[~df1['possession.types'].str.contains('free_kick')]
             df1 = df1[~df1['possession.types'].str.contains('corner')]
 
@@ -3749,7 +3749,7 @@ if username == valid_username and password == valid_password:
             df1 = df1[df1['label'].isin(valgtekamp)]
             df1['possession.types'] = df1['possession.types'].astype(str)
             df1 = df1[~df1['possession.types'].str.contains('set_piece_attack')]
-            df1 = df1[~df1['possession.types'].str.contains('throw_in')]
+            #df1 = df1[~df1['possession.types'].str.contains('throw_in')]
             df1 = df1[~df1['possession.types'].str.contains('free_kick')]
             df1 = df1[~df1['possession.types'].str.contains('corner')]
 
